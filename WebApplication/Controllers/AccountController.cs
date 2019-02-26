@@ -22,13 +22,14 @@ namespace WebApplication.Controllers
         {
             _usersService = new UserService();
         }
-
+        [Route("/Login")]
         public async Task Login(string returnUrl = "/")
         {
             await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
         }
 
         [Authorize]
+        [Route("/Logout")]
         public async Task Logout()
         {
             await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties
@@ -51,8 +52,27 @@ namespace WebApplication.Controllers
         }
 
         [Authorize]
-        [Route("/Account/MyProfile")]
-        public async Task<IActionResult> MyProfile()
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [Route("Account/Courses")]
+        public async Task<IActionResult> Courses()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [Route("Account/Groups")]
+        public async Task<IActionResult> Groups()
+        {
+            return View();
+        }
+        [Authorize]
+        [Route("Account/Students")]
+        public async Task<IActionResult> Students()
         {
             return View();
         }
