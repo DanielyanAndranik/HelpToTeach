@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Models;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers
@@ -54,7 +55,7 @@ namespace WebApplication.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View();
+            return View(new AccountLayoutViewModel {ActiveTab = "Profile" });
         }
 
         [Authorize]
@@ -70,9 +71,17 @@ namespace WebApplication.Controllers
         {
             return View();
         }
+
         [Authorize]
         [Route("Account/Students")]
         public async Task<IActionResult> Students()
+        {
+            return View();
+        }
+
+        [Authorize]
+        [Route("Account/Lessons")]
+        public async Task<IActionResult> Lessons()
         {
             return View();
         }
