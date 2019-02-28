@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication.Models;
 using Microsoft.EntityFrameworkCore;
+using WebApplication.Repository;
 
 namespace WebApplication
 {
@@ -28,6 +29,8 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<HelpToTeachContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Local")));
+
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

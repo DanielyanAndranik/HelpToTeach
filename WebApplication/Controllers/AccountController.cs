@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
+using WebApplication.Repository;
 using WebApplication.Services;
 
 namespace WebApplication.Controllers
@@ -16,12 +17,13 @@ namespace WebApplication.Controllers
     public class AccountController : Controller
     {
 
-
+        private readonly IUserRepository userRepository;
         private readonly UserService _usersService;
 
-        public AccountController()
+        public AccountController(IUserRepository userRepository)
         {
             _usersService = new UserService();
+            this.userRepository = userRepository;
         }
         [Route("/Login")]
         public async Task Login(string returnUrl = "/")
@@ -55,7 +57,9 @@ namespace WebApplication.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(new AccountLayoutViewModel {ActiveTab = "Profile" });
+            var auth0Id = await GetUserAuth0Id();
+            var user = await userRepository.GetUserByAuth0Id(auth0Id);
+            return View(new ProfileViewModel { User = user});
         }
 
         [Authorize]
