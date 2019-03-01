@@ -14,17 +14,17 @@ namespace WebApplication.Repository
         {
             this.db = context;
         }
-        public Task<User> AddUser()
+        public async Task<User> AddUser(User user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> DeleteUser()
+        public Task<User> DeleteUser(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> EditUser()
+        public Task<User> EditUser(User user)
         {
             throw new NotImplementedException();
         }
@@ -36,7 +36,7 @@ namespace WebApplication.Repository
 
         public async Task<User> GetUserByAuth0Id(string auth0Id)
         {
-            return await Task.Factory.StartNew(() => this.db.Users.First(u => u.Auth0Id == auth0Id));
+            return await Task.Factory.StartNew(() => this.db.Users.FirstOrDefault(u => u.Auth0Id == auth0Id));
         }
 
         public Task<IEnumerable<User>> GetUsers()

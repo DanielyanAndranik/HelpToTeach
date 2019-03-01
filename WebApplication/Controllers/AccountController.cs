@@ -59,7 +59,15 @@ namespace WebApplication.Controllers
         {
             var auth0Id = await GetUserAuth0Id();
             var user = await userRepository.GetUserByAuth0Id(auth0Id);
-            return View(new ProfileViewModel { User = user});
+            return View(new ProfileViewModel { User = user });
+        }
+
+        [Authorize]
+        [HttpPost(Name = "Create a new profile")]
+        public async Task<IActionResult> Create([FromBody] User user)
+        {
+            var result = await userRepository.AddUser(user);
+            return new ObjectResult(result);
         }
 
         [Authorize]

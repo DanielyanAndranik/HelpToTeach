@@ -9,8 +9,8 @@ namespace WebApplication.Repository
         Task<User> GetUser(int id);
         Task<User> GetUserByAuth0Id(string auth0Id);
         Task<IEnumerable<User>> GetUsers();
-        Task<User> AddUser();
-        Task<User> EditUser();
-        Task<User> DeleteUser();
+        Task<User> AddUser(User user);
+        Task<User> EditUser(User user);
+        Task<User> DeleteUser(int id);
     }
 }
