@@ -1,3 +1,4 @@
+import com.couchbase.spark.japi.CouchbaseSparkContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -8,15 +9,13 @@ public class Main {
 
     public static void main(String[] args){
 
-        SparkConf conf = new SparkConf()
+        SparkConf config = new SparkConf()
                 .setAppName("HelpToTeach")
-                .setMaster("local[2]");
-        
-        JavaSparkContext context = new JavaSparkContext(conf);
+                .setMaster("local[*]")
+                .set("com.couchbase.bucket.HelpToTeachMainBucket", "password");
 
-        JavaRDD<String> airports = context.textFile("input/airports.txt");
-
-        airports.saveAsTextFile("output/airports_by_latitude.text");
+        JavaSparkContext context = new JavaSparkContext(config);
+        CouchbaseSparkContext csc = CouchbaseSparkContext.couchbaseContext(context);
 
     }
 
