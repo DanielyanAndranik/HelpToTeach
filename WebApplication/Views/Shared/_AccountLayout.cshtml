@@ -1,24 +1,31 @@
-﻿@{ 
+﻿@{
     ViewData["Title"] = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@model AccountLayoutViewModel
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Profile</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Courses">My courses</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Groups">My groups</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Students">My students</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Lessons">My lessons</a>
-    </li>
+    @if (Model.User.Role == 1)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Courses">My courses</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Groups">My groups</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Students">My students</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Lessons">My lessons</a>
+        </li>
+    }
 </ul>
 
 @RenderBody()

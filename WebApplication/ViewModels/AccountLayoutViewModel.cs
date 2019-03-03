@@ -8,5 +8,6 @@ namespace WebApplication.Models
     public class AccountLayoutViewModel
     {
         public string ActiveTab { get; set; }
+        public User User { get; set; }
     }
 }

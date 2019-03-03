@@ -16,7 +16,9 @@ namespace WebApplication.Repository
         }
         public async Task<User> AddUser(User user)
         {
-            throw new NotImplementedException();
+            var result = await this.db.Users.AddAsync(user);
+            await db.SaveChangesAsync();
+            return result.Entity;
         }
 
         public Task<User> DeleteUser(int id)

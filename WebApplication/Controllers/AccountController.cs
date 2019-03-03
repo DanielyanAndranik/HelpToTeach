@@ -19,6 +19,7 @@ namespace WebApplication.Controllers
 
         private readonly IUserRepository userRepository;
         private readonly UserService _usersService;
+        private User currentUser;
 
         public AccountController(IUserRepository userRepository)
         {
@@ -26,7 +27,7 @@ namespace WebApplication.Controllers
             this.userRepository = userRepository;
         }
         [Route("/Login")]
-        public async Task Login(string returnUrl = "/")
+        public async Task Login(string returnUrl = "/Account")
         {
             await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = returnUrl });
         }
@@ -45,29 +46,22 @@ namespace WebApplication.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
-
-        [Authorize]
-        [Route("/Account/Info")]
-        public async Task<IActionResult> Info()
-        {
-            string user_id = await GetUserAuth0Id();
-            return View("Info");
-        }
-
         [Authorize]
         public async Task<IActionResult> Index()
         {
             var auth0Id = await GetUserAuth0Id();
             var user = await userRepository.GetUserByAuth0Id(auth0Id);
+            User.Claims.Append(new Claim("Role", user.Role.ToString()));
             return View(new ProfileViewModel { User = user });
         }
 
         [Authorize]
-        [HttpPost(Name = "Create a new profile")]
-        public async Task<IActionResult> Create([FromBody] User user)
+        [HttpPost]
+        public async Task<IActionResult> Post(User user)
         {
+            user.Auth0Id = await GetUserAuth0Id();
             var result = await userRepository.AddUser(user);
-            return new ObjectResult(result);
+            return View("Index");
         }
 
         [Authorize]
@@ -123,6 +117,7 @@ namespace WebApplication.Controllers
             return string.Empty;
 
         }
+
         private Task<string> GetUserAuth0Id()
         {
             return Task.Factory.StartNew(() =>

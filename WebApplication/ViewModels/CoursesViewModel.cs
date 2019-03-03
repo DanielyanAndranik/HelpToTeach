@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
-    public class ProfileViewModel : AccountLayoutViewModel
+    public class CoursesViewModel : AccountLayoutViewModel
     {
-        
     }
 }
