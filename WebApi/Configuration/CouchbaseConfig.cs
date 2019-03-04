@@ -40,6 +40,7 @@ namespace WebApi.Configuration
         public static void Cleanup()
         {
             ClusterHelper.Close();
-        }
+        }
+
     }
 }
