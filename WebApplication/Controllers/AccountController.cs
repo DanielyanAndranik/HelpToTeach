@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 using WebApplication.Repository;
 using WebApplication.Services;
+using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
 {
@@ -59,8 +60,8 @@ namespace WebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(User user)
         {
-            user.Auth0Id = await GetUserAuth0Id();
-            var result = await userRepository.AddUser(user);
+            //user.Auth0Id = await GetUserAuth0Id();
+            //var result = await userRepository.AddUser(user, );
             return View("Index");
         }
 

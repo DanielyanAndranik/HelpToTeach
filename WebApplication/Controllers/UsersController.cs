@@ -1,10 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Repository;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using WebApplication.Helpers;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace WebApplication.Controllers
 {
@@ -12,9 +18,71 @@ namespace WebApplication.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IUserRepository repository;
+        private readonly AppSettings appSettings;
+        private readonly IMapper mapper;
 
-        //private readonly IRepository<User> _usersRepository = new CouchbaseRepository<User>();
+        public UsersController(IUserRepository repository, IOptions<AppSettings> appSettings, IMapper mapper)
+        {
+            this.repository = repository;
+            this.appSettings = appSettings.Value;
+            this.mapper = mapper;
+        }
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] UserDto userDto)
+        {
+            var user = await repository.Authenticate(userDto.Username, userDto.Password);
+
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim("Name", user.FirstName),
+                    new Claim("role", user.Role.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddHours(9),
+
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+            // return basic user info (without password) and token to store client side
+            return Ok(new
+            {
+                Id = user.Id,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Token = tokenString
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody]UserDto userDto)
+        {
+            // map dto to entity
+            var user = mapper.Map<User>(userDto);
+
+            try
+            {
+                // save 
+                await repository.AddUser(user, userDto.Password);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
         //#region GET
         //[HttpGet]
         //public async Task<IActionResult> GetAll()

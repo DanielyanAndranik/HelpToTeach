@@ -21,6 +21,9 @@ namespace WebApplication.Models
     {
         public int Id { get; set; }
         public string Auth0Id { get; set; }
+        public string Username { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
