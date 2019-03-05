@@ -11,7 +11,7 @@ namespace WebApi.Configuration
     {
 
         private const string ServerUri = "http://127.0.0.1:8091";
-        private const string BucketName = "HelpToTeachMainBucket";
+        private const string BucketName = "HelpToTeachBucket";
         private const string BucketPass = "password";
 
         public static void Setup()
@@ -26,7 +26,7 @@ namespace WebApi.Configuration
                 BucketConfigs = new Dictionary<string, BucketConfiguration>
                 {
                     {
-                        "HelpToTeachMainBucket",new BucketConfiguration
+                        "HelpToTeachBucket",new BucketConfiguration
                         {
                             BucketName = BucketName,
                             Password = BucketPass,

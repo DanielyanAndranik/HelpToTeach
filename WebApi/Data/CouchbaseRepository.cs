@@ -11,7 +11,7 @@ namespace WebApi.Data
 {
     public class CouchbaseRepository<T> : IRepository<T> where T : EntityBase<T>
     {
-        private readonly IBucket _bucket = ClusterHelper.GetBucket("HelpToTeachMainBucket");
+        private readonly IBucket _bucket = ClusterHelper.GetBucket("HelpToTeachBucket");
 
         #region Private Methods
 
@@ -30,7 +30,7 @@ namespace WebApi.Data
         public async Task<List<T>> GetAll(Type t)
         {
             var type = t.Name.ToLower();
-            var query = new QueryRequest("SELECT HelpToTeachMainBucket.* FROM HelpToTeachMainBucket WHERE type = $type");
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type");
             query.AddNamedParameter("type", type);
             var result = await _bucket.QueryAsync<T>(query);
             return !result.Success ? null : result.Rows;
@@ -45,8 +45,8 @@ namespace WebApi.Data
 
         public async Task<T> Create(T item)
         {
-            item.Created = DateTime.Now;
-            item.Updated = DateTime.Now;
+            //item.Created = DateTime.Now;
+            //item.Updated = DateTime.Now;
             item.Id = Guid.NewGuid().ToString();
             var key = CreateKey(item.Id);
 
@@ -58,7 +58,7 @@ namespace WebApi.Data
 
         public async Task<T> Update(T item)
         {
-            item.Updated = DateTime.Now;
+            //item.Updated = DateTime.Now;
             var key = CreateKey(item.Id);
             var result = await _bucket.ReplaceAsync(key, item);
 
@@ -69,8 +69,8 @@ namespace WebApi.Data
 
         public async Task<T> Upsert(T item)
         {
-            if (Get(item.Id) == null) item.Created = DateTime.Now;
-            item.Updated = DateTime.Now;
+            //if (Get(item.Id) == null) item.Created = DateTime.Now;
+            //item.Updated = DateTime.Now;
             var key = CreateKey(item.Id);
             var result = await _bucket.UpsertAsync(key, item);
 

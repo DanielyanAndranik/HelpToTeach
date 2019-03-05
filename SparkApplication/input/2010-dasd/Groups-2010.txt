@@ -1,0 +1,3 @@
+1,019-1,C#-Elaine Metzger,cryptography-Cristen Osornio,C++-Ha Mejia,calculus-Marina Brunk
+2,019-2,C#-Elaine Metzger,cryptography-Cristen Osornio,C++-Jacob Tiemann,calculus-Nancie Robitaille
+3,019-3,C#-Elaine Metzger,cryptography-Cristen Osornio,C++-Jacob Tiemann,calculus-Nancie Robitaille
