@@ -16,6 +16,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
+using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace WebApplication
 {
@@ -61,12 +63,17 @@ namespace WebApplication
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
                         var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = userService.GetUser(userId);
+                        var user = userService.GetUser(userId).Result;
                         if (user == null)
                         {
                             // return unauthorized if user no longer exists
                             context.Fail("Unauthorized");
                         }
+                        context.HttpContext.User.AddIdentity(new ClaimsIdentity(new List<Claim>()
+                        {
+                            new Claim("name", user.FirstName),
+                            new Claim("role", user.Role.ToString())
+                        }));
                         return Task.CompletedTask;
                     }
                 };
