@@ -30,7 +30,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] UserDto userDto)
+        public async Task<IActionResult> Login([FromForm]UserDto userDto)
         {
             var user = await repository.Authenticate(userDto.Username, userDto.Password);
 
