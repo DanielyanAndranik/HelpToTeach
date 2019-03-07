@@ -11,6 +11,8 @@ using WebApplication.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace WebApplication.Controllers
 {
@@ -20,48 +22,34 @@ namespace WebApplication.Controllers
     {
         private readonly IUserRepository repository;
         private readonly AppSettings appSettings;
-        private readonly IMapper mapper;
+        //private readonly IMapper mapper;
 
-        public UsersController(IUserRepository repository, IOptions<AppSettings> appSettings, IMapper mapper)
+        public UsersController(IUserRepository repository, IOptions<AppSettings> appSettings)
         {
             this.repository = repository;
             this.appSettings = appSettings.Value;
-            this.mapper = mapper;
+            //this.mapper = mapper;
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromForm]UserDto userDto)
+        public async Task<IActionResult> Login([FromForm]string username, [FromForm]string password)
         {
-            var user = await repository.Authenticate(userDto.Username, userDto.Password);
+            //var user = await repository.Authenticate(username, password);
 
-            if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            //if (user == null)
+            //    return BadRequest(new { message = "Username or password is incorrect" });
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var identity = new ClaimsIdentity(new[]
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    new Claim("Name", user.FirstName),
-                    new Claim("role", user.Role.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddHours(9),
+                new Claim(ClaimTypes.Name, "Andranik"),
+                new Claim(ClaimTypes.Role, "admin"),
+            }, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-            // return basic user info (without password) and token to store client side
-            return Ok(new
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Token = tokenString
-            });
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return RedirectToAction("Index", "Home");
         }
 
         [AllowAnonymous]
@@ -69,12 +57,12 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Register([FromBody]UserDto userDto)
         {
             // map dto to entity
-            var user = mapper.Map<User>(userDto);
+            //var user = mapper.Map<User>(userDto);
 
             try
             {
-                // save 
-                await repository.AddUser(user, userDto.Password);
+                //// save 
+                //await repository.AddUser(user, userDto.Password);
                 return Ok();
             }
             catch (Exception ex)
