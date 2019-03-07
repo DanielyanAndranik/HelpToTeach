@@ -7,7 +7,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using WebApplication.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
@@ -16,33 +15,31 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace WebApplication.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : Controller
     {
         private readonly IUserRepository repository;
-        private readonly AppSettings appSettings;
-        //private readonly IMapper mapper;
+        private readonly IMapper mapper;
 
-        public UsersController(IUserRepository repository, IOptions<AppSettings> appSettings)
+        public UsersController(IUserRepository repository, IMapper mapper)
         {
             this.repository = repository;
-            this.appSettings = appSettings.Value;
-            //this.mapper = mapper;
+            this.mapper = mapper;
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromForm]string username, [FromForm]string password)
+        public async Task<IActionResult> Login([FromForm]UserDto userDto)
         {
-            //var user = await repository.Authenticate(username, password);
+            var user = await repository.Authenticate(userDto.Username, userDto.Password);
 
-            //if (user == null)
-            //    return BadRequest(new { message = "Username or password is incorrect" });
+            if (user == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
 
             var identity = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, "Andranik"),
-                new Claim(ClaimTypes.Role, "admin"),
+                new Claim(ClaimTypes.Name, user.FirstName),
+                new Claim(ClaimTypes.Role, user.Role.ToString()),
             }, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var principal = new ClaimsPrincipal(identity);
@@ -52,18 +49,35 @@ namespace WebApplication.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody]UserDto userDto)
+        public async Task<IActionResult> Register([FromForm]UserDto userDto)
         {
             // map dto to entity
-            //var user = mapper.Map<User>(userDto);
+            var user = mapper.Map<User>(userDto);
 
             try
             {
                 //// save 
-                //await repository.AddUser(user, userDto.Password);
-                return Ok();
+                await repository.AddUser(user, userDto.Password);
+                var identity = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.FirstName),
+                    new Claim(ClaimTypes.Role, user.Role.ToString()),
+                }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {

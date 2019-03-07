@@ -11,22 +11,4 @@ jQuery(document).ready(function () {
             $(tab).addClass('active');
         }
     });
-    $("#submitButton").click(function (event) {
-        var username = $("input#username").val()
-        var password = $("input#password").val();
-        console.log({ username, password });
-        $.ajax({
-            type: "POST",
-            url: "../api/Users/Login",
-            data: { username, password },
-            dataType: "json",
-            success: function (result) {
-                console.log(result);
-            },
-            error: function (result) {
-                console.log(result);
-            }
-        });
-        event.preventDefault();
-    });
 });

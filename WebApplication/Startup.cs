@@ -10,6 +10,7 @@ using WebApplication.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
+using AutoMapper;
 
 namespace WebApplication
 {
@@ -30,6 +31,7 @@ namespace WebApplication
             services.AddDbContext<HelpToTeachContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Local")));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddAutoMapper();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
