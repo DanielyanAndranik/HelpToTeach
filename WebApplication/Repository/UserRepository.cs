@@ -2,36 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Couchbase.Core;
+using Couchbase.N1QL;
 using WebApplication.Models;
 
 namespace WebApplication.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly HelpToTeachContext db;
+        private readonly IBucket _bucket;
 
-        public UserRepository(HelpToTeachContext context)
+        public UserRepository(IHelpToTeachBucketProvider provider)
         {
-            this.db = context;
-        }
-        public async Task<User> AddUser(User user, string password)
-        {
-            if (string.IsNullOrWhiteSpace(password))
-                throw new Exception("Password is required");
-
-            if (db.Users.Any(x => x.Username == user.Username))
-                throw new Exception("Username \"" + user.Username + "\" is already taken");
-
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
-
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            await db.Users.AddAsync(user);
-            await db.SaveChangesAsync();
-
-            return user;
+            this._bucket = provider.GetBucket();
         }
 
         public async Task<User> Authenticate(string username, string password)
@@ -39,11 +22,17 @@ namespace WebApplication.Repository
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
 
-            var user = await Task.Factory.StartNew(() => db.Users.SingleOrDefault(x => x.Username == username));
+            var type = typeof(User).Name.ToLower();
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type AND username = $username");
+            query.AddNamedParameter("type", type);
+            query.AddNamedParameter("username", username);
+            var result = await _bucket.QueryAsync<User>(query);
 
             // check if username exists
-            if (user == null)
+            if (!result.Success)
                 return null;
+
+            var user = result.Rows[0];
 
             // check if password is correct
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
@@ -53,32 +42,60 @@ namespace WebApplication.Repository
             return user;
         }
 
-        public Task<User> DeleteUser(int id)
+        public async Task<User> Create(User user, string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+                throw new Exception("Password is required");
+
+            user.Created = DateTime.Now;
+            user.Updated = DateTime.Now;
+            user.Id = Guid.NewGuid().ToString();
+            var key = CreateKey(typeof(User), user.Id);
+
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            var result = await _bucket.InsertAsync(key, user);
+            if (!result.Success) throw result.Exception;
+
+            return result.Value;
+        }
+
+        public Task Delete(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> EditUser(User user)
+        public Task<User> Get(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> GetUser(int id)
+        public Task<List<User>> GetAll()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User> GetUserByAuth0Id(string auth0Id)
-        {
-            return await Task.Factory.StartNew(() => this.db.Users.FirstOrDefault(u => u.Auth0Id == auth0Id));
-        }
-
-        public Task<IEnumerable<User>> GetUsers()
+        public Task<User> Update(User user)
         {
             throw new NotImplementedException();
         }
 
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public Task<User> Upsert(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string CreateKey(Type t, string id)
+        {
+            // generates type-prefixed key like 'player::123'
+            return string.Format("{0}::{1}", t.Name.ToLower(), id);
+        }
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
@@ -90,7 +107,7 @@ namespace WebApplication.Repository
             }
         }
 
-        private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        private bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");

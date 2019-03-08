@@ -8,7 +8,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Migrations
 {
-    [DbContext(typeof(HelpToTeachContext))]
+   // [DbContext(typeof(HelpToTeachContext))]
     [Migration("20190227132248_InitialCreate")]
     partial class InitialCreate
     {

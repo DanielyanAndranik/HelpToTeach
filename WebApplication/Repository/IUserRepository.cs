@@ -7,11 +7,11 @@ namespace WebApplication.Repository
     public interface IUserRepository
     {
         Task<User> Authenticate(string username, string password);
-        Task<User> GetUser(int id);
-        Task<User> GetUserByAuth0Id(string auth0Id);
-        Task<IEnumerable<User>> GetUsers();
-        Task<User> AddUser(User user, string password);
-        Task<User> EditUser(User user);
-        Task<User> DeleteUser(int id);
+        Task<List<User>> GetAll();
+        Task<User> Get(string id);
+        Task<User> Create(User user, string password);
+        Task<User> Update(User user);
+        Task<User> Upsert(User user);
+        Task Delete(string id);
     }
 }

@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="row">
+    <form class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" asp-controller="Users" asp-action="Register" method="post">
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="text" class="form-control" id="email" placeholder="Enter email" name="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+        </div>
+        <div class="form-group">
+            <label for="firstName">First name</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="John">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last name</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Doe">
+        </div>
+        <div class="form-group">
+            <label for="middleName">Middle name</label>
+            <input type="text" class="form-control" id="middleName" name="middleName" placeholder="Adams">
+        </div>
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" class="form-control" name="birthDate">
+        </div>
+        <div class="form-group">
+            <label for="inlineFormCustomSelectPref">Role</label>
+            <select class="custom-select" id="inlineFormCustomSelectPref" name="role">
+                <option selected>Choose...</option>
+                <option value="1">Lecturer</option>
+                <option value="2">Staff memeber</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <p>Already have an account? <a asp-action="Login">Sign in</a></p>
+    </form>
+</div>

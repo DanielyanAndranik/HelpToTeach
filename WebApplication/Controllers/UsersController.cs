@@ -57,7 +57,7 @@ namespace WebApplication.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm]UserDto userDto)
         {
             // map dto to entity
@@ -66,7 +66,7 @@ namespace WebApplication.Controllers
             try
             {
                 //// save 
-                await repository.AddUser(user, userDto.Password);
+                await repository.Create(user, userDto.Password);
                 var identity = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, user.FirstName),

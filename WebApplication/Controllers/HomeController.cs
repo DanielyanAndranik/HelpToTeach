@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Couchbase.Core;
+using Couchbase.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
@@ -11,20 +13,28 @@ namespace WebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IHelpToTeachBucketProvider provider;
+        private readonly IBucket bucket;
+
+        public HomeController(IHelpToTeachBucketProvider provider)
         {
-            return View();
+            this.provider = provider;
+            this.bucket = provider.GetBucket();
         }
+        public IActionResult Index() => View();
+
         [Authorize]
         public IActionResult Privacy()
         {
             return View();
         }
+        public IActionResult Login() => View();
 
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
+
+        public IActionResult ErrorForbidden() => View();
+
+        public IActionResult ErrorNotLoggedin() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

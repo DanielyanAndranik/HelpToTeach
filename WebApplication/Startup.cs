@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Repository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.HttpOverrides;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Couchbase.Extensions.DependencyInjection;
 
 namespace WebApplication
 {
@@ -28,28 +27,32 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<HelpToTeachContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Local")));
+            //services.AddDbContext<HelpToTeachContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Local")));
 
+            //services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper();
 
+            services.AddCouchbase(Configuration.GetSection("Couchbase"))
+                .AddCouchbaseBucket<IHelpToTeachBucketProvider>("HelpToTeachBucket");
+
+            services.AddMvc(options => 
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
+                .AddCookie(options => 
+                {
+                    options.AccessDeniedPath = "/Home/ErrorForbidden";
+                    options.LoginPath = "/Home/ErrorNotLoggedIn";
+                });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("AdministratorOnly", policy => policy.RequireRole("Administrator"));
-            //    options.AddPolicy("EmployeeId", policy => policy.RequireClaim("EmployeeId", "123", "456"));
-            //});
-
-            //services.AddMvc(config =>
-            //{
-            //    var policy = new AuthorizationPolicyBuilder()
-            //                     .RequireAuthenticatedUser()
-            //                     .Build();
-            //    config.Filters.Add(new AuthorizeFilter(policy));
-            //});
-            services.AddMvc();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdministratorOnly", policy => policy.RequireRole("admin"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
