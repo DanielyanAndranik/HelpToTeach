@@ -27,15 +27,16 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<HelpToTeachContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Local")));
-
-            //services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddAutoMapper();
-
             services.AddCouchbase(Configuration.GetSection("Couchbase"))
                 .AddCouchbaseBucket<IHelpToTeachBucketProvider>("HelpToTeachBucket");
 
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRepository<Course>, CouchbaseRepository<Course>>();
+            services.AddScoped<IRepository<Student>, CouchbaseRepository<Student>>();
+            services.AddScoped<IRepository<Group>, CouchbaseRepository<Group>>();
+
+            services.AddAutoMapper();
+        
             services.AddMvc(options => 
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());

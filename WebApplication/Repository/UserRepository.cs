@@ -23,16 +23,18 @@ namespace WebApplication.Repository
                 return null;
 
             var type = typeof(User).Name.ToLower();
-            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type AND username = $username");
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type");
             query.AddNamedParameter("type", type);
-            query.AddNamedParameter("username", username);
+            //query.AddNamedParameter("username", username);
             var result = await _bucket.QueryAsync<User>(query);
 
             // check if username exists
             if (!result.Success)
                 return null;
 
-            var user = result.Rows[0];
+            var user = result.FirstOrDefault(u => u.Username == username);
+
+            if (user == null) return null;
 
             // check if password is correct
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))

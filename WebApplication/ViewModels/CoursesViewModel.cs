@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication.ViewModels;
 
-namespace WebApplication.Models
+namespace WebApplication.ViewModels
 {
     public class CoursesViewModel : AccountLayoutViewModel
     {
