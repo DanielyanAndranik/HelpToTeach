@@ -214,7 +214,7 @@ public class Main {
                 JsonObject data = JsonObject.create()
                         .put("name",course.getName())
                         .put("id",course.getId())
-                        .put("type",course.getName());
+                        .put("type",course.getType());
 
                 return JsonDocument.create("course::"+course.getId(),data);
             }
