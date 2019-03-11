@@ -8,6 +8,7 @@ using Couchbase.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
+using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
 {

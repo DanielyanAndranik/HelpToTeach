@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 }
 @model AccountLayoutViewModel
 
@@ -8,7 +9,7 @@
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Profile</a>
     </li>
-    @if (Model.User.Role == 1)
+    @if (role == "Lecturer")
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Courses">My courses</a>

@@ -23,9 +23,7 @@ namespace WebApplication.Repository
                 return null;
 
             var type = typeof(User).Name.ToLower();
-            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type");
-            query.AddNamedParameter("type", type);
-            //query.AddNamedParameter("username", username);
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
             var result = await _bucket.QueryAsync<User>(query);
 
             // check if username exists
@@ -71,9 +69,10 @@ namespace WebApplication.Repository
             throw new NotImplementedException();
         }
 
-        public Task<User> Get(string id)
+        public async Task<User> Get(string id)
         {
-            throw new NotImplementedException();
+            var result = await this._bucket.GetDocumentAsync<User>(id);
+            return result.Content;
         }
 
         public Task<List<User>> GetAll()
