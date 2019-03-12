@@ -14,7 +14,7 @@ namespace WebApplication.Models
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public DateTime BirthDate { get; set; }
-        public byte Role { get; set; }
+        public string Role { get; set; }
         public List<GroupCourse> GroupCourses { get; set; }
     }
 }

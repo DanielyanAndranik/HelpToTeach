@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
-    public class Course : EntityBase<Course>
+    public class Course : EntityBase<Group>
     {
         public string Name { get; set; }
         //public List<GroupCourse> GroupCourses { get; set; }

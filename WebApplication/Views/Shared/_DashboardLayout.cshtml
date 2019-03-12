@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+}
+@model DashboradLayoutViewModel
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Courses">My courses</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Groups">My groups</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Students">My students</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Lessons">My lessons</a>
+    </li>
+</ul>
+
+@RenderBody()

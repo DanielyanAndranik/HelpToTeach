@@ -8,12 +8,12 @@ namespace WebApplication.Repository
 {
     public interface ICourseRepository
     {
-        Task<IEnumerable<Group>> GetAll();
-        Task<Group> Get(string id);
-        Task<IEnumerable<Group>> GetByLecturer(string id);
-        Task<Group> Create(Group course);
-        Task<Group> Update(Group course);
-        Task<Group> Upsert(Group course);
+        Task<IEnumerable<Course>> GetAll();
+        Task<Course> Get(string id);
+        Task<IEnumerable<Course>> GetByLecturer(string id);
+        Task<Course> Create(Course course);
+        Task<Course> Update(Course course);
+        Task<Course> Upsert(Course course);
         Task Delete(string id);
     }
 }

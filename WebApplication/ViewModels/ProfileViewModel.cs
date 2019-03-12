@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApplication.ViewModels
+﻿namespace WebApplication.ViewModels
 {
-    public class ProfileViewModel : AccountLayoutViewModel
-    {
-        
-    }
+    public class ProfileViewModel : AccountLayoutViewModel { }
 }
