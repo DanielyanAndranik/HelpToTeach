@@ -1,63 +1,67 @@
 package ModelsV2;
 
-public class Mark {
+import scala.Serializable;
 
-    private String courseId_;
-    private int first_;
-    private int second_;
-    private int final_;
-    private int n_;
+
+public class Mark implements Serializable {
+
+
+    private String courseId;
+    private int first;
+    private int second;
+    private int finalMark;
+    private int n;
 
     public Mark(String courseId,String first,String second,String n,String fin){
-        first_ = Integer.parseInt(first);
-        second_ = Integer.parseInt(second);
-        final_ = Integer.parseInt(fin);
-        n_ = Integer.parseInt(n);
-        courseId_ = courseId;
+        this.first = Integer.parseInt(first);
+        this.second = Integer.parseInt(second);
+        finalMark = Integer.parseInt(fin);
+        this.n = Integer.parseInt(n);
+        this.courseId = courseId;
     }
 
     public int getFinal_() {
-        return final_;
+        return finalMark;
     }
 
     public int getFirst_() {
-        return first_;
+        return first;
     }
 
     public int getN_() {
-        return n_;
+        return n;
     }
 
     public int getSecond_() {
-        return second_;
+        return second;
     }
 
     public void setFinal_(int final_) {
-        this.final_ = final_;
+        this.finalMark = final_;
     }
 
     public void setFirst_(int first_) {
-        this.first_ = first_;
+        this.first = first_;
     }
 
     public void setN_(int n_) {
-        this.n_ = n_;
+        this.n = n_;
     }
 
     public void setSecond_(int second_) {
-        this.second_ = second_;
+        this.second = second_;
     }
 
     public String getCourseId_() {
-        return courseId_;
+        return courseId;
     }
 
     public void setCourseId_(String courseId_) {
-        this.courseId_ = courseId_;
+        this.courseId = courseId_;
     }
 
     @Override
     public String toString() {
-        return courseId_+","+first_+","+second_+","+final_+","+n_;
+        return courseId+","+first+","+second+","+n+","+finalMark;
     }
 }
