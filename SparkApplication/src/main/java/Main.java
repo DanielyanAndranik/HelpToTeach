@@ -233,6 +233,8 @@ public class Main {
         CouchbaseDocumentRDD<JsonDocument> result4 = CouchbaseDocumentRDD.couchbaseDocumentRDD(groups_document);
         result4.saveToCouchbase();
 
+
+
         //-------------------------------------Logic for bindig groups with students end------------------
 
         //groups.saveAsTextFile("output/groups.txt");

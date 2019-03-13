@@ -1,6 +1,6 @@
 package ModelsV2;
 
-import scala.Serializable;
+import java.io.Serializable;
 
 public class KeyStudent implements Serializable {
 

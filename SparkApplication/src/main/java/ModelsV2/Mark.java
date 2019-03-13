@@ -1,6 +1,6 @@
 package ModelsV2;
 
-import scala.Serializable;
+import java.io.Serializable;
 
 
 public class Mark implements Serializable {
@@ -20,43 +20,43 @@ public class Mark implements Serializable {
         this.courseId = courseId;
     }
 
-    public int getFinal_() {
+    public int getFinal() {
         return finalMark;
     }
 
-    public int getFirst_() {
+    public int getFirst() {
         return first;
     }
 
-    public int getN_() {
+    public int getN() {
         return n;
     }
 
-    public int getSecond_() {
+    public int getSecond() {
         return second;
     }
 
-    public void setFinal_(int final_) {
+    public void setFinal(int final_) {
         this.finalMark = final_;
     }
 
-    public void setFirst_(int first_) {
+    public void setFirst(int first_) {
         this.first = first_;
     }
 
-    public void setN_(int n_) {
+    public void setN(int n_) {
         this.n = n_;
     }
 
-    public void setSecond_(int second_) {
+    public void setSecond(int second_) {
         this.second = second_;
     }
 
-    public String getCourseId_() {
+    public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId_(String courseId_) {
+    public void setCourseId(String courseId_) {
         this.courseId = courseId_;
     }
 

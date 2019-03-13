@@ -10,6 +10,8 @@ import com.couchbase.spark.japi.CouchbaseDocumentRDD;
 import com.couchbase.spark.japi.CouchbaseSparkContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import org.apache.avro.generic.GenericData;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -112,10 +114,25 @@ public class MainV2 {
         JavaPairRDD<KeyStudent,Mark> imageProcessing2011PairRDD = imageProcessing2011.mapToPair(new PairCreater("Image"));
         JavaPairRDD<KeyStudent,Mark> machineLearning2011PairRDD = machineLearning2011.mapToPair(new PairCreater("Machine"));
 
+        JavaPairRDD<KeyStudent, Mark> dotNet2012PairRDD = dotNet2012.mapToPair(new PairCreater("Net"));
+        JavaPairRDD<KeyStudent, Mark> calculus2012PairRDD = calculus2012.mapToPair(new PairCreater("Calculus"));
+        JavaPairRDD<KeyStudent,Mark> imageProcessing2012PairRDD = imageProcessing2012.mapToPair(new PairCreater("Image"));
+        JavaPairRDD<KeyStudent,Mark> machineLearning2012PairRDD = machineLearning2012.mapToPair(new PairCreater("Machine"));
+
+        JavaPairRDD<KeyStudent, Mark> java2012PairRDD = dotNet2011.mapToPair(new PairCreater("Java"));
+        JavaPairRDD<KeyStudent, Mark> sql2012PairRDD = calculus2011.mapToPair(new PairCreater("SQL"));
+
+
         JavaPairRDD<KeyStudent,Iterable<Mark>> allDataFor2011 = dotNet2011PairRDD
                 .union(calculus2011PairRDD)
                 .union(imageProcessing2011PairRDD)
                 .union(machineLearning2011PairRDD)
+                .union(dotNet2012PairRDD)
+                .union(calculus2012PairRDD)
+                .union(imageProcessing2012PairRDD)
+                .union(machineLearning2012PairRDD)
+                .union(java2012PairRDD)
+                .union(sql2012PairRDD)
                 .groupByKey();
 
         JavaRDD<Student> resultFor2011 = allDataFor2011.map(new Function<Tuple2<KeyStudent, Iterable<Mark>>, Student>() {
@@ -138,14 +155,22 @@ public class MainV2 {
             }
         });
 
-        JavaRDD<JsonDocument> couchbaseResult = resultFor2011.map(new Function<Student, JsonDocument>() {
+        JavaRDD<JsonDocument> couchbaseStudents2011Result = resultFor2011.map(new Function<Student, JsonDocument>() {
             @Override
             public JsonDocument call(Student student) throws Exception {
 
-                ObjectMapper maper = new ObjectMapper();
 
-
-                String marksJson = maper.writeValueAsString(student.getMarks_());
+                JsonArray jsonMarks = JsonArray.create();
+                for (Mark mark:
+                     student.getMarks_()) {
+                    JsonObject tempMark = JsonObject.create()
+                            .put("coursId",mark.getCourseId())
+                            .put("first",mark.getFirst())
+                            .put("second",mark.getSecond())
+                            .put("finalMark",mark.getFinal())
+                            .put("presence",mark.getN());
+                    jsonMarks.add(tempMark);
+                }
 
 
                 JsonObject data = JsonObject.create()
@@ -153,15 +178,46 @@ public class MainV2 {
                         .put("lastName",student.getLastName_())
                         .put("id",student.getId_())
                         .put("type","student")
-                        .put("marks",marksJson)
+                        .put("marks",jsonMarks)
                         .put("groupId",student.getGroupId_());
 
                 return JsonDocument.create("student::"+student.getId_(),data);
             }
         });
 
-        CouchbaseDocumentRDD<JsonDocument> result1 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseResult);
+        CouchbaseDocumentRDD<JsonDocument> result1 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseStudents2011Result);
         result1.saveToCouchbase();
+
+        JavaRDD<JsonDocument> couchbaseGroupsResult = groupsRDD.map(new Function<Group, JsonDocument>() {
+            @Override
+            public JsonDocument call(Group group) throws Exception {
+                JsonObject data = JsonObject.create()
+                        .put("groupId",group.getId_())
+                        .put("groupName",group.getName_())
+                        .put("type","group");
+
+                return JsonDocument.create("group::"+group.getId_(),data);
+            }
+        });
+
+        CouchbaseDocumentRDD<JsonDocument> result2 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseGroupsResult);
+        result2.saveToCouchbase();
+
+        JavaRDD<JsonDocument> couchbaseCoursesResult = coursesRDD.map(new Function<Course, JsonDocument>() {
+            @Override
+            public JsonDocument call(Course course) throws Exception {
+                JsonObject data = JsonObject.create()
+                        .put("courseId",course.getId_())
+                        .put("courseName",course.getName_())
+                        .put("type","course");
+
+                return JsonDocument.create("course::"+course.getId_(),data);
+            }
+        });
+
+        CouchbaseDocumentRDD<JsonDocument> result3 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseCoursesResult);
+        result3.saveToCouchbase();
+
 
     }
 
