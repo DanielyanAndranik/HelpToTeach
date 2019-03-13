@@ -1,4 +1,5 @@
 ﻿using Couchbase.Core;
+using Couchbase.N1QL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace WebApplication.Repository
 
         public async Task<Group> Create(Group group)
         {
-            var key = $"group::{Guid.NewGuid().ToString()}";
-            var result = await this.bucket.InsertAsync<Group>(key, group);
+            group.Id = Guid.NewGuid().ToString();
+            var result = await this.bucket.InsertAsync<Group>($"group::{group.Id}", group);
             return result.Value;
         }
 
@@ -32,9 +33,11 @@ namespace WebApplication.Repository
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Group>> GetAll()
+        public async Task<IEnumerable<Group>> GetAll()
         {
-            throw new NotImplementedException();
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'group'");
+            var result = await bucket.QueryAsync<Group>(query);
+            return result.Rows;
         }
 
         public Task<IEnumerable<Group>> GetByLecturer(string id)

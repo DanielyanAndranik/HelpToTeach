@@ -22,7 +22,6 @@ namespace WebApplication.Repository
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
 
-            var type = typeof(User).Name.ToLower();
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
             var result = await _bucket.QueryAsync<User>(query);
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 using WebApplication.Repository;
+using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
 {
@@ -15,7 +16,6 @@ namespace WebApplication.Controllers
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
         }
-        [Route("")]
         public IActionResult Index()
         {
             return View();
@@ -70,6 +70,18 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Students()
         {
             return View();
+        }
+
+        public async Task<IActionResult> AddStudent()
+        {
+            var groups = await this.groupRepository.GetAll();
+            return View(new AddStudentViewModel { Groups = groups});
+        }
+
+        [HttpPost]
+        public IActionResult AddStudent([FromForm] Student student)
+        {
+            return View(new AddStudentViewModel());
         }
 
         #endregion  

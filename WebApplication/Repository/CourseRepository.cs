@@ -16,7 +16,8 @@ namespace WebApplication.Repository
         }
         public async Task<Course> Create(Course course)
         {
-            var key = $"course::{Guid.NewGuid().ToString()}";
+            course.Id = Guid.NewGuid().ToString();
+            var key = $"course::{course.Id}";
             var result = await this.bucket.InsertAsync<Course>(key, course);
             return result.Value;
         }
