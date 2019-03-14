@@ -1,35 +1,31 @@
 ﻿@{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
-
+@model StudentsViewModel
 <h1>Students</h1>
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">ID</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">MiddleName</th>
+            <th scope="col">BirthDate</th>
+            <th scope="col">Group</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>twitter</td>
-        </tr>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <th scope="row">@student.Id</th>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.MiddleName</td>
+                <td>@student.BirthDate</td>
+                <td>@student.GroupId</td>
+            </tr>
+        }
     </tbody>
 </table>
 <a class="btn btn-outline-secondary" asp-action="AddStudent">Add student</a>

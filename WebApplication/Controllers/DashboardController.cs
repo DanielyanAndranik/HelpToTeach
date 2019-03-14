@@ -11,25 +11,31 @@ namespace WebApplication.Controllers
     {
         private readonly ICourseRepository courseRepository;
         private readonly IGroupRepository groupRepository;
-        public DashboardController(ICourseRepository courseRepository, IGroupRepository groupRepository)
+        private readonly IStudentRepository studentRepository;
+
+        public DashboardController(ICourseRepository courseRepository, IGroupRepository groupRepository, IStudentRepository studentRepository)
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
+            this.studentRepository = studentRepository;
         }
+
         public IActionResult Index()
         {
             return View();
         }
+
         #region Course
         public async Task<IActionResult> Courses()
         {
-            if(User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
+            if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
             {
                 var id = User.FindFirst(ClaimTypes.Sid).Value;
-                var courses = await this.courseRepository.GetByLecturer(id);
+                var _courses = await this.courseRepository.GetByLecturer(id);
             }
-            return View();
 
+            var courses = await this.courseRepository.GetAll();
+            return View(new CoursesViewModel { Courses = courses });
         }
 
         public IActionResult AddCourse()
@@ -49,7 +55,8 @@ namespace WebApplication.Controllers
 
         public async Task<IActionResult> Groups()
         {
-            return View();
+            var groups = await this.groupRepository.GetAll();
+            return View(new GroupsViewModel { Groups = groups });
         }
 
         public IActionResult AddGroup()
@@ -63,25 +70,26 @@ namespace WebApplication.Controllers
             var group = await this.groupRepository.Create(new Group { Name = name });
             return RedirectToAction("Groups");
         }
-
         #endregion
 
         #region Students
         public async Task<IActionResult> Students()
         {
-            return View();
+            var students = await this.studentRepository.GetAll();
+            return View(new StudentsViewModel { Students = students });
         }
 
         public async Task<IActionResult> AddStudent()
         {
             var groups = await this.groupRepository.GetAll();
-            return View(new AddStudentViewModel { Groups = groups});
+            return View(new AddStudentViewModel { Groups = groups, Student = new Student() });
         }
 
         [HttpPost]
-        public IActionResult AddStudent([FromForm] Student student)
+        public async Task<IActionResult> AddStudent([FromForm] Student student)
         {
-            return View(new AddStudentViewModel());
+            var _student = await this.studentRepository.Create(student);
+            return RedirectToAction("Students");
         }
 
         #endregion  

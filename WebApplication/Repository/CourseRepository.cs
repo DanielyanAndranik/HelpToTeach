@@ -1,4 +1,5 @@
 ﻿using Couchbase.Core;
+using Couchbase.N1QL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +33,11 @@ namespace WebApplication.Repository
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Course>> GetAll()
+        public async Task<IEnumerable<Course>> GetAll()
         {
-            throw new NotImplementedException();
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'course'");
+            var result = await bucket.QueryAsync<Course>(query);
+            return result.Rows;
         }
 
         public async Task<IEnumerable<Course>> GetByLecturer(string id)

@@ -1,35 +1,23 @@
 ﻿@{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
-
+@model GroupsViewModel
 <h1>Groups</h1>
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
         </tr>
     </thead>
     <tbody>
+        @foreach(var group in Model.Groups)
+        {
         <tr>
-            <th scope="row">1</th>.
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
+            <th scope="row">@group.Id</th>
+            <td>@group.Name</td>
         </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>twitter</td>
-        </tr>
+        }
     </tbody>
 </table>
 <a class="btn btn-outline-secondary" asp-action="AddGroup">Add group</a>
