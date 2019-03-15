@@ -1,0 +1,6 @@
+id-Fname--Lname---G----t1-t2-n--f
+1,Bryce,Gower,219-1,16,20,10,49
+2,Darcy,Nilles,219-1,10,12,5,40
+3,Donnell,Nellum,219-2,10,10,8,33
+4,Janna,Water,219-2,15,15,10,50
+5,Jaclyn,Buerger,219-2,20,20,10,50

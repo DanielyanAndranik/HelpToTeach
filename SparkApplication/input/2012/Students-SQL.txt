@@ -1,0 +1,6 @@
+id-Fname--Lname---G----t1-t2-n--f
+1,Morgan,Peacock,119-1,15,19,9,33
+2,Heriberto,Winkles,119-2,18,11,9,39
+3,Felicitas,Cammarata,119-3,20,15,10,29
+4,Jules,Faries,119-1,20,18,10,44
+5,Lianne,Cudjoe,119-2,18,18,10,33
