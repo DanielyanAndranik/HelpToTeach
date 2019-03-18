@@ -93,5 +93,15 @@ namespace WebApplication.Controllers
         }
 
         #endregion  
+
+        public IActionResult Assign([FromQuery] string GroupId)
+        {
+            if (string.IsNullOrWhiteSpace(GroupId))
+            {
+                throw new System.ArgumentException("message", nameof(GroupId));
+            }
+
+            return View();
+        }
     }
 }

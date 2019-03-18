@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 @model GroupsViewModel
-<h1>Groups</h1>
+<h2 class="text-center">Groups list</h2>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -11,12 +11,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var group in Model.Groups)
+        @foreach (var group in Model.Groups)
         {
-        <tr>
-            <th scope="row">@group.Id</th>
-            <td>@group.Name</td>
-        </tr>
+            <tr onclick="location.href='@(Url.Action("Assign","Dashboard", new { GroupId = group.Id }))'">
+
+                    <th scope="row">@group.Id</th>
+                    <td>@group.Name</td>
+            </tr>
         }
     </tbody>
 </table>
