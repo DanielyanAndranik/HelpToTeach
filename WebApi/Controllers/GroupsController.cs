@@ -11,42 +11,42 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentsController : ControllerBase
+    public class GroupsController : ControllerBase
     {
-
-        private readonly IRepository<Student> _studentsRepository = new CouchbaseRepository<Student>();
-
+        private readonly IRepository<Group> _groupsRepository = new CouchbaseRepository<Group>();
 
         #region GET
 
         [HttpGet]
-        public async Task<IActionResult> GetAllStudents()
+        public async Task<IActionResult> GetAllGroups()
         {
             try
             {
-                var students = await _studentsRepository.GetAll(typeof(Student));
-                return Ok(students);
+                var groups = await _groupsRepository.GetAll(typeof(Group));
+                return Ok(groups);
             }
             catch (Exception e)
             {
-                return StatusCode(500,e);
+                return StatusCode(500, e);
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentById([FromRoute]string id) {
+        public async Task<IActionResult> GetGroupById([FromRoute]string id)
+        {
             try
             {
-                var students = await _studentsRepository.GetAll(typeof(Student));
-                var student = students.FirstOrDefault(s => s.Id == id);
-                if (student == null) {
+                var groups = await _groupsRepository.GetAll(typeof(Group));
+                var group = groups.FirstOrDefault(s => s.Id == id);
+                if (group == null)
+                {
                     return NotFound();
                 }
-                return Ok(student);
+                return Ok(group);
             }
             catch (Exception e)
             {
-                return StatusCode(500,e);
+                return StatusCode(500, e);
             }
         }
 
@@ -55,20 +55,20 @@ namespace WebApi.Controllers
         #region POST
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody]Student student)
+        public async Task<IActionResult> Create([FromBody]Group group)
         {
             try
             {
-                var result = await _studentsRepository.Create(student);
+                var result = await _groupsRepository.Create(group);
                 if (result == null)
                 {
-                    return BadRequest(student);
+                    return BadRequest(group);
                 }
                 return Ok();
             }
             catch (Exception e)
             {
-                return StatusCode(500,e);
+                return StatusCode(500, e);
             }
         }
 
@@ -77,19 +77,20 @@ namespace WebApi.Controllers
         #region PUT
 
         [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody]Student student)
+        public async Task<IActionResult> Update([FromBody]Group group)
         {
             try
             {
-                var result = await _studentsRepository.Update(student);
-                if (result == null) {
+                var result = await _groupsRepository.Update(group);
+                if (result == null)
+                {
                     return BadRequest();
                 }
                 return Ok(result);
             }
             catch (Exception e)
             {
-                return StatusCode(500,e);
+                return StatusCode(500, e);
             }
         }
 
@@ -98,16 +99,16 @@ namespace WebApi.Controllers
         #region DELETE
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromBody]Student student)
+        public async Task<IActionResult> Delete([FromBody]Group group)
         {
             try
             {
-                await _studentsRepository.Delete(student.Id);
+                await _groupsRepository.Delete(group.Id);
                 return NoContent();
             }
             catch (Exception e)
             {
-                return StatusCode(500,e);
+                return StatusCode(500, e);
             }
         }
 

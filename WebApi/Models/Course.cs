@@ -2,6 +2,6 @@
 {
     public class Course:EntityBase<Course>
     {
-        public string Name { get; set; }
+        public string CourseName { get; set; }
     }
 }

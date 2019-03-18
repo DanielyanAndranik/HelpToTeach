@@ -164,7 +164,7 @@ public class MainV2 {
                 for (Mark mark:
                      student.getMarks_()) {
                     JsonObject tempMark = JsonObject.create()
-                            .put("coursId",mark.getCourseId())
+                            .put("courseId",mark.getCourseId())
                             .put("first",mark.getFirst())
                             .put("second",mark.getSecond())
                             .put("finalMark",mark.getFinal())
@@ -192,7 +192,7 @@ public class MainV2 {
             @Override
             public JsonDocument call(Group group) throws Exception {
                 JsonObject data = JsonObject.create()
-                        .put("groupId",group.getId_())
+                        .put("id",group.getId_())
                         .put("groupName",group.getName_())
                         .put("type","group");
 
@@ -207,7 +207,7 @@ public class MainV2 {
             @Override
             public JsonDocument call(Course course) throws Exception {
                 JsonObject data = JsonObject.create()
-                        .put("courseId",course.getId_())
+                        .put("id",course.getId_())
                         .put("courseName",course.getName_())
                         .put("type","course");
 

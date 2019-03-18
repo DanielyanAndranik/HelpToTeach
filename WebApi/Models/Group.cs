@@ -7,6 +7,6 @@ namespace WebApi.Models
 {
     public class Group:EntityBase<Group>
     {
-        public string Name { get; set; }
+        public string GroupName { get; set; }
     }
 }

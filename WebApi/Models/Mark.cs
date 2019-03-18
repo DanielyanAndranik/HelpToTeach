@@ -5,18 +5,12 @@ using System.Threading.Tasks;
 
 namespace WebApi.Models
 {
-
-    public enum MarkType
-    {
-        TermMark,
-        FinalMark
-    }
-
     public class Mark:EntityBase<Mark>
     {
-        public MarkType MarkType { get; set; }
-        public int Value { get; set; }
-        public string StudentId { get; set; }
-        public string GroupCourseId { get; set; }
+        public string CourseId { get; set; }
+        public int First { get; set; }
+        public int Second { get; set; }
+        public int FinalMark { get; set; }
+        public int Presence { get; set; }
     }
 }
