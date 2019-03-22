@@ -12,7 +12,7 @@ namespace WebApi.Configuration
 
         private const string ServerUri = "http://127.0.0.1:8091";
         private const string BucketName = "HelpToTeachBucket";
-        private const string BucketPass = "password";
+        private const string BucketPass = "123456";
 
         public static void Setup()
         {
@@ -28,6 +28,7 @@ namespace WebApi.Configuration
                     {
                         "HelpToTeachBucket",new BucketConfiguration
                         {
+                            Username = "andranik",
                             BucketName = BucketName,
                             Password = BucketPass,
                             UseSsl = false

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Couchbase.Extensions.DependencyInjection;
+using System;
 
 namespace WebApplication
 {
@@ -48,6 +49,9 @@ namespace WebApplication
                 {
                     options.AccessDeniedPath = "/Home/ErrorForbidden";
                     options.LoginPath = "/Home/ErrorNotLoggedIn";
+                    options.Cookie.Expiration = TimeSpan.FromHours(12);
+                    options.Cookie.MaxAge = TimeSpan.FromHours(12);
+                    options.Cookie.HttpOnly = true;
                 });
 
             services.AddAuthorization(options =>
