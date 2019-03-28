@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication", "WebApplication\WebApplication.csproj", "{EA333530-D21D-4F11-8CD2-30A68B0E903E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{17F6AFEC-68A3-4647-ACB8-CC74D91BDA74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{17F6AFEC-68A3-4647-ACB8-CC74D91BDA74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpToTeach.Core", "HelpToTeach.Core\HelpToTeach.Core.csproj", "{13AC8399-D904-4F5F-8B0D-9077B3C140C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpToTeach.Data", "HelpToTeach.Data\HelpToTeach.Data.csproj", "{CA0EB31A-F0A8-4F25-BA17-D1611D7C7F41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{17F6AFEC-68A3-4647-ACB8-CC74D91BDA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F6AFEC-68A3-4647-ACB8-CC74D91BDA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F6AFEC-68A3-4647-ACB8-CC74D91BDA74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13AC8399-D904-4F5F-8B0D-9077B3C140C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13AC8399-D904-4F5F-8B0D-9077B3C140C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13AC8399-D904-4F5F-8B0D-9077B3C140C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13AC8399-D904-4F5F-8B0D-9077B3C140C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA0EB31A-F0A8-4F25-BA17-D1611D7C7F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA0EB31A-F0A8-4F25-BA17-D1611D7C7F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA0EB31A-F0A8-4F25-BA17-D1611D7C7F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA0EB31A-F0A8-4F25-BA17-D1611D7C7F41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
