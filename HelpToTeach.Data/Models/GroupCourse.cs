@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication.Models
+namespace HelpToTeach.Data.Models
 {
     public class GroupCourse : EntityBase<GroupCourse>
     {

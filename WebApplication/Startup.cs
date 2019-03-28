@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebApplication.Models;
-using Microsoft.EntityFrameworkCore;
-using WebApplication.Repository;
 using Microsoft.AspNetCore.HttpOverrides;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Couchbase.Extensions.DependencyInjection;
 using System;
+using HelpToTeach.Core.Repository;
 
 namespace WebApplication
 {
@@ -29,7 +27,7 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCouchbase(Configuration.GetSection("Couchbase"))
-                .AddCouchbaseBucket<IHelpToTeachBucketProvider>("HelpToTeachBucket");
+                .AddCouchbaseBucket<INamedBucketProvider>("HelpToTeachBucket");
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();

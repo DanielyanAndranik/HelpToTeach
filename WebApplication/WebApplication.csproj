@@ -21,4 +21,15 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\HelpToTeach.Core\HelpToTeach.Core.csproj" />
+    <ProjectReference Include="..\HelpToTeach.Data\HelpToTeach.Data.csproj" />
+  </ItemGroup>
+
 </Project>

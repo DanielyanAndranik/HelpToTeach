@@ -7,17 +7,16 @@ using Couchbase.Core;
 using Couchbase.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Models;
 using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IHelpToTeachBucketProvider provider;
+        private readonly INamedBucketProvider provider;
         private readonly IBucket bucket;
 
-        public HomeController(IHelpToTeachBucketProvider provider)
+        public HomeController(INamedBucketProvider provider)
         {
             this.provider = provider;
             this.bucket = provider.GetBucket();

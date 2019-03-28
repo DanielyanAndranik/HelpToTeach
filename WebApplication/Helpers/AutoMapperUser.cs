@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using WebApplication.Models;
+using HelpToTeach.Data.Models;
+using HelpToTeach.Data.Transfer;
 
 namespace WebApplication.Helpers
 {

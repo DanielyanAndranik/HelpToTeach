@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplication.Models
+namespace HelpToTeach.Data.Transfer
 {
-    public class User : EntityBase<User>
+    public class UserDto
     {
+        public int Id { get; set; }
         public string Username { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
+        public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public DateTime BirthDate { get; set; }
-        public string Role { get; set; }
-        public List<GroupCourse> GroupCourses { get; set; }
+        public byte Role { get; set; }
     }
 }

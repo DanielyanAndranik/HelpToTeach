@@ -1,17 +1,17 @@
 ﻿using Couchbase.Core;
+using Couchbase.Extensions.DependencyInjection;
 using Couchbase.N1QL;
+using HelpToTeach.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WebApplication.Models;
 
-namespace WebApplication.Repository
+namespace HelpToTeach.Core.Repository
 {
     public class GroupRepository : IGroupRepository
     {
         private readonly IBucket bucket;
-        public GroupRepository(IHelpToTeachBucketProvider provider)
+        public GroupRepository(INamedBucketProvider provider)
         {
             this.bucket = provider.GetBucket();
         }

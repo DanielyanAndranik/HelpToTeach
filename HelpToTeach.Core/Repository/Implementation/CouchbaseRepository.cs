@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Couchbase.Core;
+﻿using Couchbase.Core;
+using Couchbase.Extensions.DependencyInjection;
 using Couchbase.N1QL;
-using WebApplication.Models;
+using HelpToTeach.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace WebApplication.Repository
+namespace HelpToTeach.Core.Repository
 {
     public class CouchbaseRepository<T> : IRepository<T> where T : EntityBase<T>
     {
         private readonly IBucket _bucket;
 
-        public CouchbaseRepository(IHelpToTeachBucketProvider provider)
+        public CouchbaseRepository(INamedBucketProvider provider)
         {
             this._bucket = provider.GetBucket();
         }

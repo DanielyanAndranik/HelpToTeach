@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using HelpToTeach.Core.Repository;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Repository;
 using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers

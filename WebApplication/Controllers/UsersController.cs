@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using WebApplication.Models;
+using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Repository;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using HelpToTeach.Data.Transfer;
+using HelpToTeach.Core.Repository;
 
 namespace WebApplication.Controllers
 {

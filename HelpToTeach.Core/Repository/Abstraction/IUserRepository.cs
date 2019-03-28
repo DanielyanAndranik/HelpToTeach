@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using HelpToTeach.Data.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApplication.Models;
 
-namespace WebApplication.Repository
+namespace HelpToTeach.Core.Repository
 {
     public interface IUserRepository
     {

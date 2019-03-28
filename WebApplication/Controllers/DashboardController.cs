@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using HelpToTeach.Core.Repository;
+using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication.Models;
-using WebApplication.Repository;
 using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
