@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HelpToTeach.Core.Repository;
+using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Data;
-using WebApi.Models;
+
 
 namespace WebApi.Controllers
 {
@@ -14,9 +15,7 @@ namespace WebApi.Controllers
     public class StudentsController : ControllerBase
     {
 
-        private readonly IRepository<Student> _studentsRepository = new CouchbaseRepository<Student>();
-
-
+        private readonly IRepository<Student> _studentsRepository;
         #region GET
 
         [HttpGet]

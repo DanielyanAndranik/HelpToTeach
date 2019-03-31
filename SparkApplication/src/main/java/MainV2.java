@@ -184,8 +184,8 @@ public class MainV2 {
             @Override
             public JsonDocument call(Group group) throws Exception {
                 JsonObject data = JsonObject.create()
-                        .put("groupId",group.getId_())
-                        .put("groupName",group.getName_())
+                        .put("id",group.getId_())
+                        .put("name",group.getName_())
                         .put("type","group");
 
                 return JsonDocument.create("group::"+group.getId_(),data);
@@ -199,8 +199,8 @@ public class MainV2 {
             @Override
             public JsonDocument call(Course course) throws Exception {
                 JsonObject data = JsonObject.create()
-                        .put("courseId",course.getId_())
-                        .put("courseName",course.getName_())
+                        .put("id",course.getId_())
+                        .put("name",course.getName_())
                         .put("type","course");
 
                 return JsonDocument.create("course::"+course.getId_(),data);

@@ -6,18 +6,38 @@
 @model DashboradLayoutViewModel
 
 <ul class="nav nav-tabs">
+
+    @{
+        string dCoursesTitle = "Courses";
+        string dGroupsTitle = "Groups";
+        string dStudentsTitle = "Students";
+        string dLessonsTitle = "Lessons";
+
+        if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
+        {
+            dCoursesTitle = "My courses";
+            dGroupsTitle = "My groups";
+            dStudentsTitle = "My students";
+            dLessonsTitle = "My lessons";
+        }
+
+    }
+
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Courses">My courses</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Courses">@dCoursesTitle</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Groups">My groups</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Groups">@dGroupsTitle</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Students">My students</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Students">@dStudentsTitle</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Lessons">My lessons</a>
-    </li>
+    @if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Lessons">My lessons</a>
+        </li>
+    }
 </ul>
 
 @RenderBody()

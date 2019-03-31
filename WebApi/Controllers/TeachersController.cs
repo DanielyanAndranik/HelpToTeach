@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HelpToTeach.Core.Repository;
+using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Data;
-using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -14,11 +14,11 @@ namespace WebApi.Controllers
     public class TeachersController : ControllerBase
     {
 
-        private readonly IRepository<Teacher> _teachersRepository;
+        private readonly IRepository<User> _teachersRepository;
 
         public TeachersController()
         {
-            _teachersRepository = new CouchbaseRepository<Teacher>();
+            
         }
 
         #region GET
@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var teachers = await _teachersRepository.GetAll(typeof(Teacher));
+                var teachers = await _teachersRepository.GetAll(typeof(User));
                 return Ok(teachers);
             }
             catch (Exception e)

@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
 using HelpToTeach.Data.Models;
@@ -12,15 +13,22 @@ namespace WebApplication.Controllers
         private readonly ICourseRepository courseRepository;
         private readonly IGroupRepository groupRepository;
         private readonly IStudentRepository studentRepository;
+        
 
-        public DashboardController(ICourseRepository courseRepository, IGroupRepository groupRepository, IStudentRepository studentRepository)
+        public DashboardController(ICourseRepository courseRepository, 
+            IGroupRepository groupRepository, 
+            IStudentRepository studentRepository)
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
             this.studentRepository = studentRepository;
+            
+
+            
+
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
@@ -28,14 +36,17 @@ namespace WebApplication.Controllers
         #region Course
         public async Task<IActionResult> Courses()
         {
-            if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
+            IEnumerable<Course> courses;
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
             {
-                var id = User.FindFirst(ClaimTypes.Sid).Value;
-                var _courses = await this.courseRepository.GetByLecturer(id);
+                courses = await courseRepository.GetAll();
             }
-
-            var courses = await this.courseRepository.GetAll();
-            return View(new CoursesViewModel { Courses = courses });
+            else
+            {
+                courses = await courseRepository.GetByLecturer(id);
+            }            
+            return View(new CoursesViewModel { Courses = courses});
         }
 
         public IActionResult AddCourse()
@@ -55,7 +66,16 @@ namespace WebApplication.Controllers
 
         public async Task<IActionResult> Groups()
         {
-            var groups = await this.groupRepository.GetAll();
+            IEnumerable<Group> groups;
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
+            {
+                groups = await groupRepository.GetAll();
+            }
+            else {
+                groups = await groupRepository.GetByLecturer(id);
+            }
+
             return View(new GroupsViewModel { Groups = groups });
         }
 
@@ -75,7 +95,16 @@ namespace WebApplication.Controllers
         #region Students
         public async Task<IActionResult> Students()
         {
-            var students = await this.studentRepository.GetAll();
+            IEnumerable<Student> students;
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
+            {
+                students = await studentRepository.GetAll();
+            }
+            else
+            {
+                students = await studentRepository.GetByLecturer(id);
+            }
             return View(new StudentsViewModel { Students = students });
         }
 
