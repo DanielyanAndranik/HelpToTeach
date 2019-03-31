@@ -1,93 +1,93 @@
-﻿using Couchbase;
-using Couchbase.Core;
-using Couchbase.N1QL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApi.Models;
+﻿//using Couchbase;
+//using Couchbase.Core;
+//using Couchbase.N1QL;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using WebApi.Models;
 
-namespace WebApi.Data
-{
-    public class CouchbaseRepository<T> : IRepository<T> where T : EntityBase<T>
-    {
-        private readonly IBucket _bucket = ClusterHelper.GetBucket("HelpToTeachBucket");
+//namespace WebApi.Data
+//{
+//    public class CouchbaseRepository<T> : IRepository<T> where T : EntityBase<T>
+//    {
+//        private readonly IBucket _bucket = ClusterHelper.GetBucket("HelpToTeachBucket");
 
-        #region Private Methods
+//        #region Private Methods
 
-        private string CreateKey(string id)
-        {
-            // generates type-prefixed key like 'player::123'
-            return string.Format("{0}::{1}", typeof(T).Name.ToLower(), id);
-        }
+//        private string CreateKey(string id)
+//        {
+//            // generates type-prefixed key like 'player::123'
+//            return string.Format("{0}::{1}", typeof(T).Name.ToLower(), id);
+//        }
 
-        #endregion
+//        #endregion
 
-        #region Public Members
+//        #region Public Members
 
-        #region CRUD
+//        #region CRUD
 
-        public async Task<List<T>> GetAll(Type t)
-        {
-            var type = t.Name.ToLower();
-            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type");
-            query.AddNamedParameter("type", type);
-            var result = await _bucket.QueryAsync<T>(query);
-            return !result.Success ? null : result.Rows;
-        }
+//        public async Task<List<T>> GetAll(Type t)
+//        {
+//            var type = t.Name.ToLower();
+//            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type");
+//            query.AddNamedParameter("type", type);
+//            var result = await _bucket.QueryAsync<T>(query);
+//            return !result.Success ? null : result.Rows;
+//        }
 
-        public async Task<T> Get(string id)
-        {
-            var key = CreateKey(id);
-            var result = await _bucket.GetAsync<T>(key);
-            return !result.Success ? null : result.Value;
-        }
+//        public async Task<T> Get(string id)
+//        {
+//            var key = CreateKey(id);
+//            var result = await _bucket.GetAsync<T>(key);
+//            return !result.Success ? null : result.Value;
+//        }
 
-        public async Task<T> Create(T item)
-        {
-            //item.Created = DateTime.Now;
-            //item.Updated = DateTime.Now;
-            item.Id = Guid.NewGuid().ToString();
-            var key = CreateKey(item.Id);
+//        public async Task<T> Create(T item)
+//        {
+//            //item.Created = DateTime.Now;
+//            //item.Updated = DateTime.Now;
+//            item.Id = Guid.NewGuid().ToString();
+//            var key = CreateKey(item.Id);
 
-            var result = await _bucket.InsertAsync(key, item);
-            if (!result.Success) throw result.Exception;
+//            var result = await _bucket.InsertAsync(key, item);
+//            if (!result.Success) throw result.Exception;
 
-            return item;
-        }
+//            return item;
+//        }
 
-        public async Task<T> Update(T item)
-        {
-            //item.Updated = DateTime.Now;
-            var key = CreateKey(item.Id);
-            var result = await _bucket.ReplaceAsync(key, item);
+//        public async Task<T> Update(T item)
+//        {
+//            //item.Updated = DateTime.Now;
+//            var key = CreateKey(item.Id);
+//            var result = await _bucket.ReplaceAsync(key, item);
 
-            if (!result.Success) throw result.Exception;
+//            if (!result.Success) throw result.Exception;
 
-            return item;
-        }
+//            return item;
+//        }
 
-        public async Task<T> Upsert(T item)
-        {
-            //if (Get(item.Id) == null) item.Created = DateTime.Now;
-            //item.Updated = DateTime.Now;
-            var key = CreateKey(item.Id);
-            var result = await _bucket.UpsertAsync(key, item);
+//        public async Task<T> Upsert(T item)
+//        {
+//            //if (Get(item.Id) == null) item.Created = DateTime.Now;
+//            //item.Updated = DateTime.Now;
+//            var key = CreateKey(item.Id);
+//            var result = await _bucket.UpsertAsync(key, item);
 
-            if (!result.Success) throw result.Exception;
+//            if (!result.Success) throw result.Exception;
 
-            return item;
-        }
+//            return item;
+//        }
 
-        public async Task Delete(string id)
-        {
-            var key = CreateKey(id);
-            var result = await _bucket.RemoveAsync(key);
-            if (!result.Success) throw result.Exception;
-        }
+//        public async Task Delete(string id)
+//        {
+//            var key = CreateKey(id);
+//            var result = await _bucket.RemoveAsync(key);
+//            if (!result.Success) throw result.Exception;
+//        }
 
-        #endregion
+//        #endregion
 
-        #endregion
-    }
-}
+//        #endregion
+//    }
+//}
