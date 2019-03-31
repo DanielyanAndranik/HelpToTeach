@@ -6,12 +6,14 @@ public class KeyStudent implements Serializable {
 
     private String fn_;
     private String ln_;
+    private String mn_;
     private String gn_;
 
-    public KeyStudent(String fn,String ln,String gn){
+    public KeyStudent(String fn,String ln,String mn,String gn){
         fn_ = fn;
         ln_ = ln;
         gn_ = gn;
+        mn_ = mn;
     }
 
 
@@ -30,7 +32,7 @@ public class KeyStudent implements Serializable {
 
     @Override
     public int hashCode() {
-        return fn_.hashCode() + ln_.hashCode() + gn_.hashCode();
+        return fn_.hashCode() + ln_.hashCode() + gn_.hashCode() + mn_.hashCode();
     }
 
     public String getFn_() {
@@ -45,6 +47,10 @@ public class KeyStudent implements Serializable {
         return ln_;
     }
 
+    public String getMn_() {
+        return mn_;
+    }
+
     public void setFn_(String fn_) {
         this.fn_ = fn_;
     }
@@ -53,12 +59,16 @@ public class KeyStudent implements Serializable {
         this.gn_ = gn_;
     }
 
+    public void setMn_(String mn_) {
+        this.mn_ = mn_;
+    }
+
     public void setLn_(String ln_) {
         this.ln_ = ln_;
     }
 
     @Override
     public String toString() {
-        return fn_+","+ln_+","+gn_;
+        return fn_+","+ln_+","+mn_+","+gn_;
     }
 }

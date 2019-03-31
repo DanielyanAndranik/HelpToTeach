@@ -83,33 +83,23 @@ public class MainV2 {
                     }
                 });
 
-        JavaRDD<String> dotNet2011 = sparkContext.textFile(InputPaths2011.DotNet)
-                .filter(new HeaderFilter());
-        JavaRDD<String> calculus2011 = sparkContext.textFile(InputPaths2011.Calculus)
-                .filter(new HeaderFilter());
-        JavaRDD<String> imageProcessing2011 = sparkContext.textFile(InputPaths2011.ImageProcessing)
-                .filter(new HeaderFilter());
-        JavaRDD<String> machineLearning2011 = sparkContext.textFile(InputPaths2011.MachineLearning)
-                .filter(new HeaderFilter());
+        JavaRDD<String> dotNet2011 = sparkContext.textFile(InputPaths2011.DotNet);
+        JavaRDD<String> calculus2011 = sparkContext.textFile(InputPaths2011.Calculus);
+        JavaRDD<String> imageProcessing2011 = sparkContext.textFile(InputPaths2011.ImageProcessing);
+        JavaRDD<String> machineLearning2011 = sparkContext.textFile(InputPaths2011.MachineLearning);
 
-        JavaRDD<String> dotNet2012 = sparkContext.textFile(InputPaths2012.DotNet)
-                .filter(new HeaderFilter());
-        JavaRDD<String> calculus2012 = sparkContext.textFile(InputPaths2012.Calculus)
-                .filter(new HeaderFilter());
-        JavaRDD<String> imageProcessing2012 = sparkContext.textFile(InputPaths2012.ImageProcessing)
-                .filter(new HeaderFilter());
-        JavaRDD<String> machineLearning2012 = sparkContext.textFile(InputPaths2012.MachineLearning)
-                .filter(new HeaderFilter());
+        JavaRDD<String> dotNet2012 = sparkContext.textFile(InputPaths2012.DotNet);
+        JavaRDD<String> calculus2012 = sparkContext.textFile(InputPaths2012.Calculus);
+        JavaRDD<String> imageProcessing2012 = sparkContext.textFile(InputPaths2012.ImageProcessing);
+        JavaRDD<String> machineLearning2012 = sparkContext.textFile(InputPaths2012.MachineLearning);
 
 
-        JavaRDD<String> java2012 = sparkContext.textFile(InputPaths2012.Java)
-                .filter(new HeaderFilter());
-        JavaRDD<String> sql2012 = sparkContext.textFile(InputPaths2012.SQL)
-                .filter(new HeaderFilter());
+        JavaRDD<String> java2012 = sparkContext.textFile(InputPaths2012.Java);
+        JavaRDD<String> sql2012 = sparkContext.textFile(InputPaths2012.SQL);
 
         //making pair rdds
 
-        JavaPairRDD<KeyStudent, Mark> dotNet2011PairRDD = dotNet2011.mapToPair(new PairCreater("Net"));
+        JavaPairRDD<KeyStudent,Mark> dotNet2011PairRDD = dotNet2011.mapToPair(new PairCreater("Net"));
         JavaPairRDD<KeyStudent, Mark> calculus2011PairRDD = calculus2011.mapToPair(new PairCreater("Calculus"));
         JavaPairRDD<KeyStudent,Mark> imageProcessing2011PairRDD = imageProcessing2011.mapToPair(new PairCreater("Image"));
         JavaPairRDD<KeyStudent,Mark> machineLearning2011PairRDD = machineLearning2011.mapToPair(new PairCreater("Machine"));
@@ -119,8 +109,8 @@ public class MainV2 {
         JavaPairRDD<KeyStudent,Mark> imageProcessing2012PairRDD = imageProcessing2012.mapToPair(new PairCreater("Image"));
         JavaPairRDD<KeyStudent,Mark> machineLearning2012PairRDD = machineLearning2012.mapToPair(new PairCreater("Machine"));
 
-        JavaPairRDD<KeyStudent, Mark> java2012PairRDD = dotNet2011.mapToPair(new PairCreater("Java"));
-        JavaPairRDD<KeyStudent, Mark> sql2012PairRDD = calculus2011.mapToPair(new PairCreater("SQL"));
+        JavaPairRDD<KeyStudent, Mark> java2012PairRDD = java2012.mapToPair(new PairCreater("Java"));
+        JavaPairRDD<KeyStudent, Mark> sql2012PairRDD = sql2012.mapToPair(new PairCreater("SQL"));
 
 
         JavaPairRDD<KeyStudent,Iterable<Mark>> allDataFor2011 = dotNet2011PairRDD
@@ -135,13 +125,14 @@ public class MainV2 {
                 .union(sql2012PairRDD)
                 .groupByKey();
 
-        JavaRDD<Student> resultFor2011 = allDataFor2011.map(new Function<Tuple2<KeyStudent, Iterable<Mark>>, Student>() {
+        JavaRDD<Student> resultFor2011and2012 = allDataFor2011.map(new Function<Tuple2<KeyStudent, Iterable<Mark>>, Student>() {
             @Override
             public Student call(Tuple2<KeyStudent, Iterable<Mark>> keyStudentIterableTuple2) throws Exception {
                 Student student = new Student();
                 student.setId_(UUID.randomUUID().toString());
                 student.setFirstName_(keyStudentIterableTuple2._1.getFn_());
                 student.setLastName_(keyStudentIterableTuple2._1.getLn_());
+                student.setMiddleName_(keyStudentIterableTuple2._1.getMn_());
                 student.setGroupId_(keyStudentIterableTuple2._1.getGn_());
                 List<Mark> marks = new ArrayList<>();
 
@@ -155,7 +146,7 @@ public class MainV2 {
             }
         });
 
-        JavaRDD<JsonDocument> couchbaseStudents2011Result = resultFor2011.map(new Function<Student, JsonDocument>() {
+        JavaRDD<JsonDocument> couchbaseStudents2011Result = resultFor2011and2012.map(new Function<Student, JsonDocument>() {
             @Override
             public JsonDocument call(Student student) throws Exception {
 
@@ -177,6 +168,7 @@ public class MainV2 {
                         .put("firstName",student.getFirstName_())
                         .put("lastName",student.getLastName_())
                         .put("id",student.getId_())
+                        .put("middleName",student.getMiddleName_())
                         .put("type","student")
                         .put("marks",jsonMarks)
                         .put("groupId",student.getGroupId_());
@@ -234,7 +226,8 @@ public class MainV2 {
             String temp[] = s.split(",");
             String firstName = temp[1];
             String lastName = temp[2];
-            String group = temp[3];
+            String middleName = temp[3];
+            String group = temp[4];
 
             String courseId = "???";
 
@@ -253,8 +246,8 @@ public class MainV2 {
                 }
             }
 
-            return new Tuple2<KeyStudent,Mark>(new KeyStudent(firstName,lastName,group),
-                    new Mark(courseId,temp[4],temp[5],temp[6],temp[7]));
+            return new Tuple2<KeyStudent,Mark>(new KeyStudent(firstName,lastName,middleName,group),
+                    new Mark(courseId,temp[5],temp[6],temp[7],temp[8]));
 
         }
     }

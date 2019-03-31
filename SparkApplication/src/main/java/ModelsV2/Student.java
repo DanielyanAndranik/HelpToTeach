@@ -8,6 +8,7 @@ public class Student {
     private String groupId_;
     private String firstName_;
     private String lastName_;
+    private String middleName_;
     private List<Mark> marks_;
 
     public Student(){
@@ -24,6 +25,10 @@ public class Student {
 
     public String getFirstName_() {
         return firstName_;
+    }
+
+    public String getMiddleName_() {
+        return middleName_;
     }
 
     public String getGroupId_() {
@@ -44,6 +49,10 @@ public class Student {
 
     public void setGroupId_(String groupId_) {
         this.groupId_ = groupId_;
+    }
+
+    public void setMiddleName_(String middleName_) {
+        this.middleName_ = middleName_;
     }
 
     public void setLastName_(String lastName_) {
@@ -67,6 +76,6 @@ public class Student {
 
     @Override
     public int hashCode() {
-        return firstName_.hashCode() + groupId_.hashCode() + lastName_.hashCode();
+        return firstName_.hashCode() + groupId_.hashCode() + lastName_.hashCode() + middleName_.hashCode();
     }
 }
