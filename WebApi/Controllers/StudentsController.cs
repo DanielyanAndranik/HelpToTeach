@@ -18,6 +18,11 @@ namespace WebApi.Controllers
         private readonly IRepository<Student> _studentsRepository;
         #region GET
 
+        public StudentsController(IRepository<Student> studentsRepository)
+        {
+            _studentsRepository = studentsRepository;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllStudents()
         {

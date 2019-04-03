@@ -1,4 +1,6 @@
 from RestClient import Client
 
-client = Client()
-client.get()
+client = Client(port=4000)
+response = client.get('api/Students')
+
+print(response)

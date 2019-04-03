@@ -34,7 +34,7 @@ namespace HelpToTeach.Core.Repository
         public async Task<List<T>> GetAll(Type t)
         {
             var type = t.Name.ToLower();
-            var query = new QueryRequest("SELECT HelpToTeachMainBucket.* FROM HelpToTeachMainBucket WHERE type = $type");
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = $type");
             query.AddNamedParameter("type", type);
             var result = await _bucket.QueryAsync<T>(query);
             return !result.Success ? null : result.Rows;

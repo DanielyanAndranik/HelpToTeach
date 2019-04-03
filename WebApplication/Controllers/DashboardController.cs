@@ -13,24 +13,26 @@ namespace WebApplication.Controllers
         private readonly ICourseRepository courseRepository;
         private readonly IGroupRepository groupRepository;
         private readonly IStudentRepository studentRepository;
+        private readonly IUserRepository userRepository;
         
 
-        public DashboardController(ICourseRepository courseRepository, 
-            IGroupRepository groupRepository, 
-            IStudentRepository studentRepository)
+        public DashboardController(ICourseRepository courseRepository, IGroupRepository groupRepository, IStudentRepository studentRepository, IUserRepository userRepository)
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
             this.studentRepository = studentRepository;
-            
-
-            
-
+            this.userRepository = userRepository;         
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Profile");
+        }
+
+        public async Task<IActionResult> Profile()
+        {
+            var user = await userRepository.Get(User.FindFirstValue(ClaimTypes.Sid));
+            return View(new ProfileViewModel { User = user });
         }
 
         #region Course

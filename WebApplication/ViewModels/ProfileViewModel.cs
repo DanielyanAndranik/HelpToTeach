@@ -1,4 +1,8 @@
-﻿namespace WebApplication.ViewModels
+﻿using HelpToTeach.Data.Models;
+
+namespace WebApplication.ViewModels
 {
-    public class ProfileViewModel : AccountLayoutViewModel { }
+    public class ProfileViewModel : DashboradLayoutViewModel
+    {
+    }
 }

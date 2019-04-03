@@ -1,0 +1,20 @@
+﻿@model ProfileViewModel
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    var user = Model.User;
+}
+<div class="row">
+    <div class="col-3 bg-dark ">
+        <div class="row">
+            <div class="avatar"></div>
+        </div>
+        <div class="row">
+            <p>@user.FirstName</p>
+            <p>@user.LastName</p>
+        </div>
+    </div>
+    <div class="col-9 bg-primary">
+
+    </div>
+</div>
+<h1>Profile</h1>
