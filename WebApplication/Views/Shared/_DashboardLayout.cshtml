@@ -4,43 +4,48 @@
     var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 }
 @model DashboradLayoutViewModel
+<div class="d-flex">
 
-<ul class="nav nav-tabs">
+<div class="nav-wrapper mr-3 bg-dark">
+    <ul class="nav flex-column">
 
-    @{
-        string dCoursesTitle = "Courses";
-        string dGroupsTitle = "Groups";
-        string dStudentsTitle = "Students";
-        string dLessonsTitle = "Lessons";
+        @{
+            string dCoursesTitle = "Courses";
+            string dGroupsTitle = "Groups";
+            string dStudentsTitle = "Students";
+            string dLessonsTitle = "Lessons";
 
-        if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
-        {
-            dCoursesTitle = "My courses";
-            dGroupsTitle = "My groups";
-            dStudentsTitle = "My students";
-            dLessonsTitle = "My lessons";
+            if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
+            {
+                dCoursesTitle = "My courses";
+                dGroupsTitle = "My groups";
+                dStudentsTitle = "My students";
+                dLessonsTitle = "My lessons";
+            }
+
         }
 
-    }
-
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Profile">Profile</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Courses">@dCoursesTitle</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Groups">@dGroupsTitle</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Students">@dStudentsTitle</a>
-    </li>
-    @if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Lessons">My lessons</a>
+        <li class="nav-item text-center py-2 border-bottom">
+            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Profile">Profile</a>
         </li>
-    }
-</ul>
-
-@RenderBody()
+        <li class="nav-item text-center py-2 border-bottom">
+            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Courses">@dCoursesTitle</a>
+        </li>
+        <li class="nav-item text-center py-2 border-bottom">
+            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Groups">@dGroupsTitle</a>
+        </li>
+        <li class="nav-item text-center py-2 border-bottom">
+            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Students">@dStudentsTitle</a>
+        </li>
+        @if (User.FindFirst(ClaimTypes.Role).Value == "Lecturer")
+        {
+            <li class="nav-item text-center py-2 border-bottom">
+                <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Lessons">My lessons</a>
+            </li>
+        }
+    </ul>
+</div>
+<div class="dashboard flex-grow-1">
+    @RenderBody()
+</div>
+</div>

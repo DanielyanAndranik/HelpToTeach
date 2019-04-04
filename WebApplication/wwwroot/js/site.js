@@ -5,10 +5,11 @@
 jQuery(document).ready(function () {
     var pathname = window.location.pathname;
     console.log(pathname);
-    var tabs = $('.nav-tabs .nav-link');
-    tabs.map((index, tab) => {
-        if (tab.getAttribute('href') == pathname) {
-            $(tab).addClass('active');
+    var links = $('ul.flex-column .nav-link');
+    links.map((index, link) => {
+        if (link.getAttribute('href') == pathname) {
+            $(link).toggleClass('text-dark');
+            $(link.parentElement).addClass('bg-white');
         }
     });
 });
