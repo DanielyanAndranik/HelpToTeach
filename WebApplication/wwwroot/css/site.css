@@ -79,3 +79,11 @@ body {
 .profile{
     height: 600px;
 }
+.avatar{
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+}
+.profile{
+    font-size: 1.2em;
+}

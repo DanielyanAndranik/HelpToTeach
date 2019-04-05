@@ -26,10 +26,10 @@ namespace WebApplication.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Profile");
+            return RedirectToAction("Info");
         }
 
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Info()
         {
             var user = await userRepository.Get(User.FindFirstValue(ClaimTypes.Sid));
             return View(new ProfileViewModel { User = user });
