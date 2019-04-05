@@ -8,6 +8,7 @@ namespace HelpToTeach.Core.Repository
     {
         Task<User> Authenticate(string username, string password);
         Task<List<User>> GetAll();
+        Task<List<User>> GetTeachers();
         Task<User> Get(string id);
         Task<User> Create(User user, string password);
         Task<User> Update(User user);

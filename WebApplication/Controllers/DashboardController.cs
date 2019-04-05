@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
@@ -40,7 +41,7 @@ namespace WebApplication.Controllers
         {
             IEnumerable<Course> courses;
             var id = User.FindFirst(ClaimTypes.Sid).Value;
-            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
+            if (User.FindFirst(ClaimTypes.Role).Value == "2")
             {
                 courses = await courseRepository.GetAll();
             }
@@ -123,7 +124,34 @@ namespace WebApplication.Controllers
             return RedirectToAction("Students");
         }
 
-        #endregion  
+        #endregion
+
+        #region Teachers
+
+        public async Task<IActionResult> Teachers()
+        {
+            var result = await userRepository.GetTeachers();
+            return View(new TeachersViewModel()
+            {
+                Teachers = result
+            });
+        }
+
+        public async Task<IActionResult> AddTeacher()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region GCT
+
+        public async Task<IActionResult> GroupCourseTeacher()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         public IActionResult Assign([FromQuery] string GroupId)
         {
