@@ -4,9 +4,9 @@
     var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 }
 @model DashboradLayoutViewModel
-<div class="d-flex">
+<div class="d-flex dashboard-page">
 
-<div class="nav-wrapper mr-3 bg-dark">
+<div class="nav-wrapper bg-dark">
     <ul class="nav flex-column">
 
         @{
@@ -26,7 +26,7 @@
         }
 
         <li class="nav-item text-center py-2 border-bottom">
-            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Profile">Profile</a>
+            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Info">Info</a>
         </li>
         <li class="nav-item text-center py-2 border-bottom">
             <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Courses">@dCoursesTitle</a>
@@ -54,7 +54,7 @@
         }
     </ul>
 </div>
-<div class="dashboard flex-grow-1">
+<div class="dashboard p-3">
     @RenderBody()
 </div>
 </div>
