@@ -60,6 +60,22 @@ body {
     width: 250px;
     height: 250px;
 }
-.nav-wrapper{
-    width: 250px;
+.nav-wrapper .nav-link{
+    width: 260px;
+    font-size: 1.1em;
+}
+
+.dashboard-page{
+    position: fixed;
+    top: 57px;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+}
+.dashboard{
+    box-sizing: border-box;
+    width: 100%;
+}
+.profile{
+    height: 600px;
 }

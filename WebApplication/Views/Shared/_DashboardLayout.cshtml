@@ -4,9 +4,9 @@
     var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 }
 @model DashboradLayoutViewModel
-<div class="d-flex">
+<div class="d-flex dashboard-page">
 
-<div class="nav-wrapper mr-3 bg-dark">
+<div class="nav-wrapper bg-dark">
     <ul class="nav flex-column">
 
         @{
@@ -45,7 +45,7 @@
         }
     </ul>
 </div>
-<div class="dashboard flex-grow-1">
+<div class="dashboard px-3">
     @RenderBody()
 </div>
 </div>
