@@ -29,19 +29,21 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Course> Get(string id)
+        public async Task<Course> Get(string id)
         {
-            throw new NotImplementedException();
+            var courses = await GetAll();
+            Course course = courses.FirstOrDefault(u => u.Id == id);
+            return course;
         }
 
-        public async Task<IEnumerable<Course>> GetAll()
+        public async Task<List<Course>> GetAll()
         {
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'course'");
             var result = await bucket.QueryAsync<Course>(query);
             return result.Rows;
         }
 
-        public async Task<IEnumerable<Course>> GetByLecturer(string id)
+        public async Task<List<Course>> GetByLecturer(string id)
         {
             return null;
         }
