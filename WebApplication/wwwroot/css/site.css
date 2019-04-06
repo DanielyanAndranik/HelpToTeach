@@ -84,6 +84,14 @@ body {
     height: 250px;
     overflow: hidden;
 }
-.profile{
-    font-size: 1.2em;
+
+    .profile .infocard:hover {
+        cursor: pointer;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    }
+    .profile .infocard a{
+        color: transparent;
+    }
+.profile .infocard:hover a {
+    color: #212529;
 }
