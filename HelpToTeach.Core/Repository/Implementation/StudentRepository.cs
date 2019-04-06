@@ -34,14 +34,14 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Student>> GetAll()
+        public async Task<List<Student>> GetAll()
         {
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'student'");
             var result = await bucket.QueryAsync<Student>(query);
             return result.Rows;
         }
 
-        public Task<IEnumerable<Student>> GetByLecturer(string id)
+        public Task<List<Student>> GetByLecturer(string id)
         {
             throw new NotImplementedException();
         }

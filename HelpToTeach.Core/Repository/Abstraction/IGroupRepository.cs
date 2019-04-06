@@ -8,9 +8,9 @@ namespace HelpToTeach.Core.Repository
 {
     public interface IGroupRepository
     {
-        Task<IEnumerable<Group>> GetAll();
+        Task<List<Group>> GetAll();
         Task<Group> Get(string id);
-        Task<IEnumerable<Group>> GetByLecturer(string id);
+        Task<List<Group>> GetByLecturer(string id);
         Task<Group> Create(Group group);
         Task<Group> Update(Group group);
         Task<Group> Upsert(Group group);

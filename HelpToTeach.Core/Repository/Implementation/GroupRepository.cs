@@ -4,6 +4,7 @@ using Couchbase.N1QL;
 using HelpToTeach.Data.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HelpToTeach.Core.Repository
@@ -28,19 +29,21 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Group> Get(string id)
+        public async Task<Group> Get(string id)
         {
-            throw new NotImplementedException();
+            List<Group> groups = await GetAll();
+            Group result = groups.FirstOrDefault(u => u.Id == id);
+            return result;
         }
 
-        public async Task<IEnumerable<Group>> GetAll()
+        public async Task<List<Group>> GetAll()
         {
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'group'");
             var result = await bucket.QueryAsync<Group>(query);
             return result.Rows;
         }
 
-        public Task<IEnumerable<Group>> GetByLecturer(string id)
+        public Task<List<Group>> GetByLecturer(string id)
         {
             throw new NotImplementedException();
         }

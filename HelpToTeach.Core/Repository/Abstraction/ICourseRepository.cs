@@ -8,9 +8,9 @@ namespace HelpToTeach.Core.Repository
 {
     public interface ICourseRepository
     {
-        Task<IEnumerable<Course>> GetAll();
+        Task<List<Course>> GetAll();
         Task<Course> Get(string id);
-        Task<IEnumerable<Course>> GetByLecturer(string id);
+        Task<List<Course>> GetByLecturer(string id);
         Task<Course> Create(Course course);
         Task<Course> Update(Course course);
         Task<Course> Upsert(Course course);

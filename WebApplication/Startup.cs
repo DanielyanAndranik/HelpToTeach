@@ -33,6 +33,8 @@ namespace WebApplication
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<IGroupCourseRepository, GroupCourseRepository>();
+            
 
             services.AddAutoMapper();
         

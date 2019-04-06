@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 }
 @model CoursesViewModel
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -23,7 +24,11 @@
         }
     </tbody>
 </table>
-<a class="btn btn-outline-secondary" asp-action="AddCourse">Add course</a>
+@if (role == "2")
+{
+    <a class="btn btn-outline-secondary" asp-action="AddCourse">Add course</a>
+}
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("#js-table").dataTable();

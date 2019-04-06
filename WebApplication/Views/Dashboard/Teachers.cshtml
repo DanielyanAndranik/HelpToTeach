@@ -1,44 +1,41 @@
-﻿@{
-    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+﻿@model TeachersViewModel
+@{
     var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+    ViewData["Title"] = "Teachers";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
-@model StudentsViewModel
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h1>Students</h1>
+<h1>Teachers</h1>
 <table class="table table-hover" id="js-table">
     <thead>
         <tr>
-            <th scope="col">ID</th>
             <th scope="col">FirstName</th>
             <th scope="col">LastName</th>
             <th scope="col">MiddleName</th>
             <th scope="col">BirthDate</th>
-            <th scope="col">Group</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var student in Model.Students)
+        @foreach (var teacher in Model.Teachers)
         {
             <tr>
-                <th scope="row">@student.Id</th>
-                <td>@student.FirstName</td>
-                <td>@student.LastName</td>
-                <td>@student.MiddleName</td>
-                <td>@student.BirthDate</td>
-                <td>@student.GroupId</td>
+                <td>@teacher.FirstName</td>
+                <td>@teacher.LastName</td>
+                <td>@teacher.MiddleName</td>
+                <td>@teacher.BirthDate</td>
             </tr>
         }
     </tbody>
 </table>
 @if (role == "2")
 {
-    <a class="btn btn-outline-secondary" asp-action="AddStudent">Add student</a>
+    <a class="btn btn-outline-secondary" asp-action="AddTeacher">Add Teacher</a>
 }
-
 <script type="text/javascript">
     $(document).ready(function () {
         $("#js-table").DataTable();
     });
 </script>
+

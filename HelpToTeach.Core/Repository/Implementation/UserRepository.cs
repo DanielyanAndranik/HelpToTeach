@@ -80,6 +80,14 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
+        public async Task<List<User>> GetTeachers()
+        {
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
+            var users = await _bucket.QueryAsync<User>(query);
+            var result = (from s in users where s.Role == "1" select s).ToList();
+            return result;
+        }
+
         public Task<User> Update(User user)
         {
             throw new NotImplementedException();

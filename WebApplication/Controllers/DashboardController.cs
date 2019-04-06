@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
 using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Helpers;
 using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
@@ -15,14 +17,20 @@ namespace WebApplication.Controllers
         private readonly IGroupRepository groupRepository;
         private readonly IStudentRepository studentRepository;
         private readonly IUserRepository userRepository;
+        private readonly IGroupCourseRepository groupCourseRepository;
         
 
-        public DashboardController(ICourseRepository courseRepository, IGroupRepository groupRepository, IStudentRepository studentRepository, IUserRepository userRepository)
+        public DashboardController(ICourseRepository courseRepository,
+            IGroupRepository groupRepository,
+            IStudentRepository studentRepository,
+            IUserRepository userRepository,
+            IGroupCourseRepository groupCourseRepository)
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
             this.studentRepository = studentRepository;
-            this.userRepository = userRepository;         
+            this.userRepository = userRepository;
+            this.groupCourseRepository = groupCourseRepository;
         }
 
         public IActionResult Index()
@@ -133,7 +141,62 @@ namespace WebApplication.Controllers
             return RedirectToAction("Students");
         }
 
-        #endregion  
+        #endregion
+
+        #region Teachers
+
+        public async Task<IActionResult> Teachers()
+        {
+            var result = await userRepository.GetTeachers();
+            return View(new TeachersViewModel()
+            {
+                Teachers = result
+            });
+        }
+
+        public async Task<IActionResult> AddTeacher()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region GCT
+
+        public async Task<IActionResult> GroupCourse()
+        {
+            List<GroupCourse> groupCourses = await groupCourseRepository.GetAll();
+
+            if (groupCourses == null) {
+                groupCourses = new List<GroupCourse>();
+            }
+
+            List<GroupCourseRow> result = new List<GroupCourseRow>();
+            foreach (var item in groupCourses)
+            {
+                Group group = await groupRepository.Get(item.GroupId);
+                Course course = await courseRepository.Get(item.CourseId);
+                User teacher = await userRepository.Get(item.UserId);
+                result.Add(new GroupCourseRow()
+                {
+                    GroupName = group.Name,
+                    CourseName = course.Name,
+                    TeacherName = teacher.FirstName
+                });
+            }
+
+            return View(new GroupCourseViewModel()
+            {
+                GroupCourses = result
+            });
+        }
+
+        public async Task<IActionResult> AddGroupCourse()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         public IActionResult Assign([FromQuery] string GroupId)
         {
