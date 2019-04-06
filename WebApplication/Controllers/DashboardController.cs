@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
@@ -40,7 +41,16 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Info()
         {
             var user = await userRepository.Get(User.FindFirstValue(ClaimTypes.Sid));
-            return View(new ProfileViewModel { User = user });
+            var studentsCount = (await studentRepository.GetByLecturer(User.FindFirstValue(ClaimTypes.Sid))).Count();
+            var groupsCount = (await groupRepository.GetByLecturer(User.FindFirstValue(ClaimTypes.Sid))).Count();
+            var coursesCount = (await courseRepository.GetByLecturer(User.FindFirstValue(ClaimTypes.Sid))).Count();
+            return View(new InfoViewModel
+            {
+                User = user,
+                TotalStudents = studentsCount,
+                TotalGroups = groupsCount,
+                TotalCourses = coursesCount
+            });
         }
 
         #region Course
@@ -48,7 +58,7 @@ namespace WebApplication.Controllers
         {
             IEnumerable<Course> courses;
             var id = User.FindFirst(ClaimTypes.Sid).Value;
-            if (User.FindFirst(ClaimTypes.Role).Value == "2")
+            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
             {
                 courses = await courseRepository.GetAll();
             }

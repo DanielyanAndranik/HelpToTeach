@@ -2,7 +2,7 @@
 
 namespace WebApplication.ViewModels
 {
-    public class ProfileViewModel : DashboradLayoutViewModel
+    public class InfoViewModel : DashboradLayoutViewModel
     {
         public int TotalStudents { get; set; }
         public int TotalCourses { get; set; }
