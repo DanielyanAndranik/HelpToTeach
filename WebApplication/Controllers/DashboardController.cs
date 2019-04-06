@@ -162,11 +162,12 @@ namespace WebApplication.Controllers
             }
 
             List<GroupCourseRow> result = new List<GroupCourseRow>();
-            foreach (var item in groupCourses)
+
+            for (int i = 0;i < groupCourses.Count;i++)
             {
-                Group group = await groupRepository.Get(item.GroupId);
-                Course course = await courseRepository.Get(item.CourseId);
-                User teacher = await userRepository.Get(item.UserId);
+                Group group = await groupRepository.Get(groupCourses[i].GroupId);
+                Course course = await courseRepository.Get(groupCourses[i].CourseId);
+                User teacher = await userRepository.GetTeacherById(groupCourses[i].UserId);
                 result.Add(new GroupCourseRow()
                 {
                     GroupName = group.Name,
@@ -183,7 +184,24 @@ namespace WebApplication.Controllers
 
         public async Task<IActionResult> AddGroupCourse()
         {
-            throw new NotImplementedException();
+            List<Group> groups = await groupRepository.GetAll();
+            List<Course> courses = await courseRepository.GetAll();
+            List<User> teachers = await userRepository.GetTeachers();
+
+            return View(new AddGroupCourseViewModel()
+            {
+                Groups = groups,
+                Courses = courses,
+                Teachers = teachers,
+                GroupCourse = new GroupCourse()
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddGroupCourse([FromForm]GroupCourse groupCourse)
+        {
+            var _groupCourse = await this.groupCourseRepository.Create(groupCourse);
+            return RedirectToAction("GroupCourse");
         }
 
         #endregion

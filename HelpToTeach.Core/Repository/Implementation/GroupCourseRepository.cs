@@ -21,6 +21,8 @@ namespace HelpToTeach.Core.Repository
         public async Task<GroupCourse> Create(GroupCourse groupCourse)
         {
             groupCourse.Id = Guid.NewGuid().ToString();
+            groupCourse.Created = DateTime.Now;
+            groupCourse.Updated = DateTime.Now;
             var key = $"groupCourse::{groupCourse.Id}";
             var result = await this.bucket.InsertAsync<GroupCourse>(key, groupCourse);
             return result.Value;

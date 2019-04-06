@@ -75,6 +75,13 @@ namespace HelpToTeach.Core.Repository
             return result.Content;
         }
 
+        public async Task<User> GetTeacherById(string id)
+        {
+            List<User> teachers = await GetTeachers();
+            User result = teachers.FirstOrDefault(t => t.Id == id);
+            return result;
+        }
+
         public Task<List<User>> GetAll()
         {
             throw new NotImplementedException();
