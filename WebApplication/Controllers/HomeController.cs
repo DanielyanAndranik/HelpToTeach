@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Couchbase.Core;
 using Couchbase.Extensions.DependencyInjection;
+using HelpToTeach.Core.AI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.ViewModels;
@@ -21,7 +22,12 @@ namespace WebApplication.Controllers
             this.provider = provider;
             this.bucket = provider.GetBucket();
         }
-        public IActionResult Index() => View();
+        public IActionResult Index()
+        {
+            var result = PythonRunner.Run(@"D:\Դիպլոմային\HelpToTeach\HelpToTeach.Core\AI\app.py", "");
+            ViewData.Add("result", result);
+            return View();
+        }
 
         [Authorize]
         public IActionResult Privacy()

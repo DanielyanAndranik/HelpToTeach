@@ -43,9 +43,9 @@ namespace HelpToTeach.Core.Repository
             return result.Rows;
         }
 
-        public Task<List<Group>> GetByLecturer(string id)
+        public async Task<List<Group>> GetByLecturer(string id)
         {
-            throw new NotImplementedException();
+            return new List<Group>();
         }
 
         public Task<Group> Update(Group group)

@@ -45,7 +45,7 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<List<Course>> GetByLecturer(string id)
         {
-            return null;
+            return new List<Course>();
         }
 
         public Task<Course> Update(Course course)
