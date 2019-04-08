@@ -97,3 +97,7 @@ body {
 .profile .infocard:hover a {
     color: #212529;
 }
+
+tr{
+    cursor:  pointer;
+}

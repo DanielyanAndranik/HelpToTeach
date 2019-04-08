@@ -96,7 +96,7 @@ namespace WebApplication.Controllers
                 groups = await groupRepository.GetByLecturer(id);
             }
 
-            return View(new GroupsViewModel { Groups = groups });
+            return View(new GroupsViewModel { Groups = groups, SelectedGroup = new Group() });
         }
 
         public IActionResult AddGroup()
@@ -109,6 +109,11 @@ namespace WebApplication.Controllers
         {
             var group = await this.groupRepository.Create(new Group { Name = name });
             return RedirectToAction("Groups");
+        }
+
+        public IActionResult EditGroup()
+        {
+            return View("EditGroup");
         }
         #endregion
 
