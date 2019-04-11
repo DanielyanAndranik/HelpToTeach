@@ -12,9 +12,12 @@ namespace WebApi.Controllers
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            return new JsonResult(new[] {
+                new { Name = "Andranik", Mark = 98},
+                new { Name = "Ghevond", Mark = 95}
+            });
         }
 
         // GET api/values/5

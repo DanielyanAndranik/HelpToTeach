@@ -24,7 +24,7 @@ namespace WebApplication.Controllers
         }
         public IActionResult Index()
         {
-            var result = PythonRunner.Run(@"D:\Դիպլոմային\HelpToTeach\HelpToTeach.Core\AI\app.py", "");
+            var result = PythonRunner.Run(@"D:\Դիպլոմային\HelpToTeach\HelpToTeach.Core\AI\app.py", this.Url.ToString());
             ViewData.Add("result", result);
             return View();
         }
