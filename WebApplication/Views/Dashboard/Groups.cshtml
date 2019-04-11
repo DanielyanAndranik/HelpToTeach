@@ -6,12 +6,16 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
+<h2>Groups</h2>
+@if (role != "1")
+{
+    <div class="top-bar mb-3">
+        <a class="btn btn-outline-secondary px-4" asp-action="AddGroup">Add</a>
+        <a class="btn btn-outline-warning px-4" asp-action="EditGroup">Edit</a>
+        <a class="btn btn-outline-danger px-4" asp-action="DeleteGroup">Delete</a>
+    </div>
+}
 
-<div class="top-bar mb-3">
-    <a class="btn btn-outline-secondary px-4" asp-action="AddGroup">Add</a>
-    <a class="btn btn-outline-warning px-4" asp-action="EditGroup">Edit</a>
-    <a class="btn btn-outline-danger px-4" asp-action="DeleteGroup">Delete</a>
-</div>
 <table class="table table-hover" id="js-table">
     <thead>
         <tr>
@@ -23,8 +27,8 @@
         @foreach (var group in Model.Groups)
         {
             <tr data-bind="group">
-                    <td scope="row">@group.Id</td>
-                    <td>@group.Name</td>
+                <td scope="row">@group.Id</td>
+                <td>@group.Name</td>
             </tr>
         }
     </tbody>

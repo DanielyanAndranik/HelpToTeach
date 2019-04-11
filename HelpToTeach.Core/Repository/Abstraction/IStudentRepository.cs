@@ -11,6 +11,7 @@ namespace HelpToTeach.Core.Repository
         Task<List<Student>> GetAll();
         Task<Student> Get(string id);
         Task<List<Student>> GetByLecturer(string id);
+        Task<List<Student>> GetByGroupId(string id);
         Task<Student> Create(Student student);
         Task<Student> Update(Student student);
         Task<Student> Upsert(Student student);
