@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebApplication.ViewModels
 {
-    public class TeachersViewModel:DashboradLayoutViewModel
+    public class LecturersViewModel : DashboradLayoutViewModel
     {
-        public List<User> Teachers { get; set; }
+        public List<User> Lecturers { get; set; }
     }
 }

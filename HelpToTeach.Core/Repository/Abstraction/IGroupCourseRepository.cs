@@ -10,6 +10,7 @@ namespace HelpToTeach.Core.Repository
     {
         Task<List<GroupCourse>> GetAll();
         Task<GroupCourse> Get(string id);
+        Task<List<GroupCourse>> GetByLecturerId(string id);
         Task<GroupCourse> Create(GroupCourse groupCourse);
         Task<GroupCourse> Update(GroupCourse groupCourse);
         Task<GroupCourse> Upsert(GroupCourse groupCourse);

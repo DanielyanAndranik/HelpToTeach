@@ -27,7 +27,7 @@
         @Html.LabelFor(m => m.GroupCourse.UserId)
         <select class="custom-select" name="UserId">
             <option selected>Choose...</option>
-            @foreach (var item in Model.Teachers)
+            @foreach (var item in Model.Lecturers)
             {
                 <option value="@item.Id">@item.FirstName</option>
             }

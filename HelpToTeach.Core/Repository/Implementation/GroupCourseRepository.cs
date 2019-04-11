@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace HelpToTeach.Core.Repository
 {
@@ -36,6 +37,12 @@ namespace HelpToTeach.Core.Repository
         public Task<GroupCourse> Get(string id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<GroupCourse>> GetByLecturerId(string id) {
+            List<GroupCourse> all = await GetAll();
+            List<GroupCourse> result = (from g in all where g.UserId == id select g).ToList();
+            return result;
         }
 
         public async Task<List<GroupCourse>> GetAll()

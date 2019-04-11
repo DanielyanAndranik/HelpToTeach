@@ -12,7 +12,7 @@ namespace HelpToTeach.Data.Models
         public string GroupId { get; set; }
         [Required,Display(Name ="Course Name")]
         public string CourseId { get; set; }
-        [Required,Display(Name ="Teacher Name")]
+        [Required,Display(Name = "Lecturer Name")]
         public string UserId { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace WebApplication.Helpers
 {
     public class GroupCourseRow
     {
-        public string TeacherName { get; set; }
+        public string LecturerName { get; set; }
         public string GroupName { get; set; }
         public string CourseName { get; set; }
     }

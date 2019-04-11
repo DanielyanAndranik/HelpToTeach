@@ -18,7 +18,7 @@ namespace WebApplication.Controllers
         private readonly IStudentRepository studentRepository;
         private readonly IUserRepository userRepository;
         private readonly IGroupCourseRepository groupCourseRepository;
-        
+
 
         public DashboardController(ICourseRepository courseRepository,
             IGroupRepository groupRepository,
@@ -58,15 +58,31 @@ namespace WebApplication.Controllers
         {
             IEnumerable<Course> courses;
             var id = User.FindFirst(ClaimTypes.Sid).Value;
-            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
+            if (User.FindFirst(ClaimTypes.Role).Value == "1")
             {
-                courses = await courseRepository.GetAll();
+                courses = await GetCoursesByLecturer(id.Split("::")[1]);
             }
             else
             {
-                courses = await courseRepository.GetByLecturer(id);
-            }            
-            return View(new CoursesViewModel { Courses = courses});
+                courses = await courseRepository.GetAll();
+            }
+            return View(new CoursesViewModel { Courses = courses });
+        }
+
+        private async Task<IEnumerable<Course>> GetCoursesByLecturer(string id) {
+            List<GroupCourse> groupCourses = await groupCourseRepository.GetByLecturerId(id);
+            List<Course> result = new List<Course>();
+            if (groupCourses == null || groupCourses.Count == 0) {
+                return result;
+            }
+
+            for (int i = 0; i < groupCourses.Count; i++)
+            {
+                Course course = await courseRepository.Get(groupCourses[i].CourseId);
+                result.Add(course);
+            }
+            result.GroupBy(x => x.Id).Select(x => x.First());
+            return result;
         }
 
         public IActionResult AddCourse()
@@ -88,15 +104,33 @@ namespace WebApplication.Controllers
         {
             IEnumerable<Group> groups;
             var id = User.FindFirst(ClaimTypes.Sid).Value;
-            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
+            if (!(User.FindFirst(ClaimTypes.Role).Value == "1"))
             {
                 groups = await groupRepository.GetAll();
             }
             else {
-                groups = await groupRepository.GetByLecturer(id);
+                groups = await GetGroupsByLecturer(id.Split("::")[1]);
             }
 
-            return View(new GroupsViewModel { Groups = groups });
+            return View(new GroupsViewModel { Groups = groups, SelectedGroup = new Group() });
+        }
+
+        private async Task<List<Group>> GetGroupsByLecturer(string id) {
+            List<GroupCourse> groupCourses = await groupCourseRepository.GetByLecturerId(id);
+            List<Group> result = new List<Group>();
+            if (groupCourses == null || groupCourses.Count == 0) {
+                return result;
+            }
+
+            for (int i = 0; i < groupCourses.Count; i++)
+            {
+                Group group = await groupRepository.Get(groupCourses[i].GroupId);
+                result.Add(group);
+            }
+
+            result.GroupBy(x => x.Id).Select(x => x.First());
+
+            return result;
         }
 
         public IActionResult AddGroup()
@@ -110,6 +144,11 @@ namespace WebApplication.Controllers
             var group = await this.groupRepository.Create(new Group { Name = name });
             return RedirectToAction("Groups");
         }
+
+        public IActionResult EditGroup()
+        {
+            return View("EditGroup");
+        }
         #endregion
 
         #region Students
@@ -117,15 +156,33 @@ namespace WebApplication.Controllers
         {
             IEnumerable<Student> students;
             var id = User.FindFirst(ClaimTypes.Sid).Value;
-            if (!(User.FindFirst(ClaimTypes.Role).Value == "Lecturer"))
+            if (!(User.FindFirst(ClaimTypes.Role).Value == "1"))
             {
                 students = await studentRepository.GetAll();
             }
             else
             {
-                students = await studentRepository.GetByLecturer(id);
+                students = await GetStudentsByLecturer(id.Split("::")[1]);
             }
             return View(new StudentsViewModel { Students = students });
+        }
+
+        private async Task<IEnumerable<Student>> GetStudentsByLecturer(string id) {
+            List<Group> groups = await GetGroupsByLecturer(id);
+            List<Student> students = new List<Student>();
+            if (groups.Count == 0) {
+                return students;
+            }
+
+            for (int i = 0; i < groups.Count; i++)
+            {
+                List<Student> temp = await studentRepository.GetByGroupId(groups[i].Id);
+                foreach (var item in temp)
+                {
+                    students.Add(item);
+                }
+            }
+            return students;
         }
 
         public async Task<IActionResult> AddStudent()
@@ -143,25 +200,25 @@ namespace WebApplication.Controllers
 
         #endregion
 
-        #region Teachers
+        #region Lecturers
 
-        public async Task<IActionResult> Teachers()
+        public async Task<IActionResult> Lecturers()
         {
-            var result = await userRepository.GetTeachers();
-            return View(new TeachersViewModel()
+            var result = await userRepository.GetLecturers();
+            return View(new LecturersViewModel()
             {
-                Teachers = result
+                Lecturers = result
             });
         }
 
-        public async Task<IActionResult> AddTeacher()
+        public async Task<IActionResult> AddLecturer()
         {
             throw new NotImplementedException();
         }
 
         #endregion
 
-        #region GCT
+        #region GCL
 
         public async Task<IActionResult> GroupCourse()
         {
@@ -177,12 +234,12 @@ namespace WebApplication.Controllers
             {
                 Group group = await groupRepository.Get(groupCourses[i].GroupId);
                 Course course = await courseRepository.Get(groupCourses[i].CourseId);
-                User teacher = await userRepository.GetTeacherById(groupCourses[i].UserId);
+                User lecturer = await userRepository.GetLecturerById(groupCourses[i].UserId);
                 result.Add(new GroupCourseRow()
                 {
                     GroupName = group.Name,
                     CourseName = course.Name,
-                    TeacherName = teacher.FirstName
+                    LecturerName = lecturer.FirstName
                 });
             }
 
@@ -196,13 +253,13 @@ namespace WebApplication.Controllers
         {
             List<Group> groups = await groupRepository.GetAll();
             List<Course> courses = await courseRepository.GetAll();
-            List<User> teachers = await userRepository.GetTeachers();
+            List<User> lecturers = await userRepository.GetLecturers();
 
             return View(new AddGroupCourseViewModel()
             {
                 Groups = groups,
                 Courses = courses,
-                Teachers = teachers,
+                Lecturers = lecturers,
                 GroupCourse = new GroupCourse()
             });
         }

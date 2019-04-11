@@ -41,6 +41,13 @@ namespace HelpToTeach.Core.Repository
             return result.Rows;
         }
 
+        public async Task<List<Student>> GetByGroupId(string id)
+        {
+            List<Student> all = await GetAll();
+            List<Student> result = (from s in all where s.GroupId == id select s).ToList();
+            return result;
+        }
+
         public async Task<List<Student>> GetByLecturer(string id)
         {
             return new List<Student>();

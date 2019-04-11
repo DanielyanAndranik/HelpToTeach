@@ -25,20 +25,20 @@ namespace WebApplication.ViewModels
             }
         }
 
-        private List<User> teachers;
+        private List<User> lecturers;
 
-        public List<User> Teachers
+        public List<User> Lecturers
         {
             get
             {
-                if (this.teachers == null) {
-                    this.teachers = new List<User>();
+                if (this.lecturers == null) {
+                    this.lecturers = new List<User>();
                 }
-                return this.teachers;
+                return this.lecturers;
             }
             set
             {
-                this.teachers = value;
+                this.lecturers = value;
             }
         }
 
