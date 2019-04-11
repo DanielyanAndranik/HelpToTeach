@@ -148,25 +148,25 @@ namespace WebApplication.Controllers
 
         #endregion
 
-        #region Teachers
+        #region Lecturers
 
-        public async Task<IActionResult> Teachers()
+        public async Task<IActionResult> Lecturers()
         {
-            var result = await userRepository.GetTeachers();
-            return View(new TeachersViewModel()
+            var result = await userRepository.GetLecturers();
+            return View(new LecturersViewModel()
             {
-                Teachers = result
+                Lecturers = result
             });
         }
 
-        public async Task<IActionResult> AddTeacher()
+        public async Task<IActionResult> AddLecturer()
         {
             throw new NotImplementedException();
         }
 
         #endregion
 
-        #region GCT
+        #region GCL
 
         public async Task<IActionResult> GroupCourse()
         {
@@ -182,12 +182,12 @@ namespace WebApplication.Controllers
             {
                 Group group = await groupRepository.Get(groupCourses[i].GroupId);
                 Course course = await courseRepository.Get(groupCourses[i].CourseId);
-                User teacher = await userRepository.GetTeacherById(groupCourses[i].UserId);
+                User lecturer = await userRepository.GetLecturerById(groupCourses[i].UserId);
                 result.Add(new GroupCourseRow()
                 {
                     GroupName = group.Name,
                     CourseName = course.Name,
-                    TeacherName = teacher.FirstName
+                    LecturerName = lecturer.FirstName
                 });
             }
 
@@ -201,13 +201,13 @@ namespace WebApplication.Controllers
         {
             List<Group> groups = await groupRepository.GetAll();
             List<Course> courses = await courseRepository.GetAll();
-            List<User> teachers = await userRepository.GetTeachers();
+            List<User> lecturers = await userRepository.GetLecturers();
 
             return View(new AddGroupCourseViewModel()
             {
                 Groups = groups,
                 Courses = courses,
-                Teachers = teachers,
+                Lecturers = lecturers,
                 GroupCourse = new GroupCourse()
             });
         }

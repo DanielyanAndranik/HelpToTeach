@@ -75,10 +75,10 @@ namespace HelpToTeach.Core.Repository
             return result.Content;
         }
 
-        public async Task<User> GetTeacherById(string id)
+        public async Task<User> GetLecturerById(string id)
         {
-            List<User> teachers = await GetTeachers();
-            User result = teachers.FirstOrDefault(t => t.Id == id);
+            List<User> lecturers = await GetLecturers();
+            User result = lecturers.FirstOrDefault(t => t.Id == id);
             return result;
         }
 
@@ -87,7 +87,7 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<List<User>> GetTeachers()
+        public async Task<List<User>> GetLecturers()
         {
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
             var users = await _bucket.QueryAsync<User>(query);

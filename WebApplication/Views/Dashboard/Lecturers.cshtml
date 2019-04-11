@@ -1,13 +1,13 @@
-﻿@model TeachersViewModel
+﻿@model LecturersViewModel
 @{
     var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
-    ViewData["Title"] = "Teachers";
+    ViewData["Title"] = "Lecturers";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h1>Teachers</h1>
+<h1>Lecturers</h1>
 <table class="table table-hover" id="js-table">
     <thead>
         <tr>
@@ -18,20 +18,20 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var teacher in Model.Teachers)
+        @foreach (var lecturer in Model.Lecturers)
         {
             <tr>
-                <td>@teacher.FirstName</td>
-                <td>@teacher.LastName</td>
-                <td>@teacher.MiddleName</td>
-                <td>@teacher.BirthDate</td>
+                <td>@lecturer.FirstName</td>
+                <td>@lecturer.LastName</td>
+                <td>@lecturer.MiddleName</td>
+                <td>@lecturer.BirthDate</td>
             </tr>
         }
     </tbody>
 </table>
 @if (role == "2")
 {
-    <a class="btn btn-outline-secondary" asp-action="AddTeacher">Add Teacher</a>
+<a class="btn btn-outline-secondary" asp-action="AddLecturer">Add Lecturer</a>
 }
 <script type="text/javascript">
     $(document).ready(function () {
