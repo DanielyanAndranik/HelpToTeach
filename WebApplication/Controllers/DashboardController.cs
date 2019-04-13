@@ -7,10 +7,12 @@ using HelpToTeach.Core.Repository;
 using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Helpers;
+using WebApplication.Helpers.Enums;
 using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
 {
+    [Route("dashboard")]
     public class DashboardController : Controller
     {
         private readonly ICourseRepository courseRepository;
@@ -33,11 +35,13 @@ namespace WebApplication.Controllers
             this.groupCourseRepository = groupCourseRepository;
         }
 
+        [Route("")]
         public IActionResult Index()
         {
             return RedirectToAction("Info");
         }
 
+        [Route("info")]
         public async Task<IActionResult> Info()
         {
             var user = await userRepository.Get(User.FindFirstValue(ClaimTypes.Sid));
@@ -54,6 +58,7 @@ namespace WebApplication.Controllers
         }
 
         #region Course
+        [Route("courses")]
         public async Task<IActionResult> Courses()
         {
             IEnumerable<Course> courses;
@@ -85,12 +90,14 @@ namespace WebApplication.Controllers
             return result;
         }
 
+        [Route("courses/add")]
         public IActionResult AddCourse()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("courses/add")]
         public async Task<IActionResult> AddCourse([FromForm] string name)
         {
             var course = await this.courseRepository.Create(new Course { Name = name });
@@ -100,6 +107,8 @@ namespace WebApplication.Controllers
 
         #region Group
 
+        [Route("groups")]
+        [HttpGet]
         public async Task<IActionResult> Groups()
         {
             IEnumerable<Group> groups;
@@ -133,25 +142,50 @@ namespace WebApplication.Controllers
             return result;
         }
 
+        [Route("groups/add")]
+        [HttpGet]
         public IActionResult AddGroup()
         {
-            return View();
+            return View("EditGroup", new EditGroupViewModel { Mode = Mode.New, Group = new Group() });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddGroup([FromForm] string name)
+        [Route("groups/add")]
+        public async Task<IActionResult> AddGroup([FromForm] Group group)
         {
-            var group = await this.groupRepository.Create(new Group { Name = name });
+            await this.groupRepository.Create(new Group { Name = group.Name });
             return RedirectToAction("Groups");
         }
 
-        public IActionResult EditGroup()
+        [Route("groups/edit/{id}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> EditGroup(string id)
         {
-            return View("EditGroup");
+            var group = await this.groupRepository.Get(id);
+            return View("EditGroup", new EditGroupViewModel { Mode = Mode.Edit, Group = group});
+        }
+
+        [HttpPost]
+        [Route("groups/edit/{id}")]
+        public async Task<IActionResult> EditGroup([FromRoute] string id, [FromForm] Group _group)
+        {
+            var group = await groupRepository.Get(id);
+            group.Name = _group.Name;
+            await this.groupRepository.Update(group);
+            return RedirectToAction("Groups");
+        }
+
+        [Route("groups/{id}")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGroup(string id)
+        {
+            await this.groupRepository.Delete(id);
+            return RedirectToAction("Groups");
         }
         #endregion
 
         #region Students
+        [Route("students")]
         public async Task<IActionResult> Students()
         {
             IEnumerable<Student> students;
@@ -185,6 +219,7 @@ namespace WebApplication.Controllers
             return students;
         }
 
+        [Route("students/add")]
         public async Task<IActionResult> AddStudent()
         {
             var groups = await this.groupRepository.GetAll();
@@ -192,6 +227,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
+        [Route("students/add")]
         public async Task<IActionResult> AddStudent([FromForm] Student student)
         {
             var _student = await this.studentRepository.Create(student);
@@ -201,7 +237,7 @@ namespace WebApplication.Controllers
         #endregion
 
         #region Lecturers
-
+        [Route("lecturers")]
         public async Task<IActionResult> Lecturers()
         {
             var result = await userRepository.GetLecturers();
@@ -211,6 +247,7 @@ namespace WebApplication.Controllers
             });
         }
 
+        [Route("lecturers/add")]
         public async Task<IActionResult> AddLecturer()
         {
             throw new NotImplementedException();
@@ -219,7 +256,7 @@ namespace WebApplication.Controllers
         #endregion
 
         #region GCL
-
+        [Route("gropucourses")]
         public async Task<IActionResult> GroupCourse()
         {
             List<GroupCourse> groupCourses = await groupCourseRepository.GetAll();
@@ -248,7 +285,7 @@ namespace WebApplication.Controllers
                 GroupCourses = result
             });
         }
-
+        [Route("gropucourses/add")]
         public async Task<IActionResult> AddGroupCourse()
         {
             List<Group> groups = await groupRepository.GetAll();
@@ -265,6 +302,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
+        [Route("gropucourses/add")]
         public async Task<IActionResult> AddGroupCourse([FromForm]GroupCourse groupCourse)
         {
             var _groupCourse = await this.groupCourseRepository.Create(groupCourse);
@@ -272,15 +310,5 @@ namespace WebApplication.Controllers
         }
 
         #endregion
-
-        public IActionResult Assign([FromQuery] string GroupId)
-        {
-            if (string.IsNullOrWhiteSpace(GroupId))
-            {
-                throw new System.ArgumentException("message", nameof(GroupId));
-            }
-
-            return View();
-        }
     }
 }

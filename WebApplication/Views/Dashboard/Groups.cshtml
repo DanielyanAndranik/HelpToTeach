@@ -11,8 +11,8 @@
 {
     <div class="top-bar mb-3">
         <a class="btn btn-outline-secondary px-4" asp-action="AddGroup">Add</a>
-        <a class="btn btn-outline-warning px-4" asp-action="EditGroup">Edit</a>
-        <a class="btn btn-outline-danger px-4" asp-action="DeleteGroup">Delete</a>
+        <a class="btn btn-outline-warning px-4 hidden" id="edit-button" asp-action="EditGroup">Edit</a>
+        <a class="btn btn-outline-danger px-4 hidden" id="delete-button" asp-action="DeleteGroup">Delete</a>
     </div>
 }
 
@@ -26,21 +26,38 @@
     <tbody>
         @foreach (var group in Model.Groups)
         {
-            <tr data-bind="group">
+            <tr onclick="selectGroup('@group.Id')">
                 <td scope="row">@group.Id</td>
                 <td>@group.Name</td>
             </tr>
         }
     </tbody>
 </table>
-
-<script type="text/javascript">
+<script>
+    var selectedGroupId;
+    var selectGroup;
     $(document).ready(function () {
-        $("#js-table").DataTable();
-        $("#js-table tbody tr").click(x => {
-            var row = x.target.parentElement;
-            console.log(row);
-            @{Model.SelectedGroup = new Group();}
+        var table = $("#js-table").DataTable();
+
+        $('#js-table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
         });
-    });
+
+        selectedGroupId = null;
+        selectGroup = function(id) {
+            selectedGroupId = id;
+            if (selectedGroupId !== null) {
+                $('#edit-button').removeClass('hidden');
+                $('#edit-button').attr('href', '/dashboard/groups/edit/' + selectedGroupId);
+                $('#delete-button').removeClass('hidden');
+                $('#delete-button').attr('href', '/dashboard/groups/' + selectedGroupId);
+            }
+        }
+    })
 </script>

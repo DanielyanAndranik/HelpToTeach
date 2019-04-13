@@ -101,3 +101,11 @@ body {
 tr{
     cursor:  pointer;
 }
+
+tr.selected {
+    background: rgba(128, 128, 128, 0.2);
+}
+
+a.hidden{
+    display: none;
+}

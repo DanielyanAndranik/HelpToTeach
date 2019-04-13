@@ -1,7 +1,15 @@
-﻿<form class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" asp-action="AddGroup" method="post">
+﻿@using WebApplication.Helpers.Enums;
+@model EditGroupViewModel
+@{
+    ViewData["group"] = Model.Group;
+}
+
+<h3 class="text-center">@Model.Mode.ToString() group</h3>
+
+<form class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" asp-action="@(Model.Mode == Mode.Edit? "EditGroup" : "AddGroup")" method="post">
     <div class="form-group">
         <label for="name">Group name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter group name" name="name">
+        <input type="text" class="form-control" id="name" value="@(Model.Group != null ? Model.Group.Name : "" )" placeholder="Enter group name" name="name">
     </div>
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>

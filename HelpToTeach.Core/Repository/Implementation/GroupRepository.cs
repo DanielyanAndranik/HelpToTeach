@@ -20,13 +20,15 @@ namespace HelpToTeach.Core.Repository
         public async Task<Group> Create(Group group)
         {
             group.Id = Guid.NewGuid().ToString();
+            group.Created = DateTime.Now;
+            group.Updated = DateTime.Now;
             var result = await this.bucket.InsertAsync<Group>($"group::{group.Id}", group);
             return result.Value;
         }
 
-        public Task Delete(string id)
+        public async Task Delete(string id)
         {
-            throw new NotImplementedException();
+            await this.bucket.RemoveAsync($"group::{id}");
         }
 
         public async Task<Group> Get(string id)
@@ -48,9 +50,11 @@ namespace HelpToTeach.Core.Repository
             return new List<Group>();
         }
 
-        public Task<Group> Update(Group group)
+        public async Task<Group> Update(Group group)
         {
-            throw new NotImplementedException();
+            group.Updated = DateTime.Now;
+            var result = await this.bucket.ReplaceAsync($"group::{group.Id}", group);
+            return result.Value;
         }
 
         public Task<Group> Upsert(Group group)
