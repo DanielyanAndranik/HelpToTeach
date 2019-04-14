@@ -52,12 +52,19 @@
 
         selectedCourseId = null;
         selectCourse = function (id) {
-            selectedCourseId = id;
-            if (selectedCourseId !== null) {
+            if (selectedCourseId !== id) {
+                selectedCourseId = id;
                 $('#edit-button').removeClass('hidden');
                 $('#edit-button').attr('href', '/dashboard/courses/edit/' + selectedCourseId);
                 $('#delete-button').removeClass('hidden');
                 $('#delete-button').attr('href', '/dashboard/courses/' + selectedCourseId);
+            }
+            else {
+                selectedCourseId = null;
+                $('#edit-button').addClass('hidden');
+                $('#edit-button').attr('href', '/dashboard/courses/edit/');
+                $('#delete-button').addClass('hidden');
+                $('#delete-button').attr('href', '/dashboard/courses/');
             }
         }
     });

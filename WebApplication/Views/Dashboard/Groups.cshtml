@@ -50,13 +50,20 @@
         });
 
         selectedGroupId = null;
-        selectGroup = function(id) {
-            selectedGroupId = id;
-            if (selectedGroupId !== null) {
+        selectGroup = function (id) {
+            if (selectedGroupId !== id) {
+                selectedGroupId = id;
                 $('#edit-button').removeClass('hidden');
                 $('#edit-button').attr('href', '/dashboard/groups/edit/' + selectedGroupId);
                 $('#delete-button').removeClass('hidden');
                 $('#delete-button').attr('href', '/dashboard/groups/' + selectedGroupId);
+            }
+            else {
+                selectedGroupId = null;
+                $('#edit-button').addClass('hidden');
+                $('#edit-button').attr('href', '/dashboard/groups/edit/');
+                $('#delete-button').addClass('hidden');
+                $('#delete-button').attr('href', '/dashboard/groups/');
             }
         }
     })
