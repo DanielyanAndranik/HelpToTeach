@@ -6,7 +6,16 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h1>Courses</h1>
+<h2>Courses</h2>
+
+@if (role != "1")
+{
+    <div class="top-bar mb-3">
+        <a class="btn btn-outline-secondary px-4" asp-action="AddCourse">Add</a>
+        <a class="btn btn-outline-warning px-4 hidden" id="edit-button" asp-action="EditCourse">Edit</a>
+        <a class="btn btn-outline-danger px-4 hidden" id="delete-button" asp-action="DeleteCourse">Delete</a>
+    </div>
+}
 <table class="table table-hover" id="js-table">
     <thead>
         <tr>
@@ -17,20 +26,39 @@
     <tbody>
         @foreach (var course in Model.Courses)
         {
-            <tr>
+            <tr onclick="selectCourse('@course.Id')">
                 <th scope="row">@course.Id</th>
                 <td>@course.Name</td>
             </tr>
         }
     </tbody>
 </table>
-@if (role == "2")
-{
-    <a class="btn btn-outline-secondary" asp-action="AddCourse">Add course</a>
-}
 
 <script type="text/javascript">
+    var selectedCourseId;
+    var selectCourse;
     $(document).ready(function () {
-        $("#js-table").dataTable();
+        var table = $("#js-table").dataTable();
+
+        $('#js-table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        selectedCourseId = null;
+        selectCourse = function (id) {
+            selectedCourseId = id;
+            if (selectedCourseId !== null) {
+                $('#edit-button').removeClass('hidden');
+                $('#edit-button').attr('href', '/dashboard/courses/edit/' + selectedCourseId);
+                $('#delete-button').removeClass('hidden');
+                $('#delete-button').attr('href', '/dashboard/courses/' + selectedCourseId);
+            }
+        }
     });
 </script>

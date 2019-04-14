@@ -24,14 +24,14 @@ namespace HelpToTeach.Core.Repository
             return result.Value;
         }
 
-        public Task Delete(string id)
+        public async Task Delete(string id)
         {
-            throw new NotImplementedException();
+            await this.bucket.RemoveAsync($"student::{id}");
         }
 
-        public Task<Student> Get(string id)
+        public async Task<Student> Get(string id)
         {
-            throw new NotImplementedException();
+            return (await this.bucket.GetAsync<Student>($"student::{id}")).Value;
         }
 
         public async Task<List<Student>> GetAll()
@@ -53,9 +53,11 @@ namespace HelpToTeach.Core.Repository
             return new List<Student>();
         }
 
-        public Task<Student> Update(Student student)
+        public async Task<Student> Update(Student student)
         {
-            throw new NotImplementedException();
+            student.Updated = DateTime.Now;
+            var result = await this.bucket.ReplaceAsync($"student::{student.Id}", student);
+            return result.Value;
         }
 
         public Task<Student> Upsert(Student student)

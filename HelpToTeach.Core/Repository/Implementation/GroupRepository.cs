@@ -33,9 +33,7 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<Group> Get(string id)
         {
-            List<Group> groups = await GetAll();
-            Group result = groups.FirstOrDefault(u => u.Id == id);
-            return result;
+            return (await this.bucket.GetAsync<Group>($"group::{id}")).Value;
         }
 
         public async Task<List<Group>> GetAll()

@@ -29,14 +29,14 @@ namespace HelpToTeach.Core.Repository
             return result.Value;
         }
 
-        public Task Delete(string id)
+        public async Task Delete(string id)
         {
-            throw new NotImplementedException();
+            await this.bucket.RemoveAsync($"groupCourse::{id}");
         }
 
-        public Task<GroupCourse> Get(string id)
+        public async Task<GroupCourse> Get(string id)
         {
-            throw new NotImplementedException();
+            return (await this.bucket.GetAsync<GroupCourse>($"groupCourse::{id}")).Value;
         }
 
         public async Task<List<GroupCourse>> GetByLecturerId(string id) {
@@ -52,9 +52,11 @@ namespace HelpToTeach.Core.Repository
             return result.Rows;
         }
 
-        public Task<GroupCourse> Update(GroupCourse groupCourse)
+        public async Task<GroupCourse> Update(GroupCourse groupCourse)
         {
-            throw new NotImplementedException();
+            groupCourse.Updated = DateTime.Now;
+            var result = await this.bucket.ReplaceAsync($"groupCourse::{groupCourse.Id}", groupCourse);
+            return result.Value;
         }
 
         public Task<GroupCourse> Upsert(GroupCourse groupCourse)

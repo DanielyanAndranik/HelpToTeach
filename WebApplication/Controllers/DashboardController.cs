@@ -93,7 +93,7 @@ namespace WebApplication.Controllers
         [Route("courses/add")]
         public IActionResult AddCourse()
         {
-            return View();
+            return View("EditCourse", new EditCourseViewModel { Mode = Mode.New});
         }
 
         [HttpPost]
@@ -101,6 +101,32 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> AddCourse([FromForm] string name)
         {
             var course = await this.courseRepository.Create(new Course { Name = name });
+            return RedirectToAction("Courses");
+        }
+
+        [Route("courses/edit/{id}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> EditCourse(string id)
+        {
+            var course = await this.courseRepository.Get(id);
+            return View("EditCourse", new EditCourseViewModel { Mode = Mode.Edit, Course = course });
+        }
+
+        [HttpPost]
+        [Route("courses/edit/{id}")]
+        public async Task<IActionResult> EditCourse([FromRoute] string id, [FromForm] Group _course)
+        {
+            var course = await courseRepository.Get(id);
+            course.Name = _course.Name;
+            await this.courseRepository.Update(course);
+            return RedirectToAction("Courses");
+        }
+
+        [Route("courses/{id}")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCourse(string id)
+        {
+            await this.courseRepository.Delete(id);
             return RedirectToAction("Courses");
         }
         #endregion

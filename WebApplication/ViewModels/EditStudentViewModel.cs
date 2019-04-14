@@ -3,12 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApplication.Helpers.Enums;
 
 namespace WebApplication.ViewModels
 {
-    public class EditGroupViewModel : EditViewModel
+    public class EditStudentViewModel : EditViewModel
     {
-        public Group Group { get; set; }
+        public Student Student { get; set; }
     }
 }
