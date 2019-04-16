@@ -71,7 +71,7 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<User> Get(string id)
         {
-            var result = await this._bucket.GetDocumentAsync<User>(id);
+            var result = await this._bucket.GetDocumentAsync<User>($"user::{id}");
             return result.Content;
         }
 

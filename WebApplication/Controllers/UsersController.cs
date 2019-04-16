@@ -35,7 +35,7 @@ namespace WebApplication.Controllers
 
             var identity = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Sid, $"user::{user.Id}"),
+                new Claim(ClaimTypes.Sid, user.Id),
                 new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim(ClaimTypes.Role, user.Role),
             }, CookieAuthenticationDefaults.AuthenticationScheme);

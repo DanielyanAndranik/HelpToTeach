@@ -50,7 +50,16 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<List<Student>> GetByLecturer(string id)
         {
-            return new List<Student>();
+            var query = new QueryRequest(
+                                            "SELECT s.* FROM HelpToTeachBucket s " +
+                                            "JOIN HelpToTeachBucket g ON s.groupId = g.id" +
+                                            "JOIN HelpToTeachBucket gc ON gc.groupId = g.id" +
+                                            "WHERE s.type = 'student' AND g.type = 'group' AND gc.type = 'groupCourse'" +
+                                            "AND gc.userId = '$userId'"
+                                        );
+            query.AddNamedParameter("$userId", id);
+            var result = await bucket.QueryAsync<Student>(query);
+            return result.Rows;
         }
 
         public async Task<Student> Update(Student student)

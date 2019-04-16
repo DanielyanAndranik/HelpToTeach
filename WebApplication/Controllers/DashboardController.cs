@@ -65,7 +65,7 @@ namespace WebApplication.Controllers
             var id = User.FindFirst(ClaimTypes.Sid).Value;
             if (User.FindFirst(ClaimTypes.Role).Value == "1")
             {
-                courses = await GetCoursesByLecturer(id.Split("::")[1]);
+                courses = await courseRepository.GetByLecturer(id);
             }
             else
             {
@@ -144,7 +144,7 @@ namespace WebApplication.Controllers
                 groups = await groupRepository.GetAll();
             }
             else {
-                groups = await GetGroupsByLecturer(id.Split("::")[1]);
+                groups = await groupRepository.GetByLecturer(id);
             }
 
             return View(new GroupsViewModel { Groups = groups, SelectedGroup = new Group() });
