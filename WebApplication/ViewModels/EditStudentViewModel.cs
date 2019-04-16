@@ -9,5 +9,6 @@ namespace WebApplication.ViewModels
     public class EditStudentViewModel : EditViewModel
     {
         public Student Student { get; set; }
+        public IEnumerable<Group> Groups { get; set; }
     }
 }

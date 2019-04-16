@@ -36,7 +36,10 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<List<Student>> GetAll()
         {
-            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'student'");
+            var query = new QueryRequest(
+                "SELECT s.*, g as `group` FROM HelpToTeachBucket s " +
+                "JOIN HelpToTeachBucket g ON s.groupId = g.id " +
+                "WHERE s.type = 'student' AND g.type = 'group'");
             var result = await bucket.QueryAsync<Student>(query);
             return result.Rows;
         }
@@ -51,7 +54,7 @@ namespace HelpToTeach.Core.Repository
         public async Task<List<Student>> GetByLecturer(string id)
         {
             var query = new QueryRequest(
-                                            "SELECT s.* FROM HelpToTeachBucket s " +
+                                            "SELECT s.*, g as `group` FROM HelpToTeachBucket s " +
                                             "JOIN HelpToTeachBucket g ON s.groupId = g.id" +
                                             "JOIN HelpToTeachBucket gc ON gc.groupId = g.id" +
                                             "WHERE s.type = 'student' AND g.type = 'group' AND gc.type = 'groupCourse'" +

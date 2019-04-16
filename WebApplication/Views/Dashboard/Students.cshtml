@@ -6,11 +6,18 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h1>Students</h1>
+<h3 class="text-center">Students</h3>
+@if (role == "2")
+{
+    <div class="border-bottom border-top py-2 mb-3">
+        <a class="btn btn-outline-secondary px-4" asp-action="AddStudent">Add</a>
+        <a class="btn btn-outline-warning px-4 hidden" id="edit-button" asp-action="EditStudent">Edit</a>
+        <a class="btn btn-outline-danger px-4 hidden" id="delete-button" asp-action="DeleteStudent">Delete</a>
+    </div>
+}
 <table class="table table-hover" id="js-table">
     <thead>
         <tr>
-            <th scope="col">ID</th>
             <th scope="col">FirstName</th>
             <th scope="col">LastName</th>
             <th scope="col">MiddleName</th>
@@ -21,24 +28,49 @@
     <tbody>
         @foreach (var student in Model.Students)
         {
-            <tr>
-                <th scope="row">@student.Id</th>
+            <tr onclick="selectStudent('@student.Id')">
                 <td>@student.FirstName</td>
                 <td>@student.LastName</td>
                 <td>@student.MiddleName</td>
                 <td>@student.BirthDate</td>
-                <td>@student.GroupId</td>
+                <td>@student.Group.Name</td>
             </tr>
         }
     </tbody>
 </table>
-@if (role == "2")
-{
-    <a class="btn btn-outline-secondary" asp-action="AddStudent">Add student</a>
-}
 
 <script type="text/javascript">
+    var selectedStudentId;
+    var selectStudent;
     $(document).ready(function () {
-        $("#js-table").DataTable();
-    });
+        var table = $("#js-table").DataTable();
+
+        $('#js-table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        selectedStudentId = null;
+        selectStudent = function (id) {
+            if (selectedStudentId !== id) {
+                selectedStudentId = id;
+                $('#edit-button').removeClass('hidden');
+                $('#edit-button').attr('href', '/dashboard/students/edit/' + selectedStudentId);
+                $('#delete-button').removeClass('hidden');
+                $('#delete-button').attr('href', '/dashboard/students/' + selectedStudentId);
+            }
+            else {
+                selectedStudentId = null;
+                $('#edit-button').addClass('hidden');
+                $('#edit-button').attr('href', '/dashboard/students/edit/');
+                $('#delete-button').addClass('hidden');
+                $('#delete-button').attr('href', '/dashboard/students/');
+            }
+        }
+    })
 </script>

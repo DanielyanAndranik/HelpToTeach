@@ -13,5 +13,6 @@ namespace HelpToTeach.Data.Models
         public DateTime BirthDate { get; set; }
         public bool FullScholarship { get; set; }
         public string GroupId { get; set; }
+        public Group Group { get; set; }
     }
 }

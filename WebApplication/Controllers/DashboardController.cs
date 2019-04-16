@@ -222,7 +222,7 @@ namespace WebApplication.Controllers
             }
             else
             {
-                students = await GetStudentsByLecturer(id.Split("::")[1]);
+                students = await studentRepository.GetByLecturer(id);
             }
             return View(new StudentsViewModel { Students = students });
         }
@@ -249,7 +249,7 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> AddStudent()
         {
             var groups = await this.groupRepository.GetAll();
-            return View(new AddStudentViewModel { Groups = groups, Student = new Student() });
+            return View("EditStudents", new EditStudentViewModel { Mode = Mode.New, Groups = groups, Student = new Student() });
         }
 
         [HttpPost]
@@ -257,6 +257,38 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> AddStudent([FromForm] Student student)
         {
             var _student = await this.studentRepository.Create(student);
+            return RedirectToAction("Students");
+        }
+
+        [Route("students/edit/{id}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> EditStudent(string id)
+        {
+            var student = await this.studentRepository.Get(id);
+            var groups = await this.groupRepository.GetAll();
+            return View("EditStudent", new EditStudentViewModel { Mode = Mode.Edit, Student = student, Groups = groups });
+        }
+
+        [HttpPost]
+        [Route("students/edit/{id}")]
+        public async Task<IActionResult> EditStudent([FromRoute] string id, [FromForm] Student _student)
+        {
+            var student = await studentRepository.Get(id);
+            student.FirstName = _student.FirstName;
+            student.LastName = _student.LastName;
+            student.MiddleName = _student.MiddleName;
+            student.GroupId = _student.GroupId;
+            student.FullScholarship = _student.FullScholarship;
+            student.BirthDate = _student.BirthDate;
+            await this.studentRepository.Update(student);
+            return RedirectToAction("Students");
+        }
+
+        [Route("students/{id}")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStudent(string id)
+        {
+            await this.studentRepository.Delete(id);
             return RedirectToAction("Students");
         }
 
