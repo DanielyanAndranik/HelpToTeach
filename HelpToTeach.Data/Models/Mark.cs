@@ -10,5 +10,7 @@ namespace HelpToTeach.Data.Models
         public MarkType MarkType { get; set; }
         public byte Value { get; set; }
         public DateTime Date { get; set; }
+        public string StudentId { get; set; }
+        public string GroupCourseId { get; set; }
     }
 }
