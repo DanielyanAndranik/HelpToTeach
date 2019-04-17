@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
+using HelpToTeach.Core.Repository.Abstraction;
 using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Helpers;
@@ -20,19 +21,22 @@ namespace WebApplication.Controllers
         private readonly IStudentRepository studentRepository;
         private readonly IUserRepository userRepository;
         private readonly IGroupCourseRepository groupCourseRepository;
+        private readonly IMarkRepository markRepository;
 
 
         public DashboardController(ICourseRepository courseRepository,
             IGroupRepository groupRepository,
             IStudentRepository studentRepository,
             IUserRepository userRepository,
-            IGroupCourseRepository groupCourseRepository)
+            IGroupCourseRepository groupCourseRepository,
+            IMarkRepository markRepository)
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
             this.studentRepository = studentRepository;
             this.userRepository = userRepository;
             this.groupCourseRepository = groupCourseRepository;
+            this.markRepository = markRepository;
         }
 
         [Route("")]
@@ -343,6 +347,9 @@ namespace WebApplication.Controllers
                 GroupCourses = result
             });
         }
+
+        
+
         [Route("gropucourses/add")]
         public async Task<IActionResult> AddGroupCourse()
         {
@@ -368,5 +375,85 @@ namespace WebApplication.Controllers
         }
 
         #endregion
+
+        #region Lessons
+
+        [Route("gropucourses/MyLessons")]
+        public async Task<IActionResult> MyLessons()
+        {
+            var id = User.FindFirst(ClaimTypes.Sid).Value;
+
+            List<GroupCourse> groupCourses = await groupCourseRepository.GetByLecturerId(id);
+
+            if (groupCourses == null)
+            {
+                groupCourses = new List<GroupCourse>();
+            }
+
+            List<GroupCourseRow> result = new List<GroupCourseRow>();
+
+            for (int i = 0; i < groupCourses.Count; i++)
+            {
+                Group group = await groupRepository.Get(groupCourses[i].GroupId);
+                Course course = await courseRepository.Get(groupCourses[i].CourseId);
+                User lecturer = await userRepository.GetLecturerById(groupCourses[i].UserId);
+                result.Add(new GroupCourseRow()
+                {
+                    GroupCourseId = groupCourses[i].Id,
+                    GroupName = group.Name,
+                    CourseName = course.Name,
+                    LecturerName = lecturer.FirstName
+                });
+            }
+
+            return View(new MyLessonsViewModel()
+            {
+                GroupCourses = result
+            });
+        }
+
+        [Route("gropucourses/ShowMore")]
+        public async Task<IActionResult> ShowMore(string groupCourseId) {
+            GroupCourse gc = await groupCourseRepository.Get(groupCourseId);
+            if (gc == null) {
+                throw new NotImplementedException();
+            }
+
+            List<Student> students = await studentRepository.GetByGroupId(gc.GroupId);
+
+            return View(new ShowMoreViewModel() {
+                Students = students,
+                GroupCourseId = groupCourseId
+            });
+        }
+
+        [Route("gropucourses/SetMark")]
+        public async Task<IActionResult> SetMark(string studentId,string groupCourseId) {
+            Mark mark = new Mark();
+            mark.GroupCourseId = groupCourseId;
+            mark.StudentId = studentId;
+
+            Student student = await studentRepository.Get(studentId);
+            GroupCourse gc = await groupCourseRepository.Get(groupCourseId);
+            Group group = await groupRepository.Get(gc.GroupId);
+            Course course = await courseRepository.Get(gc.CourseId);
+
+            return View(new SetMarkViewModel() {
+                Student = student,
+                Mark = mark,
+                Group = group,
+                Course = course
+            });
+        }
+
+        [HttpPost]
+        [Route("gropucourses/AddMark")]
+        public async Task<IActionResult> AddMark([FromForm]Mark mark) {
+            await markRepository.Create(mark);
+            return RedirectToAction("MyLessons");
+        }
+
+        #endregion
+
     }
 }

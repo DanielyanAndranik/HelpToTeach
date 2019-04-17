@@ -1,0 +1,42 @@
+﻿@model ShowMoreViewModel
+@{
+    ViewData["Title"] = "ShowMore";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<h1>ShowMore</h1>
+@if (Model.Students != null && Model.Students.Count != 0)
+{
+    <table class="table table-hover" id="js-table">
+        <thead>
+            <tr>
+                <th scope="col">FirstName</th>
+                <th scope="col">LastName</th>
+                <th scope="col">MiddleName</th>
+                <th scope="col">Group</th>
+                <th scope="col">Mark</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td>@student.FirstName</td>
+                    <td>@student.LastName</td>
+                    <td>@student.MiddleName</td>
+                    <td>@student.Group.Name</td>
+                    <td>
+                        @Html.ActionLink("Set a Mark","SetMark","Dashboard",new {studentId = student.Id,groupCourseId = Model.GroupCourseId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#js-table").DataTable();
+    });
+</script>

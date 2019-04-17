@@ -1,0 +1,33 @@
+﻿@model SetMarkViewModel
+@using HelpToTeach.Data.Enums;
+@{
+    ViewData["Title"] = "SetMark";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<h1>SetMark</h1>
+<h2>@Model.Group.Name</h2>
+<h2>@Model.Student.FirstName</h2>
+<h2>@Model.Student.LastName</h2>
+<h2>@Model.Course.Name</h2>
+<form class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3" asp-action="AddMark" method="post">
+    <div class="form-group">
+        @Html.LabelFor(m => m.Mark.MarkType)
+        <select asp-for="@Model.Mark.MarkType" asp-items="Html.GetEnumSelectList<MarkType>()" class="form-control"></select>
+        @Html.ValidationMessageFor(m => m.Mark.MarkType)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Mark.Date)
+        @Html.TextBoxFor(m => m.Mark.Date,
+            string.Format("{0:d}",Model.Mark.Date.ToShortDateString()),
+            new { @class= "date-picker form-control", type="date" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Mark.Value)
+        @Html.TextBoxFor(m => m.Mark.Value, new { @class = "form-control" })
+    </div>
+
+    @Html.HiddenFor(m => m.Mark.GroupCourseId)
+    @Html.HiddenFor(m => m.Mark.StudentId)
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
