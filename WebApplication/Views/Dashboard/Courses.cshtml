@@ -6,9 +6,9 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h2>Courses</h2>
+<h3 class="text-center">Courses</h3>
 
-@if (role != "1")
+@if (role == "2")
 {
     <div class="border-bottom border-top py-2 mb-3">
         <a class="btn btn-outline-secondary px-4" asp-action="AddCourse">Add</a>
@@ -16,18 +16,16 @@
         <a class="btn btn-outline-danger px-4 hidden" id="delete-button" asp-action="DeleteCourse">Delete</a>
     </div>
 }
-<table class="table table-hover" id="js-table">
+<table class="table table-hover table-striped table-bordered" id="js-table">
     <thead>
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Name</th>
+            <th>Name</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var course in Model.Courses)
         {
             <tr onclick="selectCourse('@course.Id')">
-                <th scope="row">@course.Id</th>
                 <td>@course.Name</td>
             </tr>
         }

@@ -8,7 +8,7 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 <h3 class="text-center">Lecturers</h3>
-<table class="table table-hover" id="js-table">
+<table class="table table-hover table-striped table-bordered" id="js-table">
     <thead>
         <tr>
             <th scope="col">FirstName</th>
@@ -24,15 +24,11 @@
                 <td>@lecturer.FirstName</td>
                 <td>@lecturer.LastName</td>
                 <td>@lecturer.MiddleName</td>
-                <td>@lecturer.BirthDate</td>
+                <td>@lecturer.BirthDate.ToShortDateString()</td>
             </tr>
         }
     </tbody>
 </table>
-@if (role == "2")
-{
-<a class="btn btn-outline-secondary" asp-action="AddLecturer">Add Lecturer</a>
-}
 <script type="text/javascript">
     $(document).ready(function () {
         $("#js-table").DataTable();

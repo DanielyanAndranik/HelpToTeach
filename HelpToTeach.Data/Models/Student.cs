@@ -11,7 +11,7 @@ namespace HelpToTeach.Data.Models
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public DateTime BirthDate { get; set; }
-        public bool FullScholarship { get; set; }
+        public bool FullSchoolarship { get; set; }
         public string GroupId { get; set; }
         public Group Group { get; set; }
     }

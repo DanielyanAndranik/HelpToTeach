@@ -2,40 +2,43 @@
 @{
     ViewData["Title"] = "GroupCourse";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
 }
 
-<h1>Group Course Lecturers</h1>
+<h3 class="text-center">Group-Course-Lecturers</h3>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-@if (Model.GroupCourses.Count != 0)
+
+@if (role == "2")
 {
-    <h2 class="text-center">GCL list</h2>
-    <table class="table table-hover" id="js-table">
-        <thead>
+    <div class="border-bottom border-top py-2 mb-3">
+        <a class="btn btn-outline-secondary px-4" asp-action="AddCourse">Add</a>
+        <a class="btn btn-outline-warning px-4 hidden" id="edit-button" asp-action="EditCourse">Edit</a>
+        <a class="btn btn-outline-danger px-4 hidden" id="delete-button" asp-action="DeleteCourse">Delete</a>
+    </div>
+}
+<table class="table table-hover table-striped table-bordered" id="js-table">
+    <thead>
+        <tr>
+            <th scope="col">Lecturer Name</th>
+            <th scope="col">Group Name</th>
+            <th scope="col">Course Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var groupCourse in Model.GroupCourses)
+        {
             <tr>
-                <th scope="col">Lecturer Name</th>
-                <th scope="col">Group Name</th>
-                <th scope="col">Course Name</th>
+                <td>@groupCourse.LecturerName</td>
+                <td>@groupCourse.GroupName</td>
+                <td>@groupCourse.CourseName</td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var groupCourse in Model.GroupCourses)
-            {
-                <tr>
-                    <td>@groupCourse.LecturerName</td>
-                    <td>@groupCourse.GroupName</td>
-                    <td>@groupCourse.CourseName</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <h2 class="text-center">There are no results</h2>
-}
+        }
+    </tbody>
+</table>
+
 
 
 <a class="btn btn-outline-secondary" asp-action="AddGroupCourse">Add group course</a>

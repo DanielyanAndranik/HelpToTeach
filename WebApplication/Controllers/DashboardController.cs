@@ -249,7 +249,7 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> AddStudent()
         {
             var groups = await this.groupRepository.GetAll();
-            return View("EditStudents", new EditStudentViewModel { Mode = Mode.New, Groups = groups, Student = new Student() });
+            return View("EditStudent", new EditStudentViewModel { Mode = Mode.New, Groups = groups });
         }
 
         [HttpPost]
@@ -278,7 +278,7 @@ namespace WebApplication.Controllers
             student.LastName = _student.LastName;
             student.MiddleName = _student.MiddleName;
             student.GroupId = _student.GroupId;
-            student.FullScholarship = _student.FullScholarship;
+            student.FullSchoolarship = _student.FullSchoolarship;
             student.BirthDate = _student.BirthDate;
             await this.studentRepository.Update(student);
             return RedirectToAction("Students");
