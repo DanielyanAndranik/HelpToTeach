@@ -4,43 +4,33 @@
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-<h1>My Group Courses</h1>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-@if (Model.GroupCourses.Count != 0)
-{
-    <h2 class="text-center">GCL list</h2>
-    <table class="table table-hover" id="js-table">
-        <thead>
+<h2 class="text-center">GCL list</h2>
+<table class="table table-hover table-striped table-bordered" id="js-table">
+    <thead>
+        <tr>
+            <th scope="col">Group Name</th>
+            <th scope="col">Course Name</th>
+            <th scope="col">Mark</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var groupCourse in Model.GroupCourses)
+        {
             <tr>
-                <th scope="col">Group Name</th>
-                <th scope="col">Course Name</th>
-                <th scope="col">Mark</th>
+                <td>@groupCourse.GroupName</td>
+                <td>@groupCourse.CourseName</td>
+                <td>
+
+                    @Html.ActionLink("Show More", "ShowMore", "Dashboard", new { groupCourseId = groupCourse.GroupCourseId })
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var groupCourse in Model.GroupCourses)
-            {
-                <tr>
-                    <td>@groupCourse.GroupName</td>
-                    <td>@groupCourse.CourseName</td>
-                    <td>
-                        
-                        @Html.ActionLink("Show More","ShowMore","Dashboard",new { groupCourseId = groupCourse.GroupCourseId})
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <h2 class="text-center">There are no results</h2>
-}
+        }
+    </tbody>
+</table>
 
-
-<a class="btn btn-outline-secondary" asp-action="AddGroupCourse">Add group course</a>
 <script type="text/javascript">
     $(document).ready(function () {
         $("#js-table").DataTable();

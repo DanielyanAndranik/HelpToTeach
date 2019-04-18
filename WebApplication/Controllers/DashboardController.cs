@@ -378,7 +378,7 @@ namespace WebApplication.Controllers
 
         #region Lessons
 
-        [Route("gropucourses/MyLessons")]
+        [Route("groupcourses/MyLessons")]
         public async Task<IActionResult> MyLessons()
         {
             var id = User.FindFirst(ClaimTypes.Sid).Value;
@@ -412,7 +412,7 @@ namespace WebApplication.Controllers
             });
         }
 
-        [Route("gropucourses/ShowMore")]
+        [Route("groupcourses/ShowMore")]
         public async Task<IActionResult> ShowMore(string groupCourseId) {
             GroupCourse gc = await groupCourseRepository.Get(groupCourseId);
             if (gc == null) {
@@ -427,11 +427,13 @@ namespace WebApplication.Controllers
             });
         }
 
-        [Route("gropucourses/SetMark")]
+        [Route("groupcourses/SetMark")]
         public async Task<IActionResult> SetMark(string studentId,string groupCourseId) {
-            Mark mark = new Mark();
-            mark.GroupCourseId = groupCourseId;
-            mark.StudentId = studentId;
+            Mark mark = new Mark
+            {
+                GroupCourseId = groupCourseId,
+                StudentId = studentId
+            };
 
             Student student = await studentRepository.Get(studentId);
             GroupCourse gc = await groupCourseRepository.Get(groupCourseId);
@@ -447,7 +449,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
-        [Route("gropucourses/AddMark")]
+        [Route("groupcourses/AddMark")]
         public async Task<IActionResult> AddMark([FromForm]Mark mark) {
             await markRepository.Create(mark);
             return RedirectToAction("MyLessons");
