@@ -318,8 +318,8 @@ namespace WebApplication.Controllers
         #endregion
 
         #region GCL
-        [Route("gropucourses")]
-        public async Task<IActionResult> GroupCourse()
+        [Route("groupcourses")]
+        public async Task<IActionResult> GroupCourses()
         {
             List<GroupCourse> groupCourses = await groupCourseRepository.GetAll();
 
@@ -350,7 +350,7 @@ namespace WebApplication.Controllers
 
         
 
-        [Route("gropucourses/add")]
+        [Route("groupcourses/add")]
         public async Task<IActionResult> AddGroupCourse()
         {
             List<Group> groups = await groupRepository.GetAll();
@@ -367,7 +367,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
-        [Route("gropucourses/add")]
+        [Route("groupcourses/add")]
         public async Task<IActionResult> AddGroupCourse([FromForm]GroupCourse groupCourse)
         {
             var _groupCourse = await this.groupCourseRepository.Create(groupCourse);

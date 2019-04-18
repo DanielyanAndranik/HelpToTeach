@@ -39,11 +39,37 @@
     </tbody>
 </table>
 
-
-
-<a class="btn btn-outline-secondary" asp-action="AddGroupCourse">Add group course</a>
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#js-table").DataTable();
-    });
+        var table = $("#js-table").DataTable();
+
+        $('#js-table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+
+        //selectedGroupId = null;
+        //selectGroup = function (id) {
+        //    if (selectedGroupId !== id) {
+        //        selectedGroupId = id;
+        //        $('#edit-button').removeClass('hidden');
+        //        $('#edit-button').attr('href', '/dashboard/groups/edit/' + selectedGroupId);
+        //        $('#delete-button').removeClass('hidden');
+        //        $('#delete-button').attr('href', '/dashboard/groups/' + selectedGroupId);
+        //    }
+        //    else {
+        //        selectedGroupId = null;
+        //        $('#edit-button').addClass('hidden');
+        //        $('#edit-button').attr('href', '/dashboard/groups/edit/');
+        //        $('#delete-button').addClass('hidden');
+        //        $('#delete-button').attr('href', '/dashboard/groups/');
+        //    }
+        //}
+    })
+
 </script>
