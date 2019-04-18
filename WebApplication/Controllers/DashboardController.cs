@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
-using HelpToTeach.Core.Repository.Abstraction;
 using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Helpers;
@@ -24,12 +23,13 @@ namespace WebApplication.Controllers
         private readonly IMarkRepository markRepository;
 
 
-        public DashboardController(ICourseRepository courseRepository,
-            IGroupRepository groupRepository,
-            IStudentRepository studentRepository,
-            IUserRepository userRepository,
-            IGroupCourseRepository groupCourseRepository,
-            IMarkRepository markRepository)
+        public DashboardController(
+                ICourseRepository courseRepository,
+                IGroupRepository groupRepository,
+                IStudentRepository studentRepository,
+                IUserRepository userRepository,
+                IGroupCourseRepository groupCourseRepository,
+                IMarkRepository markRepository )
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
@@ -378,7 +378,7 @@ namespace WebApplication.Controllers
 
         #region Lessons
 
-        [Route("groupcourses/MyLessons")]
+        [Route("groupcourses/myLessons")]
         public async Task<IActionResult> MyLessons()
         {
             var id = User.FindFirst(ClaimTypes.Sid).Value;
@@ -456,6 +456,5 @@ namespace WebApplication.Controllers
         }
 
         #endregion
-
     }
 }

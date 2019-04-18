@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HelpToTeach.Core.Repository.Abstraction
+namespace HelpToTeach.Core.Repository
 {
     public interface IMarkRepository
     {
@@ -14,5 +14,8 @@ namespace HelpToTeach.Core.Repository.Abstraction
         Task<Mark> Update(Mark mark);
         Task<Mark> Upsert(Mark mark);
         Task Delete(string id);
+        Task<List<Mark>> GetMarksByStudent(string id);
+        Task<List<Mark>> GetMarksByCourse(string id);
+        Task<List<Mark>> GetMarksByStudentAndCourse(string studentId, string courseId);
     }
 }

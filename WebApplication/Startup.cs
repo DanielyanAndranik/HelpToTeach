@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Couchbase.Extensions.DependencyInjection;
 using System;
 using HelpToTeach.Core.Repository;
-using HelpToTeach.Core.Repository.Implementation;
-using HelpToTeach.Core.Repository.Abstraction;
 
 namespace WebApplication
 {

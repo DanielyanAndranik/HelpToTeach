@@ -1,17 +1,16 @@
 ﻿using Couchbase.Core;
 using Couchbase.Extensions.DependencyInjection;
-using HelpToTeach.Core.Repository.Abstraction;
+using Couchbase.N1QL;
 using HelpToTeach.Data.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace HelpToTeach.Core.Repository.Implementation
+namespace HelpToTeach.Core.Repository
 {
     public class MarkRepository : IMarkRepository
     {
-
         private readonly IBucket bucket;
         public MarkRepository(INamedBucketProvider provider)
         {
@@ -37,9 +36,46 @@ namespace HelpToTeach.Core.Repository.Implementation
             throw new NotImplementedException();
         }
 
-        public Task<List<Mark>> GetAll()
+        public async Task<List<Mark>> GetAll()
         {
-            throw new NotImplementedException();
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'mark'");
+            var result = await bucket.QueryAsync<Mark>(query);
+            return result.Rows;
+        }
+
+        public async Task<List<Mark>> GetMarksByCourse(string id)
+        {
+            var query = new QueryRequest(
+                "SELECT m.* FROM HelpToTeachBucket m " +
+                "JOIN HelpToTeachBucket gc ON m.groupCourseId = gc.id " +
+                "WHERE m.type = 'mark' AND gc.type = 'groupcourse' " +
+                "AND gc.courseId = $courseId");
+            query.AddNamedParameter("$courseId", id);
+            var result = await bucket.QueryAsync<Mark>(query);
+            return result.Rows;
+        }
+
+        public async Task<List<Mark>> GetMarksByStudent(string id)
+        {
+            var query = new QueryRequest(
+                "SELECT m.* FROM HelpToTeachBucket m " +
+                "WHERE m.type = 'mark' AND m.studentId = $studentId");
+            query.AddNamedParameter("$studentId", id);
+            var result = await bucket.QueryAsync<Mark>(query);
+            return result.Rows;
+        }
+
+        public async Task<List<Mark>> GetMarksByStudentAndCourse(string studentId, string courseId)
+        {
+            var query = new QueryRequest(
+                "SELECT m.* FROM HelpToTeachBucket m " +
+                "JOIN HelpToTeachBucket gc ON m.groupCourseId = gc.id " +
+                "WHERE m.type = 'mark' AND gc.type = 'groupcourse' " +
+                "AND gc.courseId = $courseId AND m.studentId = $studentId");
+            query.AddNamedParameter("$studentId", studentId);
+            query.AddNamedParameter("$courseId", courseId);
+            var result = await bucket.QueryAsync<Mark>(query);
+            return result.Rows;
         }
 
         public Task<Mark> Update(Mark mark)

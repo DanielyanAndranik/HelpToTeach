@@ -107,5 +107,5 @@ tr.selected {
 }
 
 a.hidden{
-    display: none;
+    visibility: collapse;
 }

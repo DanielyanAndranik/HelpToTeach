@@ -1,0 +1,7 @@
+[
+  {
+    "Operation": "PredictMiddleMark",
+    "Script": "script1.py",
+    "Args": ""
+  }
+]
