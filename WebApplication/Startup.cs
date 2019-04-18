@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Couchbase.Extensions.DependencyInjection;
 using System;
 using HelpToTeach.Core.Repository;
+using HelpToTeach.Core.Repository.Implementation;
+using HelpToTeach.Core.Repository.Abstraction;
 
 namespace WebApplication
 {
@@ -34,6 +36,7 @@ namespace WebApplication
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<IGroupCourseRepository, GroupCourseRepository>();
+            services.AddScoped<IMarkRepository, MarkRepository>();
             
 
             services.AddAutoMapper();

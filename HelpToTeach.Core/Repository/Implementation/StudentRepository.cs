@@ -12,9 +12,11 @@ namespace HelpToTeach.Core.Repository
     public class StudentRepository : IStudentRepository
     {
         private readonly IBucket bucket;
-        public StudentRepository(INamedBucketProvider provider)
+        private readonly IGroupRepository groupRepository;
+        public StudentRepository(INamedBucketProvider provider,IGroupRepository groupRepository)
         {
             this.bucket = provider.GetBucket();
+            this.groupRepository = groupRepository;
         }
     
         public async Task<Student> Create(Student student)
@@ -53,16 +55,33 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<List<Student>> GetByLecturer(string id)
         {
-            var query = new QueryRequest(
-                                            "SELECT s.*, g as `group` FROM HelpToTeachBucket s " +
-                                            "JOIN HelpToTeachBucket g ON s.groupId = g.id" +
-                                            "JOIN HelpToTeachBucket gc ON gc.groupId = g.id" +
-                                            "WHERE s.type = 'student' AND g.type = 'group' AND gc.type = 'groupCourse'" +
-                                            "AND gc.userId = '$userId'"
-                                        );
-            query.AddNamedParameter("$userId", id);
-            var result = await bucket.QueryAsync<Student>(query);
-            return result.Rows;
+
+            //var query = new QueryRequest(
+            //                                "SELECT s.*, g as `group` FROM HelpToTeachBucket s " +
+            //                                "JOIN HelpToTeachBucket g ON s.groupId = g.id" +
+            //                                "JOIN HelpToTeachBucket gc ON gc.groupId = g.id" +
+            //                                "WHERE s.type = 'student' AND g.type = 'group' AND gc.type = 'groupcourse'" +
+            //                                "AND gc.userId = '$userId'"
+            //                            );
+            //query.AddNamedParameter("$userId", id);
+            //var result = await bucket.QueryAsync<Student>(query);
+            //return result.Rows;
+
+            List<Student> allStudents = await GetAll();
+            List<Group> allByLecturer = await groupRepository.GetByLecturer(id);
+            List<Student> result = new List<Student>();
+
+            foreach (var group in allByLecturer)
+            {
+                foreach (var student in allStudents)
+                {
+                    if (student.GroupId == group.Id) {
+                        result.Add(student);
+                    }
+                }
+            }
+
+            return result;
         }
 
         public async Task<Student> Update(Student student)
