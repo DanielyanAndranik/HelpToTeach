@@ -40,14 +40,30 @@ namespace HelpToTeach.Core.Repository
         }
 
         public async Task<List<GroupCourse>> GetByLecturerId(string id) {
-            List<GroupCourse> all = await GetAll();
-            List<GroupCourse> result = (from g in all where g.UserId == id select g).ToList();
-            return result;
+            var query = new QueryRequest(
+                    "SELECT gc.*, c as `course`, g as `group`, l as `user` " +
+                    "FROM HelpToTeachBucket gc " +
+                    "JOIN HelpToTeachBucket g ON gc.groupId = g.id " +
+                    "JOIN HelpToTeachBucket c ON gc.courseId = c.id " +
+                    "JOIN HelpToTeachBucket l ON gc.userId = l.id " +
+                    "WHERE c.type = 'course' AND g.type = 'group' " +
+                    "AND gc.type = 'groupcourse' AND l.type='user' AND gc.userId = $userId"
+                );
+            query.AddNamedParameter("$userId", id);
+            var result = await bucket.QueryAsync<GroupCourse>(query);
+            return result.Rows;
         }
 
         public async Task<List<GroupCourse>> GetAll()
         {
-            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'groupcourse'");
+            var query = new QueryRequest(
+                    "SELECT gc.*, c as `course`, g as `group`, l as `lecturer` " +
+                    "FROM HelpToTeachBucket gc " +
+                    "JOIN HelpToTeachBucket g ON gc.groupId = g.id " +
+                    "JOIN HelpToTeachBucket c ON gc.courseId = c.id " +
+                    "JOIN HelpToTeachBucket l ON gc.userId = l.id " +
+                    "WHERE c.type = 'course' AND g.type = 'group' " +
+                    "AND gc.type = 'groupcourse' AND l.type='user'");
             var result = await bucket.QueryAsync<GroupCourse>(query);
             return result.Rows;
         }

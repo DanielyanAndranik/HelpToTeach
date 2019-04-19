@@ -1,4 +1,4 @@
-﻿@model GroupCourseViewModel
+﻿@model GroupCoursesViewModel
 @{
     ViewData["Title"] = "GroupCourse";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
@@ -11,14 +11,23 @@
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 
-@if (role == "2")
-{
-    <div class="border-bottom border-top py-2 mb-3">
+<div class="border-bottom border-top py-2 mb-3">
+    @if (role == "2")
+    {
         <a class="btn btn-outline-secondary px-4" asp-action="AddCourse">Add</a>
         <a class="btn btn-outline-warning px-4 hidden" id="edit-button" asp-action="EditCourse">Edit</a>
         <a class="btn btn-outline-danger px-4 hidden" id="delete-button" asp-action="DeleteCourse">Delete</a>
-    </div>
-}
+    }
+    else
+    {
+        <a class="btn btn-outline-secondary px-4 hidden" id="lecture-button" asp-action="StartLesson">Lecture</a>
+        <a class="btn btn-outline-secondary px-4 hidden" id="seminar-button" asp-action="StartLesson">Seminar</a>
+        <a class="btn btn-outline-secondary px-4 hidden" id="lab-button" asp-action="StartLesson">Lab</a>
+        <a class="btn btn-outline-secondary px-4 hidden" id="middle-button" asp-action="StartLesson">Middle</a>
+        <a class="btn btn-outline-secondary px-4 hidden" id="final-button" asp-action="StartLesson">Final</a>
+    }
+</div>
+
 <table class="table table-hover table-striped table-bordered" id="js-table">
     <thead>
         <tr>
@@ -30,16 +39,18 @@
     <tbody>
         @foreach (var groupCourse in Model.GroupCourses)
         {
-            <tr>
-                <td>@groupCourse.LecturerName</td>
-                <td>@groupCourse.GroupName</td>
-                <td>@groupCourse.CourseName</td>
+            <tr onclick="selectRow('@groupCourse.Id')">
+                <td>@groupCourse.User.FirstName</td>
+                <td>@groupCourse.Group.Name</td>
+                <td>@groupCourse.Course.Name</td>
             </tr>
         }
     </tbody>
 </table>
 
 <script type="text/javascript">
+    var selectedRowId;
+    var selectRow;
     $(document).ready(function () {
         var table = $("#js-table").DataTable();
 
@@ -53,23 +64,35 @@
             }
         });
 
-        //selectedGroupId = null;
-        //selectGroup = function (id) {
-        //    if (selectedGroupId !== id) {
-        //        selectedGroupId = id;
-        //        $('#edit-button').removeClass('hidden');
-        //        $('#edit-button').attr('href', '/dashboard/groups/edit/' + selectedGroupId);
-        //        $('#delete-button').removeClass('hidden');
-        //        $('#delete-button').attr('href', '/dashboard/groups/' + selectedGroupId);
-        //    }
-        //    else {
-        //        selectedGroupId = null;
-        //        $('#edit-button').addClass('hidden');
-        //        $('#edit-button').attr('href', '/dashboard/groups/edit/');
-        //        $('#delete-button').addClass('hidden');
-        //        $('#delete-button').attr('href', '/dashboard/groups/');
-        //    }
-        //}
+        selectedRowId = null;
+        selectRow = function (id) {
+            if (selectedRowId !== id) {
+                selectedRowId = id;
+                $('#lecture-button').removeClass('hidden');
+                $('#seminar-button').removeClass('hidden');
+                $('#lab-button').removeClass('hidden');
+                $('#middle-button').removeClass('hidden');
+                $('#final-button').removeClass('hidden');
+                $('#lecture-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=0');
+                $('#seminar-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=1');
+                $('#lab-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=2');
+                $('#middle-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=3');
+                $('#final-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId) + '&type=4';
+            }
+            else {
+                selectedRowId = null;
+                $('#lecture-button').removeClass('hidden');
+                $('#seminar-button').removeClass('hidden');
+                $('#lab-button').removeClass('hidden');
+                $('#middle-button').removeClass('hidden');
+                $('#final-button').removeClass('hidden');
+                $('#lecture-button').attr('href', './');
+                $('#seminar-button').attr('href', './');
+                $('#lab-button').attr('href', './');
+                $('#middle-button').attr('href', './');
+                $('#final-button').attr('href', './');
+            }
+        }
     })
 
 </script>

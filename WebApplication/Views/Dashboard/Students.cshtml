@@ -60,9 +60,9 @@
             if (selectedStudentId !== id) {
                 selectedStudentId = id;
                 $('#edit-button').removeClass('hidden');
-                $('#edit-button').attr('href', '/dashboard/students/edit/' + selectedStudentId);
+                $('#edit-button').attr('href', '/dashboard/students/edit?studentId=' + selectedStudentId);
                 $('#delete-button').removeClass('hidden');
-                $('#delete-button').attr('href', '/dashboard/students/' + selectedStudentId);
+                $('#delete-button').attr('href', '/dashboard/students?studentId=' + selectedStudentId);
             }
             else {
                 selectedStudentId = null;

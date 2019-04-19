@@ -4,7 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
+using HelpToTeach.Data.Enums;
 using HelpToTeach.Data.Models;
+using HelpToTeach.Data.Transfer;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Helpers;
 using WebApplication.Helpers.Enums;
@@ -29,7 +31,7 @@ namespace WebApplication.Controllers
                 IStudentRepository studentRepository,
                 IUserRepository userRepository,
                 IGroupCourseRepository groupCourseRepository,
-                IMarkRepository markRepository )
+                IMarkRepository markRepository)
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
@@ -48,10 +50,12 @@ namespace WebApplication.Controllers
         [Route("info")]
         public async Task<IActionResult> Info()
         {
-            var user = await userRepository.Get(User.FindFirstValue(ClaimTypes.Sid));
-            var studentsCount = (await studentRepository.GetByLecturer(User.FindFirstValue(ClaimTypes.Sid))).Count();
-            var groupsCount = (await groupRepository.GetByLecturer(User.FindFirstValue(ClaimTypes.Sid))).Count();
-            var coursesCount = (await courseRepository.GetByLecturer(User.FindFirstValue(ClaimTypes.Sid))).Count();
+            var id = User.FindFirstValue(ClaimTypes.Sid);
+
+            var user = await userRepository.Get(id);
+            var studentsCount = (await studentRepository.GetByLecturer(id)).Count();
+            var groupsCount = (await groupRepository.GetByLecturer(id)).Count();
+            var coursesCount = (await courseRepository.GetByLecturer(id)).Count();
             return View(new InfoViewModel
             {
                 User = user,
@@ -78,10 +82,12 @@ namespace WebApplication.Controllers
             return View(new CoursesViewModel { Courses = courses });
         }
 
-        private async Task<IEnumerable<Course>> GetCoursesByLecturer(string id) {
+        private async Task<IEnumerable<Course>> GetCoursesByLecturer(string id)
+        {
             List<GroupCourse> groupCourses = await groupCourseRepository.GetByLecturerId(id);
             List<Course> result = new List<Course>();
-            if (groupCourses == null || groupCourses.Count == 0) {
+            if (groupCourses == null || groupCourses.Count == 0)
+            {
                 return result;
             }
 
@@ -97,7 +103,7 @@ namespace WebApplication.Controllers
         [Route("courses/add")]
         public IActionResult AddCourse()
         {
-            return View("EditCourse", new EditCourseViewModel { Mode = Mode.New});
+            return View("EditCourse", new EditCourseViewModel { Mode = Mode.New });
         }
 
         [HttpPost]
@@ -147,17 +153,20 @@ namespace WebApplication.Controllers
             {
                 groups = await groupRepository.GetAll();
             }
-            else {
+            else
+            {
                 groups = await groupRepository.GetByLecturer(id);
             }
 
             return View(new GroupsViewModel { Groups = groups, SelectedGroup = new Group() });
         }
 
-        private async Task<List<Group>> GetGroupsByLecturer(string id) {
+        private async Task<List<Group>> GetGroupsByLecturer(string id)
+        {
             List<GroupCourse> groupCourses = await groupCourseRepository.GetByLecturerId(id);
             List<Group> result = new List<Group>();
-            if (groupCourses == null || groupCourses.Count == 0) {
+            if (groupCourses == null || groupCourses.Count == 0)
+            {
                 return result;
             }
 
@@ -192,7 +201,7 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> EditGroup(string id)
         {
             var group = await this.groupRepository.Get(id);
-            return View("EditGroup", new EditGroupViewModel { Mode = Mode.Edit, Group = group});
+            return View("EditGroup", new EditGroupViewModel { Mode = Mode.Edit, Group = group });
         }
 
         [HttpPost]
@@ -231,10 +240,12 @@ namespace WebApplication.Controllers
             return View(new StudentsViewModel { Students = students });
         }
 
-        private async Task<IEnumerable<Student>> GetStudentsByLecturer(string id) {
+        private async Task<IEnumerable<Student>> GetStudentsByLecturer(string id)
+        {
             List<Group> groups = await GetGroupsByLecturer(id);
             List<Student> students = new List<Student>();
-            if (groups.Count == 0) {
+            if (groups.Count == 0)
+            {
                 return students;
             }
 
@@ -264,11 +275,10 @@ namespace WebApplication.Controllers
             return RedirectToAction("Students");
         }
 
-        [Route("students/edit/{id}")]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> EditStudent(string id)
+        [Route("students/edit")]
+        public async Task<IActionResult> EditStudent(string studentId)
         {
-            var student = await this.studentRepository.Get(id);
+            var student = await this.studentRepository.Get(studentId);
             var groups = await this.groupRepository.GetAll();
             return View("EditStudent", new EditStudentViewModel { Mode = Mode.Edit, Student = student, Groups = groups });
         }
@@ -321,34 +331,43 @@ namespace WebApplication.Controllers
         [Route("groupcourses")]
         public async Task<IActionResult> GroupCourses()
         {
-            List<GroupCourse> groupCourses = await groupCourseRepository.GetAll();
-
-            if (groupCourses == null) {
-                groupCourses = new List<GroupCourse>();
+            var role = User.FindFirstValue(ClaimTypes.Role);
+            List<GroupCourse> groupCourses;
+            if (role == "1")
+            {
+                var id = User.FindFirstValue(ClaimTypes.Sid);
+                groupCourses = await groupCourseRepository.GetByLecturerId(id);
+            }
+            else
+            {
+                groupCourses = await groupCourseRepository.GetAll();
             }
 
-            List<GroupCourseRow> result = new List<GroupCourseRow>();
+            //if (groupCourses == null)
+            //{
+            //    groupCourses = new List<GroupCourse>();
+            //}
 
-            for (int i = 0;i < groupCourses.Count;i++)
-            {
-                Group group = await groupRepository.Get(groupCourses[i].GroupId);
-                Course course = await courseRepository.Get(groupCourses[i].CourseId);
-                User lecturer = await userRepository.GetLecturerById(groupCourses[i].UserId);
-                result.Add(new GroupCourseRow()
-                {
-                    GroupName = group.Name,
-                    CourseName = course.Name,
-                    LecturerName = lecturer.FirstName
-                });
-            }
+            //List<GroupCourseRow> result = new List<GroupCourseRow>();
 
-            return View(new GroupCourseViewModel()
+            //for (int i = 0; i < groupCourses.Count; i++)
+            //{
+            //    Group group = await groupRepository.Get(groupCourses[i].GroupId);
+            //    Course course = await courseRepository.Get(groupCourses[i].CourseId);
+            //    User lecturer = await userRepository.GetLecturerById(groupCourses[i].UserId);
+            //    result.Add(new GroupCourseRow()
+            //    {
+            //        GroupName = group.Name,
+            //        CourseName = course.Name,
+            //        LecturerName = lecturer.FirstName
+            //    });
+            //}
+
+            return View(new GroupCoursesViewModel()
             {
-                GroupCourses = result
+                GroupCourses = groupCourses
             });
         }
-
-        
 
         [Route("groupcourses/add")]
         public async Task<IActionResult> AddGroupCourse()
@@ -378,10 +397,10 @@ namespace WebApplication.Controllers
 
         #region Lessons
 
-        [Route("groupcourses/myLessons")]
-        public async Task<IActionResult> MyLessons()
+        [Route("lessons")]
+        public async Task<IActionResult> Lessons()
         {
-            var id = User.FindFirst(ClaimTypes.Sid).Value;
+            var id = User.FindFirstValue(ClaimTypes.Sid);
 
             List<GroupCourse> groupCourses = await groupCourseRepository.GetByLecturerId(id);
 
@@ -412,47 +431,24 @@ namespace WebApplication.Controllers
             });
         }
 
-        [Route("groupcourses/ShowMore")]
-        public async Task<IActionResult> ShowMore(string groupCourseId) {
-            GroupCourse gc = await groupCourseRepository.Get(groupCourseId);
-            if (gc == null) {
-                throw new NotImplementedException();
-            }
-
-            List<Student> students = await studentRepository.GetByGroupId(gc.GroupId);
-
-            return View(new ShowMoreViewModel() {
-                Students = students,
-                GroupCourseId = groupCourseId
-            });
-        }
-
-        [Route("groupcourses/SetMark")]
-        public async Task<IActionResult> SetMark(string studentId,string groupCourseId) {
-            Mark mark = new Mark
+        [Route("lessons/start")]
+        public async Task<IActionResult> StartLesson(string groupCourseId, LessonType type)
+        {
+            var groupCourse = await groupCourseRepository.Get(groupCourseId);
+            var students = await studentRepository.GetByGroupId(groupCourse.GroupId);
+            var studentMarkPairs = new List<StudentMark>();
+            foreach(var student in students)
             {
-                GroupCourseId = groupCourseId,
-                StudentId = studentId
-            };
-
-            Student student = await studentRepository.Get(studentId);
-            GroupCourse gc = await groupCourseRepository.Get(groupCourseId);
-            Group group = await groupRepository.Get(gc.GroupId);
-            Course course = await courseRepository.Get(gc.CourseId);
-
-            return View(new SetMarkViewModel() {
-                Student = student,
-                Mark = mark,
-                Group = group,
-                Course = course
-            });
+                studentMarkPairs.Add(new StudentMark { StudentId = student.Id });
+            }
+            return View("AddLesson", new StartLessonViewModel { GroupCourse = groupCourse, Type = type, Students = students, StudentMarkPairs = studentMarkPairs });
         }
 
         [HttpPost]
-        [Route("groupcourses/AddMark")]
-        public async Task<IActionResult> AddMark([FromForm]Mark mark) {
-            await markRepository.Create(mark);
-            return RedirectToAction("MyLessons");
+        [Route("lessons/save")]
+        public async Task<IActionResult> SaveLesson(StartLessonViewModel startLessonViewModel)
+        {
+            return RedirectToAction("Lessons");
         }
 
         #endregion

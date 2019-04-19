@@ -1,0 +1,55 @@
+﻿@{
+    var role = User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+    ViewData["Title"] = "Lecturers";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+@model StartLessonViewModel
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<h1>AddLesson</h1>
+
+<form asp-action="SaveLesson" method="post">
+    <div class="border-bottom border-top py-2 mb-3">
+        <button class="btn btn-outline-secondary px-4" type="submit" id="start-button">Save</button>
+    </div>
+
+
+    <table class="table table-hover table-bordered" id="js-table">
+        <thead>
+            <tr>
+                <th scope="col">FirstName</th>
+                <th scope="col">LastName</th>
+                @*<th scope="col">Presence</th>*@
+                <th scope="col">Mark</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Model.StudentMarkPairs.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Students[i].FirstName</td>
+                    <td>@Model.Students[i].LastName</td>
+                    @*<td><input type="checkbox" name="presence" value="true" /></td>*@
+                    <td style="display:none">@Html.TextBoxFor(m => m.StudentMarkPairs[i].StudentId)</td>
+                    <td>@Html.TextBoxFor(m => m.StudentMarkPairs[i].Mark)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+<script>
+    $(document).ready(function () {
+        var table = $("#js-table").DataTable();
+
+        $('#js-table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    })
+</script>

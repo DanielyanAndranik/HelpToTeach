@@ -10,9 +10,12 @@ namespace HelpToTeach.Data.Models
     {
         [Required,Display(Name ="Group Name")]
         public string GroupId { get; set; }
+        public Group Group { get; set; }
         [Required,Display(Name ="Course Name")]
         public string CourseId { get; set; }
+        public Course Course { get; set; }
         [Required,Display(Name = "Lecturer Name")]
         public string UserId { get; set; }
+        public User User { get; set; }
     }
 }

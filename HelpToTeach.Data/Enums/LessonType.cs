@@ -8,6 +8,8 @@ namespace HelpToTeach.Data.Enums
     {
         Lecture, 
         Seminar,
-        Lab
+        Lab,
+        Middle,
+        Final
     }
 }
