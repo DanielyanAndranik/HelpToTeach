@@ -9,7 +9,8 @@ namespace HelpToTeach.Data.Enums
         Lecture, 
         Seminar,
         Lab,
-        Middle,
+        FirstMiddle,
+        SecondMiddle,
         Final
     }
 }

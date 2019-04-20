@@ -13,7 +13,7 @@ namespace HelpToTeach.Core.Repository
     {
         private readonly IBucket bucket;
         private readonly IGroupRepository groupRepository;
-        public StudentRepository(INamedBucketProvider provider,IGroupRepository groupRepository)
+        public StudentRepository(INamedBucketProvider provider, IGroupRepository groupRepository)
         {
             this.bucket = provider.GetBucket();
             this.groupRepository = groupRepository;

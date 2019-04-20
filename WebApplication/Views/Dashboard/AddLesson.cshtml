@@ -14,25 +14,26 @@
         <button class="btn btn-outline-secondary px-4" type="submit" id="start-button">Save</button>
     </div>
 
+    @Html.HiddenFor(m => m.GroupCourse.Id)
 
     <table class="table table-hover table-bordered" id="js-table">
         <thead>
             <tr>
                 <th scope="col">FirstName</th>
                 <th scope="col">LastName</th>
-                @*<th scope="col">Presence</th>*@
+                <th scope="col">Absent</th>
                 <th scope="col">Mark</th>
             </tr>
         </thead>
         <tbody>
-            @for (var i = 0; i < Model.StudentMarkPairs.Count; i++)
+            @for (var i = 0; i < Model.Marks.Count; i++)
             {
                 <tr>
+                    <td style="display:none">@Html.TextBoxFor(m => m.Marks[i].StudentId)</td>
                     <td>@Model.Students[i].FirstName</td>
                     <td>@Model.Students[i].LastName</td>
-                    @*<td><input type="checkbox" name="presence" value="true" /></td>*@
-                    <td style="display:none">@Html.TextBoxFor(m => m.StudentMarkPairs[i].StudentId)</td>
-                    <td>@Html.TextBoxFor(m => m.StudentMarkPairs[i].Mark)</td>
+                    <td>@Html.CheckBoxFor(m => m.Marks[i].Absent)</td>
+                    <td>@Html.TextBoxFor(m => m.Marks[i].Value)</td>
                 </tr>
             }
         </tbody>

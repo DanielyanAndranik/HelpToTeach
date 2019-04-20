@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HelpToTeach.Data.Models
 {
-    class Lesson : EntityBase<Lesson>
+    public class Lesson : EntityBase<Lesson>
     {
         public LessonType LessonType { get; set; }
         public DateTime Date { get; set; }

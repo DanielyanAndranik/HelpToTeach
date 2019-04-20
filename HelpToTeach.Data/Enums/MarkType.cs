@@ -6,10 +6,10 @@ namespace HelpToTeach.Data.Enums
 {
     public enum MarkType
     {
-        Middle,
-        Final,
+        Activity,
         Lab,
-        Presence,
-        Activity
+        FirstMiddle,
+        SecondMiddle,
+        Final
     }
 }

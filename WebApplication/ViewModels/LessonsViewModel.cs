@@ -6,7 +6,7 @@ using WebApplication.Helpers;
 
 namespace WebApplication.ViewModels
 {
-    public class MyLessonsViewModel : DashboradLayoutViewModel
+    public class LessonsViewModel : DashboradLayoutViewModel
     {
         public List<GroupCourseRow> GroupCourses { get; set; }
     }

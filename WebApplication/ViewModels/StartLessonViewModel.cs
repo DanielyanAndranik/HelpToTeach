@@ -13,6 +13,6 @@ namespace WebApplication.ViewModels
         public LessonType Type { get; set; }
         public GroupCourse GroupCourse { get; set; }
         public List<Student> Students { get; set; }
-        public List<StudentMark> StudentMarkPairs { get; set; }
+        public List<Mark> Marks { get; set; }
     }
 }

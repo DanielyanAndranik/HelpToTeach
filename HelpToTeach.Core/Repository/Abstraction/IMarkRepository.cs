@@ -1,4 +1,5 @@
 ﻿using HelpToTeach.Data.Models;
+using HelpToTeach.Data.Transfer;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,7 @@ namespace HelpToTeach.Core.Repository
 {
     public interface IMarkRepository
     {
+        Task<List<Mark>> AddRange(IEnumerable<Mark> marks);
         Task<List<Mark>> GetAll();
         Task<Mark> Get(string id);
         Task<Mark> Create(Mark mark);

@@ -2,6 +2,7 @@
 using Couchbase.Extensions.DependencyInjection;
 using Couchbase.N1QL;
 using HelpToTeach.Data.Models;
+using HelpToTeach.Data.Transfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,16 @@ namespace HelpToTeach.Core.Repository
         public MarkRepository(INamedBucketProvider provider)
         {
             this.bucket = provider.GetBucket();
+        }
+
+        public async Task<List<Mark>> AddRange(IEnumerable<Mark> marks)
+        {
+            var returningMarks = new List<Mark>();
+            foreach(var mark in marks)
+            {
+                returningMarks.Add(await this.Create(mark));
+            }
+            return returningMarks;
         }
 
         public async Task<Mark> Create(Mark mark)

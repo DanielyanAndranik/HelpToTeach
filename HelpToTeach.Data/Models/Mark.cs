@@ -11,11 +11,12 @@ namespace HelpToTeach.Data.Models
         [Required,Display(Name ="Mark Type")]
         public MarkType MarkType { get; set; }
         [Required]
+        public bool Absent { get; set; }
         public byte Value { get; set; }
         public DateTime Date { get; set; }
         [Required]
         public string StudentId { get; set; }
         [Required]
-        public string GroupCourseId { get; set; }
+        public string LessonId { get; set; }
     }
 }
