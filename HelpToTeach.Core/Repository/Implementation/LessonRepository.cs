@@ -25,5 +25,10 @@ namespace HelpToTeach.Core.Repository
             var result = (await bucket.GetDocumentAsync<Lesson>($"lesson::{lesson.Id}")).Content;
             return result;
         }
+
+        public Task<List<Lesson>> GetByLecturer(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

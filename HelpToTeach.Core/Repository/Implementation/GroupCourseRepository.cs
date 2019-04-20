@@ -36,7 +36,7 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<GroupCourse> Get(string id)
         {
-            return (await this.bucket.GetAsync<GroupCourse>($"groupCourse::{id}")).Value;
+            return (await this.bucket.GetDocumentAsync<GroupCourse>($"groupCourse::{id}")).Content;
         }
 
         public async Task<List<GroupCourse>> GetByLecturerId(string id) {

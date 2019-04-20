@@ -23,7 +23,8 @@
         <a class="btn btn-outline-secondary px-4 hidden" id="lecture-button" asp-action="StartLesson">Lecture</a>
         <a class="btn btn-outline-secondary px-4 hidden" id="seminar-button" asp-action="StartLesson">Seminar</a>
         <a class="btn btn-outline-secondary px-4 hidden" id="lab-button" asp-action="StartLesson">Lab</a>
-        <a class="btn btn-outline-secondary px-4 hidden" id="middle-button" asp-action="StartLesson">Middle</a>
+        <a class="btn btn-outline-secondary px-4 hidden" id="first-middle-button" asp-action="StartLesson">First Middle</a>
+        <a class="btn btn-outline-secondary px-4 hidden" id="second-middle-button" asp-action="StartLesson">Second Middle</a>
         <a class="btn btn-outline-secondary px-4 hidden" id="final-button" asp-action="StartLesson">Final</a>
     }
 </div>
@@ -71,25 +72,29 @@
                 $('#lecture-button').removeClass('hidden');
                 $('#seminar-button').removeClass('hidden');
                 $('#lab-button').removeClass('hidden');
-                $('#middle-button').removeClass('hidden');
+                $('#first-middle-button').removeClass('hidden');
+                $('#second-middle-button').removeClass('hidden');
                 $('#final-button').removeClass('hidden');
                 $('#lecture-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=0');
                 $('#seminar-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=1');
                 $('#lab-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=2');
-                $('#middle-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=3');
-                $('#final-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId) + '&type=4';
+                $('#first-middle-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=3');
+                $('#second-middle-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId + '&type=4');
+                $('#final-button').attr('href', '/dashboard/lessons/start?groupCourseId=' + selectedRowId) + '&type=5';
             }
             else {
                 selectedRowId = null;
                 $('#lecture-button').addClass('hidden');
                 $('#seminar-button').addClass('hidden');
                 $('#lab-button').addClass('hidden');
-                $('#middle-button').addClass('hidden');
+                $('#first-middle-button').addClass('hidden');
+                $('#second-middle-button').addClass('hidden');
                 $('#final-button').addClass('hidden');
                 $('#lecture-button').attr('href', './');
                 $('#seminar-button').attr('href', './');
                 $('#lab-button').attr('href', './');
-                $('#middle-button').attr('href', './');
+                $('#first-middle-button').attr('href', './');
+                $('#second-middle-button').attr('href', './');
                 $('#final-button').attr('href', './');
             }
         }
