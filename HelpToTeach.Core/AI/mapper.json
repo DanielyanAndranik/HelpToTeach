@@ -1,7 +1,22 @@
 [
   {
-    "Operation": "PredictMiddleMark",
-    "Script": "script1.py",
-    "Args": ""
+    "Operation": "PredictFirstMiddleMark",
+    "Script": "middle_marks.py",
+    "Args": "-mode predict -which 1"
+  },
+  {
+    "Operation": "PredictSecondMiddleMark",
+    "Script": "middle_marks.py",
+    "Args": "-mode predict -which 2"
+  },
+  {
+    "Operation": "TrainFirstMiddleMark",
+    "Script": "middle_marks.py",
+    "Args": "-mode train -which 1"
+  },
+  {
+    "Operation": "PredictSecondMiddleMark",
+    "Script": "middle_marks.py",
+    "Args": "-mode train -which 2"
   }
 ]

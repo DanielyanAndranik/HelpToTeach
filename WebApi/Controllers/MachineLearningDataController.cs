@@ -12,20 +12,19 @@ namespace WebApi.Controllers
     [ApiController]
     public class MachineLearningDataController : ControllerBase
     {
-        private readonly IMarkRepository markRepository;
-        private readonly IStudentRepository studentRepository;
+        private readonly IMLDataRepository mlDataRepository;
 
-        public MachineLearningDataController(IMarkRepository markRepository, IStudentRepository studentRepository)
+        public MachineLearningDataController(IMLDataRepository mlDataRepository)
         {
-            this.markRepository = markRepository;
-            this.studentRepository = studentRepository;
+            this.mlDataRepository = mlDataRepository;
         }
 
         [HttpGet]
         [Route("firstmiddle")]
-        public IActionResult GetFirstMiddleData(string groupCourseId)
+        public async Task<IActionResult> GetFirstMiddleData(string groupCourseId)
         {
-            return null;
+            var result = await mlDataRepository.GetDataForFirstMiddle(groupCourseId);
+            return new JsonResult(result);
         }
 
         [HttpGet]

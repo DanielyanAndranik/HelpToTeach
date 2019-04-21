@@ -10,5 +10,6 @@ namespace HelpToTeach.Core.Repository
     {
         Task<Lesson> Create(Lesson lesson);
         Task<List<Lesson>> GetByLecturer(string id);
+        Task<List<Lesson>> GetByGroupCourse(string id);
     }
 }

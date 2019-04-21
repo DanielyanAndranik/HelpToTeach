@@ -19,5 +19,6 @@ namespace HelpToTeach.Core.Repository
         Task<List<Mark>> GetMarksByStudent(string id);
         Task<List<Mark>> GetMarksByCourse(string id);
         Task<List<Mark>> GetMarksByStudentAndCourse(string studentId, string courseId);
+        Task<List<Mark>> GetMarksByStudentAndGroupCourse(string studentId, string groupCourseId);
     }
 }

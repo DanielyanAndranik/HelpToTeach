@@ -28,6 +28,7 @@ namespace WebApi
             services.AddScoped<IRepository<Student>, CouchbaseRepository<Student>>();
             services.AddScoped<IRepository<Group>, CouchbaseRepository<Group>>();
             services.AddScoped<IMarkRepository, MarkRepository>();
+            services.AddScoped<IMLDataRepository, MLDataRepository>();
 
             services.AddMvc();
         }

@@ -18,5 +18,6 @@ namespace HelpToTeach.Data.Models
         public string StudentId { get; set; }
         [Required]
         public string LessonId { get; set; }
+        public Lesson Lesson { get; set; }
     }
 }

@@ -89,6 +89,19 @@ namespace HelpToTeach.Core.Repository
             return result.Rows;
         }
 
+        public async Task<List<Mark>> GetMarksByStudentAndGroupCourse(string studentId, string groupCourseId)
+        {
+            var query = new QueryRequest(
+                "SELECT m.*, l as `lesson` FROM HelpToTeachBucket m " +
+                "JOIN HelpToTeachBucket l ON m.lessonId = l.id " +
+                "WHERE m.type = 'mark' AND l.type = 'lesson' " +
+                "AND l.groupCourseId = $groupCourseId AND m.studentId = $studentId");
+            query.AddNamedParameter("$groupCourseId", groupCourseId);
+            query.AddNamedParameter("$studentId", studentId);
+            var result = await bucket.QueryAsync<Mark>(query);
+            return result.Rows;
+        }
+
         public Task<Mark> Update(Mark mark)
         {
             throw new NotImplementedException();

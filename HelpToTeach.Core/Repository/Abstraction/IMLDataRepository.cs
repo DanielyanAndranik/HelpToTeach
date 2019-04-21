@@ -8,8 +8,8 @@ namespace HelpToTeach.Core.Repository
 {
     public interface IMLDataRepository
     {
-        Task<List<MiddleFeatures>> GetDataForFirstMiddle(string groupCourseId);
-        Task<List<MiddleFeatures>> GetDataForSecondMiddle(string groupCourseId);
-        Task<List<MiddleFeatures>> GetDataForFinal(string groupCourseId);
+        Task<List<MiddleMarkData>> GetDataForFirstMiddle(string groupCourseId);
+        Task<List<MiddleMarkData>> GetDataForSecondMiddle(string groupCourseId);
+        Task<List<MiddleMarkData>> GetDataForFinal(string groupCourseId);
     }
 }
