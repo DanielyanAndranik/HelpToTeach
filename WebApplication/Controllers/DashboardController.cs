@@ -324,7 +324,7 @@ namespace WebApplication.Controllers
         [Route("lecturers/add")]
         public async Task<IActionResult> AddLecturer()
         {
-            throw new NotImplementedException();
+            return View("~/Views/Home/Register.cshtml", new RegisterViewModel(RegisterMode.Lecturer));
         }
 
         #endregion
