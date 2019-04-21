@@ -63,6 +63,10 @@ public class Student {
         this.marks_ = marks_;
     }
 
+    public boolean isValid(){
+        return marks_.size() == Info.COURSES_COUNT_2011 || marks_.size() == Info.COURSES_COUNT_2011_12;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
