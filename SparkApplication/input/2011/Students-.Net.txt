@@ -1,4 +1,4 @@
-1,Morgan,Peacock,Chelsea,119-1,15,19,9,45
+1,Morgan,Peacock,Chelsea,119-1,1,1,9,10
 2,Heriberto,Winkles,Rickey,119-2,10,10,9,39
 3,Felicitas,Cammarata,Gregory,119-3,15,15,10,45
 4,Jules,Faries,Tracy,119-1,20,20,10,50

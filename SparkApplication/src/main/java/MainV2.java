@@ -146,6 +146,27 @@ public class MainV2 {
             }
         });
 
+        resultFor2011and2012 = resultFor2011and2012.filter(new Function<Student, Boolean>() {
+            @Override
+            public Boolean call(Student student) throws Exception {
+                for (Mark m:
+                     student.getMarks_()) {
+                    if(!m.isValid()){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+
+        resultFor2011and2012 = resultFor2011and2012.filter(new Function<Student, Boolean>() {
+            @Override
+            public Boolean call(Student student) throws Exception {
+                return student.isValid();
+            }
+        });
+
+
         JavaRDD<JsonDocument> couchbaseStudents2011Result = resultFor2011and2012.map(new Function<Student, JsonDocument>() {
             @Override
             public JsonDocument call(Student student) throws Exception {
@@ -155,7 +176,7 @@ public class MainV2 {
                 for (Mark mark:
                      student.getMarks_()) {
                     JsonObject tempMark = JsonObject.create()
-                            .put("coursId",mark.getCourseId())
+                            .put("courseId",mark.getCourseId())
                             .put("first",mark.getFirst())
                             .put("second",mark.getSecond())
                             .put("finalMark",mark.getFinal())
@@ -209,7 +230,6 @@ public class MainV2 {
 
         CouchbaseDocumentRDD<JsonDocument> result3 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseCoursesResult);
         result3.saveToCouchbase();
-
 
     }
 

@@ -60,6 +60,10 @@ public class Mark implements Serializable {
         this.courseId = courseId_;
     }
 
+    public boolean isValid(){
+        return ((first + second + finalMark + n) > 40);
+    }
+
     @Override
     public String toString() {
         return courseId+","+first+","+second+","+n+","+finalMark;
