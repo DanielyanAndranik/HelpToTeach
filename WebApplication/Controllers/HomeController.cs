@@ -8,6 +8,7 @@ using Couchbase.Extensions.DependencyInjection;
 using HelpToTeach.Core.AI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Helpers.Enums;
 using WebApplication.ViewModels;
 
 namespace WebApplication.Controllers
@@ -36,7 +37,7 @@ namespace WebApplication.Controllers
         }
         public IActionResult Login() => View();
 
-        public IActionResult Register() => View();
+        public IActionResult Register() => View(new RegisterViewModel(RegisterMode.Staff));
 
         public IActionResult ErrorForbidden() => View();
 
