@@ -39,9 +39,9 @@ namespace HelpToTeach.Core.Repository
             return (await this.bucket.GetDocumentAsync<GroupCourse>($"groupCourse::{id}")).Content;
         }
 
-        public async Task<List<GroupCourse>> GetByLecturerId(string id) {
+        public async Task<List<GroupCourse>> GetByLecturer(string id) {
             var query = new QueryRequest(
-                    "SELECT gc.*, c as `course`, g as `group`, l as `user` " +
+                    "SELECT gc.*, c as `course`, g as `group`, l as `lecturer` " +
                     "FROM HelpToTeachBucket gc " +
                     "JOIN HelpToTeachBucket g ON gc.groupId = g.id " +
                     "JOIN HelpToTeachBucket c ON gc.courseId = c.id " +

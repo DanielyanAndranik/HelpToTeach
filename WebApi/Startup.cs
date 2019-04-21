@@ -24,9 +24,12 @@ namespace WebApi
         {
             services.AddCouchbase(Configuration.GetSection("Couchbase"))
                 .AddCouchbaseBucket<INamedBucketProvider>("HelpToTeachBucket");
-            services.AddScoped<IRepository<Course>, CouchbaseRepository<Course>>();
-            services.AddScoped<IRepository<Student>, CouchbaseRepository<Student>>();
-            services.AddScoped<IRepository<Group>, CouchbaseRepository<Group>>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IGroupCourseRepository, GroupCourseRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<ILessonRepository, LessonRepository>();
             services.AddScoped<IMarkRepository, MarkRepository>();
             services.AddScoped<IMLDataRepository, MLDataRepository>();
 

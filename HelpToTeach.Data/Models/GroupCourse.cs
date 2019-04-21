@@ -16,6 +16,6 @@ namespace HelpToTeach.Data.Models
         public Course Course { get; set; }
         [Required,Display(Name = "Lecturer Name")]
         public string UserId { get; set; }
-        public User User { get; set; }
+        public User Lecturer { get; set; }
     }
 }

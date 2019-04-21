@@ -1,9 +1,18 @@
 import requests
+from sys import argv
 import json
 
-r = requests.get('http://localhost:4000/api/Values')
+script, mode, url = argv
 
-for value in json.loads(r.content):
-    print(value)
+r = requests.get(url)
 
-feature_names = ['StudentId', '']
+for o in r.json():
+    print(o)
+
+if mode == 'train':
+    print('train mode')
+else:
+    print('predict mode')
+
+
+

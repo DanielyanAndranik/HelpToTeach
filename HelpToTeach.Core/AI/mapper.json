@@ -2,21 +2,21 @@
   {
     "Operation": "PredictFirstMiddleMark",
     "Script": "middle_marks.py",
-    "Args": "-mode predict -which 1"
+    "Args": "predict http://localhost:4000/api/"
   },
   {
     "Operation": "PredictSecondMiddleMark",
     "Script": "middle_marks.py",
-    "Args": "-mode predict -which 2"
+    "Args": "predict -which 2"
   },
   {
     "Operation": "TrainFirstMiddleMark",
     "Script": "middle_marks.py",
-    "Args": "-mode train -which 1"
+    "Args": "train -which 1"
   },
   {
     "Operation": "PredictSecondMiddleMark",
     "Script": "middle_marks.py",
-    "Args": "-mode train -which 2"
+    "Args": "train -which 2"
   }
 ]

@@ -51,6 +51,7 @@ namespace HelpToTeach.Core.Repository
                 var middleMarkData = new MiddleMarkData
                 {
                     StudentId = student.Id,
+                    HasSchoolarship = student.FullSchoolarship
                 };
                 var marks = await markRepository.GetMarksByStudentAndGroupCourse(student.Id, groupCourseId);
 
@@ -78,12 +79,13 @@ namespace HelpToTeach.Core.Repository
                 }
 
                 var lectureMarks = marks.Where(m => m.Lesson.LessonType == LessonType.Lecture);
-                var lecturesCount = labMarks.Count();
+                var lecturesCount = lectureMarks.Count();
                 if (lecturesCount > 0)
                 {
                     middleMarkData.LectureActivity = (float)lectureMarks.Where(m => !m.Absent).Average(m => m.Value);
                     middleMarkData.LectureAbsence = (float)lectureMarks.Where(m => m.Absent).Count() / lecturesCount; 
                 }
+                middleMarkDataList.Add(middleMarkData);
             }
 
             return middleMarkDataList;

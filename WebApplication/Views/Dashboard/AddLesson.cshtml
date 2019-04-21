@@ -7,7 +7,8 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h1>AddLesson</h1>
+
+<h3 class="text-center">@Model.Type.ToString()</h3>
 
 <form asp-action="SaveLesson" method="post">
     <div class="border-bottom border-top py-2 mb-3">
@@ -15,6 +16,7 @@
     </div>
 
     @Html.HiddenFor(m => m.GroupCourse.Id)
+    @Html.HiddenFor(m => m.Type)
 
     <table class="table table-hover table-bordered" id="js-table">
         <thead>
