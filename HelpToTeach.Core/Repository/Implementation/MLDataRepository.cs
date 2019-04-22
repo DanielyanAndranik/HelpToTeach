@@ -34,7 +34,7 @@ namespace HelpToTeach.Core.Repository
             this.markRepository = markRepository;
         }
 
-        public async Task<List<MiddleMarkData>> GetDataForFinal(string groupCourseId)
+        public Task<List<MiddleMarkData>> GetDataForFinal(string groupCourseId)
         {
             throw new NotImplementedException();
         }

@@ -1,18 +1,5 @@
-import requests
-from sys import argv
-import json
+import numpy as np
 
-script, mode, url = argv
+data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 
-r = requests.get(url)
-
-for o in r.json():
-    print(o)
-
-if mode == 'train':
-    print('train mode')
-else:
-    print('predict mode')
-
-
-
+print(data[:, 1:])
