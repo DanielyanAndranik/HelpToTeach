@@ -64,26 +64,37 @@ namespace HelpToTeach.Core.Repository
 
                 var labMarks = marks.Where(m => m.Lesson.LessonType == LessonType.Lab);
                 var labsCount = labMarks.Count();
+                middleMarkData.LabsCount = labsCount;
                 if (labsCount > 0)
                 {
-                    middleMarkData.LabMark = (float)labMarks.Where(m => !m.Absent).Average(m => m.Value);
-                    middleMarkData.LabAbsence = (float)labMarks.Where(m => m.Absent).Count() / labsCount;
+                    middleMarkData.LabAbsenceCount = labMarks.Where(m => m.Absent).Count();
+                    middleMarkData.LabMarkCount = labMarks.Where(m => !m.Absent).Count();
+                    if (middleMarkData.LabMarkCount > 0)
+                        middleMarkData.LabMark = (float)labMarks.Where(m => !m.Absent && m.Value != 0).Sum(m => m.Value) / middleMarkData.LabMarkCount;
                 }
 
                 var seminarMarks = marks.Where(m => m.Lesson.LessonType == LessonType.Seminar);
                 var seminarsCount = seminarMarks.Count();
+                middleMarkData.SeminarsCount = seminarsCount;
                 if (seminarsCount > 0)
                 {
-                    middleMarkData.SeminarActivity = (float)seminarMarks.Where(m => !m.Absent).Average(m => m.Value);
-                    middleMarkData.SeminarAbsence = (float)seminarMarks.Where(m => m.Absent).Count() / seminarsCount;
+                    middleMarkData.SeminarAbsenceCount = seminarMarks.Where(m => m.Absent).Count();
+                    middleMarkData.SeminarMarkCount = seminarMarks.Where(m => !m.Absent).Count();
+                    if (middleMarkData.SeminarMarkCount > 0)
+                        middleMarkData.SeminarMark = (float)seminarMarks.Where(m => !m.Absent && m.Value != 0).Sum(m => m.Value) / middleMarkData.SeminarMarkCount;
+
                 }
 
                 var lectureMarks = marks.Where(m => m.Lesson.LessonType == LessonType.Lecture);
                 var lecturesCount = lectureMarks.Count();
+                middleMarkData.LecturesCount = lecturesCount;
                 if (lecturesCount > 0)
                 {
-                    middleMarkData.LectureActivity = (float)lectureMarks.Where(m => !m.Absent).Average(m => m.Value);
-                    middleMarkData.LectureAbsence = (float)lectureMarks.Where(m => m.Absent).Count() / lecturesCount; 
+                    middleMarkData.LectureAbsenceCount = lectureMarks.Where(m => m.Absent).Count();
+                    middleMarkData.LectureMarkCount = lectureMarks.Where(m => !m.Absent).Count();
+                    if (middleMarkData.LectureMarkCount > 0)
+                        middleMarkData.LectureMark = (float)lectureMarks.Where(m => !m.Absent && m.Value != 0).Sum(m => m.Value) / middleMarkData.LectureMarkCount;
+
                 }
                 middleMarkDataList.Add(middleMarkData);
             }
