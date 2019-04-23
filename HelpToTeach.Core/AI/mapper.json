@@ -2,12 +2,12 @@
   {
     "Operation": "PredictFirstMiddleMarks",
     "Script": "middle_marks.py",
-    "Args": "predict http://localhost:4000/api/"
+    "Args": "predict http://localhost:4000/api/MachineLearningData/firstmiddle?groupCourseId="
   },
   {
-    "Operation": "PredictSecondMiddleMark",
+    "Operation": "PredictSecondMiddleMarks",
     "Script": "middle_marks.py",
-    "Args": "predict -which 2"
+    "Args": "predict http://localhost:4000/api/MachineLearningData/secondmiddle?groupCourseId="
   },
   {
     "Operation": "TrainFirstMiddleMark",

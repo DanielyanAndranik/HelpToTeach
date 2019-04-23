@@ -27,18 +27,27 @@ namespace WebApi.Controllers
             return new JsonResult(result);
         }
 
+        [HttpPost]
+        [Route("firstmiddle")]
+        public IActionResult AddPredictedMarksForFirstMiddle([FromBody] List<KeyValuePair<string, int>> list)
+        {
+            return new JsonResult(list);
+        }
+
         [HttpGet]
         [Route("secondmiddle")]
-        public IActionResult GetSecondMiddleData()
+        public async Task<IActionResult> GetSecondMiddleData(string groupCourseId)
         {
-            return null;
+            var result = await mlDataRepository.GetDataForSecondMiddle(groupCourseId);
+            return new JsonResult(result);
         }
 
         [HttpGet]
         [Route("final")]
-        public IActionResult GetFinalData()
+        public async Task<IActionResult> GetFinalData(string groupCourseId)
         {
-            return null;
+            var result = await mlDataRepository.GetDataForFinal(groupCourseId);
+            return new JsonResult(result);
         }
     }
 }

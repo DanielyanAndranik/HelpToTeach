@@ -4,10 +4,10 @@ using System.Text;
 
 namespace HelpToTeach.Data.Models
 {
-    public class MiddleMarkData
+    public class MiddleMarkFeatures
     {
         public string StudentId { get; set; }
-        public bool HasSchoolarship { get; set; }
+        public bool HasScholarship { get; set; }
 
         public int LabsCount { get; set; }
         public int LabAbsenceCount { get; set; }

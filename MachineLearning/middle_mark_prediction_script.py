@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 
-script, mode, url = argv
+script, mode, get_url, post_url = argv
 
 feature_names = ['studentId', 'hasScholarship', 'labsCount', 'labAbsenceCount', 'labMarkCount',
                  'labMark', 'lecturesCount', 'lectureAbsenceCount', 'lectureMarkCount',
@@ -13,7 +13,7 @@ feature_names = ['studentId', 'hasScholarship', 'labsCount', 'labAbsenceCount', 
 target_name = 'mark'
 file_name = 'middle_mark_prediction_model.sav'
 
-r = requests.get(url)
+r = requests.get(get_url)
 json_data = r.json()
 X = []
 
@@ -37,8 +37,9 @@ if mode == 'train':
 
 if mode == 'predict':
     model = joblib.load(file_name)
-    Y = []
+    result = []
     for x in X:
-        Y.append(model.predict(x))
+        result.append({x[0], model.predict(x)})
 
+    r = requests.post(post_url, data=result)
 
