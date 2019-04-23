@@ -294,7 +294,7 @@ namespace WebApplication.Controllers
             student.LastName = _student.LastName;
             student.MiddleName = _student.MiddleName;
             student.GroupId = _student.GroupId;
-            student.FullSchoolarship = _student.FullSchoolarship;
+            student.FullScholarship = _student.FullScholarship;
             student.BirthDate = _student.BirthDate;
             await this.studentRepository.Update(student);
             return RedirectToAction("Students");
