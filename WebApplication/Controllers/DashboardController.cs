@@ -447,12 +447,26 @@ namespace WebApplication.Controllers
             }
 
             var viewModel = new StartLessonViewModel { GroupCourse = groupCourse, Type = type, Students = students, Marks = marks };
-            var result = await mlDataRepository.GetFirstMiddlePrediction(groupCourseId);
+
+            var result = new KeyValuePair<bool, List<Mark>>();
+
+            if (type == LessonType.FirstMiddle)
+            {
+                result = await mlDataRepository.GetFirstMiddlePrediction(groupCourseId);
+            }
+            else if (type == LessonType.SecondMiddle)
+            {
+                result = await mlDataRepository.GetSecondMiddlePrediction(groupCourseId);
+            }
+            else if (type == LessonType.Final)
+            {
+                result = await mlDataRepository.GetFinalPrediction(groupCourseId);
+            }
 
             if (!result.Key)
                 viewModel.ErrorMessage = "Error occured when trying to predict marks";
             else
-                viewModel.PredictedValues = result.Value;
+                viewModel.PredictedMarks = result.Value;
             return View("AddLesson", viewModel);
         }
 

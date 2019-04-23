@@ -8,6 +8,8 @@ namespace HelpToTeach.Core.AI
     {
         public string Operation { get; set; }
         public string Script { get; set; }
-        public string Args { get; set; }
+        public string Mode { get; set; }
+        public string GetUrl { get; set; }
+        public string PostUrl { get; set; }
     }
 }

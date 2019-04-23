@@ -19,5 +19,6 @@ namespace HelpToTeach.Data.Models
         [Required]
         public string LessonId { get; set; }
         public Lesson Lesson { get; set; }
+        public bool IsPredicted { get; set; }
     }
 }

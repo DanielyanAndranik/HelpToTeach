@@ -7,7 +7,7 @@ namespace HelpToTeach.Core.AI
     public static class OperationNames
     {
         public static readonly string PredictForFirstMiddle = "PredictFirstMiddleMarks";
-        public static readonly string PredictFoSecondMiddle = "PredictSecondMiddleMarks";
+        public static readonly string PredictForSecondMiddle = "PredictSecondMiddleMarks";
         public static readonly string PredictForFinal = "PredictFinalMarks";
     }
 }

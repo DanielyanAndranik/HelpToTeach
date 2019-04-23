@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HelpToTeach.Core.Repository;
+using HelpToTeach.Data.Enums;
+using HelpToTeach.Data.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +15,18 @@ namespace WebApi.Controllers
     public class MachineLearningDataController : ControllerBase
     {
         private readonly IMLDataRepository mlDataRepository;
+        private readonly IMarkRepository markRepository;
+        private readonly ILessonRepository lessonRepository;
 
-        public MachineLearningDataController(IMLDataRepository mlDataRepository)
+        public MachineLearningDataController(
+            IMLDataRepository mlDataRepository, 
+            IMarkRepository markRepository, 
+            ILessonRepository lessonRepository
+            )
         {
             this.mlDataRepository = mlDataRepository;
+            this.markRepository = markRepository;
+            this.lessonRepository = lessonRepository;
         }
 
         [HttpGet]
@@ -29,9 +39,19 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Route("firstmiddle")]
-        public IActionResult AddPredictedMarksForFirstMiddle([FromBody] List<KeyValuePair<string, int>> list)
+        public async Task<IActionResult> AddPredictedMarksForFirstMiddle(string groupCourseId, [FromBody] List<Mark> marks)
         {
-            return new JsonResult(list);
+            try
+            {
+                var lesson = (await lessonRepository.GetByGroupCourse(groupCourseId)).FirstOrDefault(l => l.LessonType == LessonType.FirstMiddle);
+                if (lesson == null) return new NotFoundResult();
+                var result = await markRepository.AddPredictedMarks(marks, lesson.Id);
+                return new OkObjectResult(result);
+            }
+            catch
+            {
+                return new NotFoundResult();
+            }
         }
 
         [HttpGet]

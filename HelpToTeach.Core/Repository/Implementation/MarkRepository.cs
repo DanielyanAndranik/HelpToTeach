@@ -18,6 +18,19 @@ namespace HelpToTeach.Core.Repository
             this.bucket = provider.GetBucket();
         }
 
+        public async Task<List<Mark>> AddPredictedMarks(IEnumerable<Mark> marks, string lessonId)
+        {
+            var returningMarks = new List<Mark>();
+
+            foreach (var mark in marks)
+            {
+                mark.IsPredicted = true;
+                mark.LessonId = lessonId;
+                returningMarks.Add(await this.Create(mark));
+            }
+            return returningMarks;
+        }
+
         public async Task<List<Mark>> AddRange(IEnumerable<Mark> marks)
         {
             var returningMarks = new List<Mark>();
@@ -102,9 +115,17 @@ namespace HelpToTeach.Core.Repository
             return result.Rows;
         }
 
-        public Task<List<Mark>> GetPredictedMarksByLesson(string lessonId, int type)
+        public async Task<List<Mark>> GetPredictedMarksByLesson(string lessonId, int type)
         {
-            throw new NotImplementedException();
+            var query = new QueryRequest(
+                "SELECT m.*, l as `lesson` FROM HelpToTeachBucket m " +
+                "JOIN HelpToTeachBucket l ON m.lessonId = l.id " +
+                "WHERE m.type = 'mark' AND l.type = 'lesson' " +
+                "AND l.id = $lessonId AND l.lessontype = $type");
+            query.AddNamedParameter("$lessonId", lessonId);
+            query.AddNamedParameter("$type", type);
+            var result = await bucket.QueryAsync<Mark>(query);
+            return result.Rows;
         }
 
         public Task<Mark> Update(Mark mark)

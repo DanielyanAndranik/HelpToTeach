@@ -10,6 +10,7 @@ namespace HelpToTeach.Core.Repository
     public interface IMarkRepository
     {
         Task<List<Mark>> AddRange(IEnumerable<Mark> marks);
+        Task<List<Mark>> AddPredictedMarks(IEnumerable<Mark> marks, string lessonId);
         Task<List<Mark>> GetAll();
         Task<Mark> Get(string id);
         Task<Mark> Create(Mark mark);

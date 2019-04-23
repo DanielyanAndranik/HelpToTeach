@@ -191,25 +191,35 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
-        public Task<List<MiddleMarkFeatures>> GetFinalPrediction(string groupCourseId)
+        public Task<KeyValuePair<bool, List<Mark>>> GetFinalPrediction(string groupCourseId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<KeyValuePair<bool, List<KeyValuePair<string, int>>>> GetFirstMiddlePrediction(string groupCourseId)
+        public async Task<KeyValuePair<bool, List<Mark>>> GetFirstMiddlePrediction(string groupCourseId)
         {
             var result = await Task.Run<bool>(() => PythonRunner.Run(OperationNames.PredictForFirstMiddle, groupCourseId));
             if (!result)
-                return new KeyValuePair<bool, List<KeyValuePair<string, int>>>(false, null);
+                return new KeyValuePair<bool, List<Mark>>(false, null);
 
-            var lesson = (await lessonRepository.GetByGroupCourse(groupCourseId)).FirstOrDefault(l => l.LessonType == LessonType.FirstMiddle);
+            var firstMiddle = (await lessonRepository.GetByGroupCourse(groupCourseId)).FirstOrDefault(l => l.LessonType == LessonType.FirstMiddle);
 
-            return new KeyValuePair<bool, List<KeyValuePair<string, int>>>(true, new List<KeyValuePair<string, int>>());
+            var predictedMiddleMarks = await markRepository.GetPredictedMarksByLesson(firstMiddle.Id, (int)firstMiddle.LessonType);
+
+            return new KeyValuePair<bool, List<Mark>>(true, predictedMiddleMarks);
         }
 
-        public Task<List<MiddleMarkFeatures>> GetSecondMiddlePrediction(string groupCourseId)
+        public async Task<KeyValuePair<bool, List<Mark>>> GetSecondMiddlePrediction(string groupCourseId)
         {
-            throw new NotImplementedException();
+            var result = await Task.Run<bool>(() => PythonRunner.Run(OperationNames.PredictForSecondMiddle, groupCourseId));
+            if (!result)
+                return new KeyValuePair<bool, List<Mark>>(false, null);
+
+            var secondMiddle = (await lessonRepository.GetByGroupCourse(groupCourseId)).FirstOrDefault(l => l.LessonType == LessonType.SecondMiddle);
+
+            var predictedMiddleMarks = await markRepository.GetPredictedMarksByLesson(secondMiddle.Id, (int)secondMiddle.LessonType);
+
+            return new KeyValuePair<bool, List<Mark>>(true, predictedMiddleMarks);
         }
     }
 }

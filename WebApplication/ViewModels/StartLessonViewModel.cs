@@ -15,7 +15,7 @@ namespace WebApplication.ViewModels
         public Lesson Lesson { get; set; }
         public List<Student> Students { get; set; }
         public List<Mark> Marks { get; set; }
-        public List<KeyValuePair<string, int>> PredictedValues { get; set; }
+        public List<Mark> PredictedMarks { get; set; }
         public string ErrorMessage { get; set; }
     }
 }
