@@ -8,7 +8,7 @@
         crossorigin="anonymous"></script>
 <h3 class="text-center">Courses</h3>
 
-@if (role == "2")
+@if (role != "1")
 {
     <div class="border-bottom border-top py-2 mb-3">
         <a class="btn btn-outline-secondary px-4" asp-action="AddCourse">Add</a>

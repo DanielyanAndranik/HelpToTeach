@@ -1,0 +1,12 @@
+{
+  "username": "admin@root.com",
+  "firstName": "Admin",
+  "lastName": "Admin",
+  "middleName": "Admin",
+  "birthDate": "1987-05-15T00:00:00",
+  "role": "0",
+  "approved": true,
+  "groupCourses": null,
+  "id": "0d986eeb-ed14-4dbe-a876-721151f4d0af",
+  "type": "user"
+}

@@ -49,7 +49,9 @@ namespace HelpToTeach.Core.Repository
 
             user.Created = DateTime.Now;
             user.Updated = DateTime.Now;
-            user.Id = Guid.NewGuid().ToString();
+            if (string.IsNullOrEmpty(user.Id) || user.Id == "0") {
+                user.Id = Guid.NewGuid().ToString();
+            }
             var key = CreateKey(typeof(User), user.Id);
 
             byte[] passwordHash, passwordSalt;
@@ -82,9 +84,11 @@ namespace HelpToTeach.Core.Repository
             return result;
         }
 
-        public Task<List<User>> GetAll()
+        public async Task<List<User>> GetAll()
         {
-            throw new NotImplementedException();
+            var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
+            var users = await _bucket.QueryAsync<User>(query);
+            return users.Rows;
         }
 
         public async Task<List<User>> GetLecturers()
@@ -100,9 +104,11 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
-        public Task<User> Upsert(User user)
+        public async Task<User> Upsert(User user)
         {
-            throw new NotImplementedException();
+            user.Updated = DateTime.Now;
+            var result = await _bucket.ReplaceAsync($"user::{user.Id}", user);
+            return result.Value;
         }
 
         private string CreateKey(Type t, string id)

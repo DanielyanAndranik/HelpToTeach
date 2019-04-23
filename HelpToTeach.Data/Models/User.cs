@@ -15,6 +15,7 @@ namespace HelpToTeach.Data.Models
         public string MiddleName { get; set; }
         public DateTime BirthDate { get; set; }
         public string Role { get; set; }
+        public bool Approved { get; set; }
         public List<GroupCourse> GroupCourses { get; set; }
     }
 }

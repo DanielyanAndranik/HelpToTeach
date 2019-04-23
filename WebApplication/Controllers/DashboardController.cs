@@ -456,5 +456,42 @@ namespace WebApplication.Controllers
         }
 
         #endregion
+
+        #region Requests
+
+        [Route("RegistrationRequests")]
+        public async Task<IActionResult> RegistrationRequests() {
+            List<User> users = await userRepository.GetAll();
+            users = (from u in users where u.Approved == false select u).ToList();
+            return View(new RegistrationRequestsViewModel() {
+                Users = users
+            });
+        }
+
+        [Route("response")]
+        [HttpPost(Name ="Resp")]
+        public async Task<IActionResult> Response([FromBody]ResponseMode mode) {
+            
+            try
+            {
+                User user = await userRepository.Get(mode.UserId);
+                if (mode.Mode == 1)
+                {
+                    user.Approved = true;
+                    await userRepository.Update(user);
+                }
+                else
+                {
+                    await userRepository.Delete(mode.UserId);
+                }
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500,e);
+            }
+            return Ok();
+        }
+
+        #endregion
     }
 }

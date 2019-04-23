@@ -12,7 +12,7 @@
         crossorigin="anonymous"></script>
 
 <div class="border-bottom border-top py-2 mb-3">
-    @if (role == "2")
+    @if (role != "1")
     {
         <a class="btn btn-outline-secondary px-4" asp-action="AddGroupCourse">Add</a>
         <a class="btn btn-outline-warning px-4 hidden" id="edit-button" asp-action="EditGroupCourse">Edit</a>
