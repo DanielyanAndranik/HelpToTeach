@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using HelpToTeach.Core.AI;
 using HelpToTeach.Core.Repository;
 using HelpToTeach.Data.Enums;
 using HelpToTeach.Data.Models;
@@ -24,6 +25,7 @@ namespace WebApplication.Controllers
         private readonly IGroupCourseRepository groupCourseRepository;
         private readonly IMarkRepository markRepository;
         private readonly ILessonRepository lessonRepository;
+        private readonly IMLDataRepository mlDataRepository;
 
         public DashboardController(
                 ICourseRepository courseRepository,
@@ -32,7 +34,8 @@ namespace WebApplication.Controllers
                 IUserRepository userRepository,
                 IGroupCourseRepository groupCourseRepository,
                 IMarkRepository markRepository,
-                ILessonRepository lessonRepository)
+                ILessonRepository lessonRepository,
+                IMLDataRepository mlDataRepository)
         {
             this.courseRepository = courseRepository;
             this.groupRepository = groupRepository;
@@ -41,6 +44,7 @@ namespace WebApplication.Controllers
             this.groupCourseRepository = groupCourseRepository;
             this.markRepository = markRepository;
             this.lessonRepository = lessonRepository;
+            this.mlDataRepository = mlDataRepository;
         }
 
         [Route("")]
@@ -422,6 +426,13 @@ namespace WebApplication.Controllers
         [Route("lessons/start")]
         public async Task<IActionResult> StartLesson(string groupCourseId, LessonType type)
         {
+            var lesson = await lessonRepository.Create(new Lesson
+            {
+                GroupCourseId = groupCourseId,
+                LessonType = type,
+                Date = DateTime.Now
+            });
+
             var groupCourse = await groupCourseRepository.Get(groupCourseId);
             var students = await studentRepository.GetByGroupId(groupCourse.GroupId);
             var marks = new List<Mark>();
@@ -434,21 +445,22 @@ namespace WebApplication.Controllers
                     MarkType = (type == LessonType.Lecture || type == LessonType.Seminar) ? MarkType.Activity : (MarkType)((int)type - 1)
                 });
             }
-            return View("AddLesson", new StartLessonViewModel { GroupCourse = groupCourse, Type = type, Students = students, Marks = marks });
+
+            var viewModel = new StartLessonViewModel { GroupCourse = groupCourse, Type = type, Students = students, Marks = marks };
+            var result = await mlDataRepository.GetFirstMiddlePrediction(groupCourseId);
+
+            if (!result.Key)
+                viewModel.ErrorMessage = "Error occured when trying to predict marks";
+            else
+                viewModel.PredictedValues = result.Value;
+            return View("AddLesson", viewModel);
         }
 
         [HttpPost]
         [Route("lessons/save")]
         public async Task<IActionResult> SaveLesson(StartLessonViewModel startLessonViewModel)
         {
-            var lesson = await lessonRepository.Create(new Lesson
-            {
-                GroupCourseId = startLessonViewModel.GroupCourse.Id,
-                LessonType = startLessonViewModel.Type,
-                Date = DateTime.Now
-            });
-
-            startLessonViewModel.Marks.ForEach(m => m.LessonId = lesson.Id);
+            startLessonViewModel.Marks.ForEach(m => m.LessonId = startLessonViewModel.Lesson.Id);
 
             await markRepository.AddRange(startLessonViewModel.Marks);
 

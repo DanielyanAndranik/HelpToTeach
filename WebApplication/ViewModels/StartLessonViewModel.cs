@@ -12,7 +12,10 @@ namespace WebApplication.ViewModels
     {
         public LessonType Type { get; set; }
         public GroupCourse GroupCourse { get; set; }
+        public Lesson Lesson { get; set; }
         public List<Student> Students { get; set; }
         public List<Mark> Marks { get; set; }
+        public List<KeyValuePair<string, int>> PredictedValues { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

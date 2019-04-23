@@ -8,7 +8,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h2 class="text-center">GCL list</h2>
+<h2 class="text-center">Lessons list</h2>
 @if (role == "1")
 {
     <div class="border-bottom border-top py-2 mb-3">
@@ -20,7 +20,8 @@
         <tr>
             <th scope="col">Group Name</th>
             <th scope="col">Course Name</th>
-            <th scope="col">Mark</th>
+            <th scope="col">Date</th>
+            <th scope="col">Type</th>
         </tr>
     </thead>
     <tbody>
@@ -29,10 +30,8 @@
             <tr onclick="selectLesson('@groupCourse.GroupCourseId')">
                 <td>@groupCourse.GroupName</td>
                 <td>@groupCourse.CourseName</td>
-                <td>
-
-                    @Html.ActionLink("Show More", "ShowMore", "Dashboard", new { groupCourseId = groupCourse.GroupCourseId })
-                </td>
+                <td>@groupCourse.CourseName</td>
+                <td>@groupCourse.CourseName</td>
             </tr>
         }
     </tbody>

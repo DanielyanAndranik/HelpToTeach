@@ -36,6 +36,7 @@ namespace WebApplication
             services.AddScoped<IGroupCourseRepository, GroupCourseRepository>();
             services.AddScoped<IMarkRepository, MarkRepository>();
             services.AddScoped<ILessonRepository, LessonRepository>();
+            services.AddScoped<IMLDataRepository, MLDataRepository>();
             
 
             services.AddAutoMapper();

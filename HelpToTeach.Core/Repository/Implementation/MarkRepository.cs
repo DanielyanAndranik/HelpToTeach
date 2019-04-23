@@ -102,6 +102,11 @@ namespace HelpToTeach.Core.Repository
             return result.Rows;
         }
 
+        public Task<List<Mark>> GetPredictedMarksByLesson(string lessonId, int type)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Mark> Update(Mark mark)
         {
             throw new NotImplementedException();
