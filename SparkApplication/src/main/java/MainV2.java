@@ -23,10 +23,8 @@ import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
 
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ModelsV2.Group;
@@ -134,6 +132,7 @@ public class MainV2 {
                 student.setLastName_(keyStudentIterableTuple2._1.getLn_());
                 student.setMiddleName_(keyStudentIterableTuple2._1.getMn_());
                 student.setGroupId_(keyStudentIterableTuple2._1.getGn_());
+                student.setBirthDate_(keyStudentIterableTuple2._1.getBirthDate_());
                 List<Mark> marks = new ArrayList<>();
 
                 for (Mark m:
@@ -189,6 +188,7 @@ public class MainV2 {
                         .put("firstName",student.getFirstName_())
                         .put("lastName",student.getLastName_())
                         .put("id",student.getId_())
+                        .put("birthDate",student.getBirthDate_().toLocaleString())
                         .put("middleName",student.getMiddleName_())
                         .put("type","student")
                         .put("marks",jsonMarks)
@@ -236,6 +236,7 @@ public class MainV2 {
     static class PairCreater implements PairFunction<String,KeyStudent,Mark>{
 
         private String courseName;
+        private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         public PairCreater(String courseName){
             this.courseName = courseName;
@@ -247,7 +248,13 @@ public class MainV2 {
             String firstName = temp[1];
             String lastName = temp[2];
             String middleName = temp[3];
-            String group = temp[4];
+            Date birthDate;
+            try {
+                birthDate = format.parse(temp[4]);
+            }catch (Exception e){
+                birthDate = format.parse("0001-1-1");
+            }
+            String group = temp[5];
 
             String courseId = "???";
 
@@ -266,8 +273,8 @@ public class MainV2 {
                 }
             }
 
-            return new Tuple2<KeyStudent,Mark>(new KeyStudent(firstName,lastName,middleName,group),
-                    new Mark(courseId,temp[5],temp[6],temp[7],temp[8]));
+            return new Tuple2<KeyStudent,Mark>(new KeyStudent(firstName,lastName,middleName,group,birthDate),
+                    new Mark(courseId,temp[6],temp[7],temp[8],temp[9]));
 
         }
     }

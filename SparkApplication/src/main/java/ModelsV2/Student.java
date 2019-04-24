@@ -1,5 +1,6 @@
 package ModelsV2;
 
+import java.util.Date;
 import java.util.List;
 
 public class Student {
@@ -9,6 +10,7 @@ public class Student {
     private String firstName_;
     private String lastName_;
     private String middleName_;
+    private Date birthDate_;
     private List<Mark> marks_;
 
     public Student(){
@@ -39,6 +41,10 @@ public class Student {
         return lastName_;
     }
 
+    public Date getBirthDate_() {
+        return birthDate_;
+    }
+
     public void setId_(String id_) {
         this.id_ = id_;
     }
@@ -63,6 +69,10 @@ public class Student {
         this.marks_ = marks_;
     }
 
+    public void setBirthDate_(Date birthDate_) {
+        this.birthDate_ = birthDate_;
+    }
+
     public boolean isValid(){
         return marks_.size() == Info.COURSES_COUNT_2011 || marks_.size() == Info.COURSES_COUNT_2011_12;
     }
@@ -80,6 +90,6 @@ public class Student {
 
     @Override
     public int hashCode() {
-        return firstName_.hashCode() + groupId_.hashCode() + lastName_.hashCode() + middleName_.hashCode();
+        return firstName_.hashCode() + groupId_.hashCode() + lastName_.hashCode() + middleName_.hashCode() + birthDate_.hashCode();
     }
 }
