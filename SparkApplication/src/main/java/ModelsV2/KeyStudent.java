@@ -1,6 +1,7 @@
 package ModelsV2;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class KeyStudent implements Serializable {
 
@@ -8,12 +9,15 @@ public class KeyStudent implements Serializable {
     private String ln_;
     private String mn_;
     private String gn_;
+    //birthDate_
+    private Date bd_;
 
-    public KeyStudent(String fn,String ln,String mn,String gn){
+    public KeyStudent(String fn,String ln,String mn,String gn,Date bd){
         fn_ = fn;
         ln_ = ln;
         gn_ = gn;
         mn_ = mn;
+        bd_ = bd;
     }
 
 
@@ -51,6 +55,10 @@ public class KeyStudent implements Serializable {
         return mn_;
     }
 
+    public Date getBirthDate_() {
+        return bd_;
+    }
+
     public void setFn_(String fn_) {
         this.fn_ = fn_;
     }
@@ -65,6 +73,10 @@ public class KeyStudent implements Serializable {
 
     public void setLn_(String ln_) {
         this.ln_ = ln_;
+    }
+
+    public void setBirthDate_(Date birthDate_) {
+        this.bd_ = birthDate_;
     }
 
     @Override
