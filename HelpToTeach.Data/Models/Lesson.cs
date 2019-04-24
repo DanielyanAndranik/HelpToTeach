@@ -9,6 +9,7 @@ namespace HelpToTeach.Data.Models
     {
         public LessonType LessonType { get; set; }
         public DateTime Date { get; set; }
+        public bool Saved { get; set; }
         public string GroupCourseId { get; set; }
         public GroupCourse GroupCourse { get; set; }
     }

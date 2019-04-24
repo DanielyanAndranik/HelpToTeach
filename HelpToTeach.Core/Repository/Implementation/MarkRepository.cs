@@ -55,6 +55,13 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
+        public async Task DeletePredictedMarksByLesson(string lessonId)
+        {
+            var query = new QueryRequest("DELETE FROM HelpToTeachBucket m WHERE m.type = 'mark' AND m.isPredicted = true AND m.lessonid = $lessonId");
+            query.AddNamedParameter("$lessonId", lessonId);
+            var result = await bucket.QueryAsync<Mark>(query);
+        }
+
         public Task<Mark> Get(string id)
         {
             throw new NotImplementedException();

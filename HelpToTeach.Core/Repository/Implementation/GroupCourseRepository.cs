@@ -36,7 +36,18 @@ namespace HelpToTeach.Core.Repository
 
         public async Task<GroupCourse> Get(string id)
         {
-            return (await this.bucket.GetDocumentAsync<GroupCourse>($"groupCourse::{id}")).Content;
+            var query = new QueryRequest(
+                "SELECT gc.*, c as `course`, g as `group`, l as `lecturer` " +
+                "FROM HelpToTeachBucket gc " +
+                "JOIN HelpToTeachBucket g ON gc.groupId = g.id " +
+                "JOIN HelpToTeachBucket c ON gc.courseId = c.id " +
+                "JOIN HelpToTeachBucket l ON gc.userId = l.id " +
+                "WHERE c.type = 'course' AND g.type = 'group' " +
+                "AND gc.type = 'groupcourse' AND l.type='user' AND gc.id = $id"
+            );
+            query.AddNamedParameter("$id", id);
+            var result = await bucket.QueryAsync<GroupCourse>(query);
+            return result.Rows.FirstOrDefault();
         }
 
         public async Task<List<GroupCourse>> GetByLecturer(string id) {
@@ -63,7 +74,7 @@ namespace HelpToTeach.Core.Repository
                     "JOIN HelpToTeachBucket c ON gc.courseId = c.id " +
                     "JOIN HelpToTeachBucket l ON gc.userId = l.id " +
                     "WHERE c.type = 'course' AND g.type = 'group' " +
-                    "AND gc.type = 'groupcourse' AND l.type='user'");
+                    "AND gc.type = 'groupcourse' AND l.type = 'user'");
             var result = await bucket.QueryAsync<GroupCourse>(query);
             return result.Rows;
         }

@@ -18,6 +18,10 @@
 <table class="table table-hover table-bordered" id="js-table">
     <thead>
         <tr>
+            @if (role == "2")
+            {
+                <th scope="col">Lecturer Name</th>
+            }
             <th scope="col">Group Name</th>
             <th scope="col">Course Name</th>
             <th scope="col">Date</th>
@@ -25,14 +29,18 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var groupCourse in Model.GroupCourses)
+        @foreach (var lesson in Model.Lessons)
         {
-            <tr onclick="selectLesson('@groupCourse.GroupCourseId')">
-                <td>@groupCourse.GroupName</td>
-                <td>@groupCourse.CourseName</td>
-                <td>@groupCourse.CourseName</td>
-                <td>@groupCourse.CourseName</td>
-            </tr>
+        <tr>
+            @if (role == "2")
+            {
+            <td>@lesson.GroupCourse.Lecturer.FirstName @lesson.GroupCourse.Lecturer.LastName</td>
+            }
+            <td>@lesson.GroupCourse.Group.Name</td>
+            <td>@lesson.GroupCourse.Course.Name</td>
+            <td>@lesson.Date.ToShortDateString()</td>
+            <td>@lesson.LessonType.ToString()</td>
+        </tr>
         }
     </tbody>
 </table>

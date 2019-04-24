@@ -17,6 +17,7 @@ namespace HelpToTeach.Core.Repository
         Task<Mark> Update(Mark mark);
         Task<Mark> Upsert(Mark mark);
         Task Delete(string id);
+        Task DeletePredictedMarksByLesson(string lessonId);
         Task<List<Mark>> GetMarksByStudent(string id);
         Task<List<Mark>> GetMarksByCourse(string id);
         Task<List<Mark>> GetMarksByStudentAndCourse(string studentId, string courseId);

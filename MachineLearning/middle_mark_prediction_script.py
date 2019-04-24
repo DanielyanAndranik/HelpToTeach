@@ -42,8 +42,9 @@ if mode == 'train':
 
 if mode == 'predict':
     model = joblib.load(file_name)
-    if model:
-
+    if model is None:
+        print('error')
+        exit()
     result = []
     for x in X:
         result.append({x[0], model.predict(x)})

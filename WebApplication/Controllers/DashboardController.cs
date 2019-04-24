@@ -389,38 +389,22 @@ namespace WebApplication.Controllers
             var id = User.FindFirstValue(ClaimTypes.Sid);
             var role = User.FindFirstValue(ClaimTypes.Role);
 
-            if(role == "2")
+            var lessons = new List<Lesson>(); 
+            if(role == "1")
             {
-
+                lessons = await lessonRepository.GetByLecturer(id);
+            }
+            else
+            {
+                lessons = await lessonRepository.GetAll();
             }
 
-            List<GroupCourse> groupCourses = await groupCourseRepository.GetByLecturer(id);
-
-            if (groupCourses == null)
+            foreach(var lesson in lessons)
             {
-                groupCourses = new List<GroupCourse>();
+                lesson.GroupCourse = await groupCourseRepository.Get(lesson.GroupCourseId);
             }
 
-            List<GroupCourseRow> result = new List<GroupCourseRow>();
-
-            for (int i = 0; i < groupCourses.Count; i++)
-            {
-                Group group = await groupRepository.Get(groupCourses[i].GroupId);
-                Course course = await courseRepository.Get(groupCourses[i].CourseId);
-                User lecturer = await userRepository.GetLecturerById(groupCourses[i].UserId);
-                result.Add(new GroupCourseRow()
-                {
-                    GroupCourseId = groupCourses[i].Id,
-                    GroupName = group.Name,
-                    CourseName = course.Name,
-                    LecturerName = lecturer.FirstName
-                });
-            }
-
-            return View(new LessonsViewModel()
-            {
-                GroupCourses = result
-            });
+            return View(new LessonsViewModel { Lessons = lessons });
         }
 
         [Route("lessons/start")]
@@ -476,8 +460,21 @@ namespace WebApplication.Controllers
         {
             startLessonViewModel.Marks.ForEach(m => m.LessonId = startLessonViewModel.Lesson.Id);
 
+            var lesson = await lessonRepository.Get(startLessonViewModel.Lesson.Id);
+            lesson.Saved = true;
+            await lessonRepository.Update(lesson);
+
             await markRepository.AddRange(startLessonViewModel.Marks);
 
+            return RedirectToAction("Lessons");
+        }
+
+        [HttpPost]
+        [Route("lessons/cancel")]
+        public async Task<IActionResult> CancelLesson(StartLessonViewModel startLessonViewModel)
+        {
+            await lessonRepository.Delete(startLessonViewModel.Lesson.Id);
+            await markRepository.DeletePredictedMarksByLesson(startLessonViewModel.Lesson.Id);
             return RedirectToAction("Lessons");
         }
 
