@@ -1,15 +1,12 @@
-﻿using System;
+﻿using HelpToTeach.Core.Repository;
+using HelpToTeach.Data.Enums;
+using HelpToTeach.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using HelpToTeach.Core.AI;
-using HelpToTeach.Core.Repository;
-using HelpToTeach.Data.Enums;
-using HelpToTeach.Data.Models;
-using HelpToTeach.Data.Transfer;
-using Microsoft.AspNetCore.Mvc;
-using WebApplication.Helpers;
 using WebApplication.Helpers.Enums;
 using WebApplication.ViewModels;
 
@@ -389,8 +386,8 @@ namespace WebApplication.Controllers
             var id = User.FindFirstValue(ClaimTypes.Sid);
             var role = User.FindFirstValue(ClaimTypes.Role);
 
-            var lessons = new List<Lesson>(); 
-            if(role == "1")
+            var lessons = new List<Lesson>();
+            if (role == "1")
             {
                 lessons = await lessonRepository.GetByLecturer(id);
             }
@@ -399,7 +396,7 @@ namespace WebApplication.Controllers
                 lessons = await lessonRepository.GetAll();
             }
 
-            foreach(var lesson in lessons)
+            foreach (var lesson in lessons)
             {
                 lesson.GroupCourse = await groupCourseRepository.Get(lesson.GroupCourseId);
             }
@@ -482,37 +479,47 @@ namespace WebApplication.Controllers
 
         #region Requests
 
-        [Route("RegistrationRequests")]
-        public async Task<IActionResult> RegistrationRequests() {
+        [Route("registrationrequests")]
+        public async Task<IActionResult> RegistrationRequests()
+        {
             List<User> users = await userRepository.GetAll();
             users = (from u in users where u.Approved == false select u).ToList();
-            return View(new RegistrationRequestsViewModel() {
+            return View(new RegistrationRequestsViewModel()
+            {
                 Users = users
             });
         }
 
-        [Route("response")]
-        [HttpPost(Name ="Resp")]
-        public async Task<IActionResult> Response([FromBody]ResponseMode mode) {
-            
+        [Route("registrationrequests/accept/{id}")]
+        [HttpPost("{id}")]
+        public async Task<IActionResult> AcceptRegistration([FromRoute] string id)
+        {
             try
             {
-                User user = await userRepository.Get(mode.UserId);
-                if (mode.Mode == 1)
-                {
-                    user.Approved = true;
-                    await userRepository.Update(user);
-                }
-                else
-                {
-                    await userRepository.Delete(mode.UserId);
-                }
+                var user = await userRepository.Get(id);
+                user.Approved = true;
+                await userRepository.Update(user);
             }
             catch (Exception e)
             {
-                return StatusCode(500,e);
+                return StatusCode(500, e);
             }
-            return Ok();
+            return RedirectToAction("RegistrationRequests");
+        }
+
+        [Route("registrationrequests/deny/{id}")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DenyRegistration([FromRoute] string id)
+        {
+            try
+            {
+                await userRepository.Delete(id);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
+            return RedirectToAction("RegistrationRequests");
         }
 
         #endregion

@@ -7,7 +7,11 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
-<h1>Registration Requests</h1>
+<h3 class="text-center">Registration Requests</h3>
+<div class="border-bottom border-top py-2 mb-3">
+    <a class="btn btn-outline-secondary px-4 hidden" id="accept-button" asp-action="AcceptRegistration">Accept</a>
+    <a class="btn btn-outline-danger px-4 hidden" id="deny-button" asp-action="DenyRegistration">Deny</a>
+</div>
 <table class="table table-hover table-bordered" id="js-table">
     <thead>
         <tr>
@@ -15,56 +19,53 @@
             <th scope="col">LastName</th>
             <th scope="col">MiddleName</th>
             <th scope="col">BirthDate</th>
-            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in Model.Users)
         {
-            <tr>
+            <tr onclick="select('@user.Id')">
                 <td>@user.FirstName</td>
                 <td>@user.LastName</td>
                 <td>@user.MiddleName</td>
                 <td>@user.BirthDate.ToShortDateString()</td>
-                <td>
-                    <button type="button" class="btn btn-success js-accept-btns" id="@user.Id">Accept</button>
-                    <button type="button" class="btn btn-danger js-delete-btns" id="@user.Id">Delete</button>
-                </td>
             </tr>
         }
     </tbody>
 </table>
 <script type="text/javascript">
+    var selectedId;
+    var select;
     $(document).ready(function () {
-        $("#js-table").DataTable();
+        var table = $("#js-table").dataTable();
 
-        $(".js-accept-btns").click(function () {
-            let userId = $(this).attr("id");
-            let mode = 1;
-            ajaxReq(userId,mode);
+        $('#js-table tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
         });
 
-        $(".js-delete-btns").click(function () {
-            let userId = $(this).attr("id");
-            let mode = 2;
-            ajaxReq(userId, mode);
-        });
-
-        function ajaxReq(userId, mode) {
-            var model = { UserId: userId,Mode:mode};
-            $.ajax({
-                url: "response",
-                method: "POST",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                data: JSON.stringify(model)
-            }).done(function () {
-                bootbox.alert("The changes have been done");
-            });
+        selectedId = null;
+        select = function (id) {
+            if (selectedId !== id) {
+                selectedId = id;
+                $('#accept-button').removeClass('hidden');
+                $('#accept-button').attr('href', '/dashboard/registrationrequests/accept/' + selectedId);
+                $('#deny-button').removeClass('hidden');
+                $('#deny-button').attr('href', '/dashboard/registrationrequests/deny/' + selectedId);
+            }
+            else {
+                selectedId = null;
+                $('#accept-button').addClass('hidden');
+                $('#accept-button').attr('href', '');
+                $('#deny-button').addClass('hidden');
+                $('#deny-button').attr('href', '');
+            }
         }
-
-        
-
     });
 </script>
 

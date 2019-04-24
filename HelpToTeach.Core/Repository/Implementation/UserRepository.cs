@@ -11,11 +11,11 @@ namespace HelpToTeach.Core.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IBucket _bucket;
+        private readonly IBucket bucket;
 
         public UserRepository(INamedBucketProvider provider)
         {
-            this._bucket = provider.GetBucket();
+            this.bucket = provider.GetBucket();
         }
 
         public async Task<User> Authenticate(string username, string password)
@@ -24,7 +24,7 @@ namespace HelpToTeach.Core.Repository
                 return null;
 
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
-            var result = await _bucket.QueryAsync<User>(query);
+            var result = await bucket.QueryAsync<User>(query);
 
             // check if username exists
             if (!result.Success)
@@ -60,20 +60,20 @@ namespace HelpToTeach.Core.Repository
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            var result = await _bucket.InsertAsync(key, user);
+            var result = await bucket.InsertAsync(key, user);
             if (!result.Success) throw result.Exception;
 
             return result.Value;
         }
 
-        public Task Delete(string id)
+        public async Task Delete(string id)
         {
-            throw new NotImplementedException();
+            await this.bucket.RemoveAsync($"user::{id}");
         }
 
         public async Task<User> Get(string id)
         {
-            var result = await this._bucket.GetDocumentAsync<User>($"user::{id}");
+            var result = await this.bucket.GetDocumentAsync<User>($"user::{id}");
             return result.Content;
         }
 
@@ -87,27 +87,29 @@ namespace HelpToTeach.Core.Repository
         public async Task<List<User>> GetAll()
         {
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
-            var users = await _bucket.QueryAsync<User>(query);
+            var users = await bucket.QueryAsync<User>(query);
             return users.Rows;
         }
 
         public async Task<List<User>> GetLecturers()
         {
             var query = new QueryRequest("SELECT HelpToTeachBucket.* FROM HelpToTeachBucket WHERE type = 'user'");
-            var users = await _bucket.QueryAsync<User>(query);
+            var users = await bucket.QueryAsync<User>(query);
             var result = (from s in users where s.Role == "1" select s).ToList();
             return result;
         }
 
-        public Task<User> Update(User user)
+        public async Task<User> Update(User user)
         {
-            throw new NotImplementedException();
+            user.Updated = DateTime.Now;
+            var result = await this.bucket.ReplaceAsync($"user::{user.Id}", user);
+            return result.Value;
         }
 
         public async Task<User> Upsert(User user)
         {
             user.Updated = DateTime.Now;
-            var result = await _bucket.ReplaceAsync($"user::{user.Id}", user);
+            var result = await bucket.ReplaceAsync($"user::{user.Id}", user);
             return result.Value;
         }
 
