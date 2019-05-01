@@ -191,9 +191,17 @@ namespace HelpToTeach.Core.Repository
             throw new NotImplementedException();
         }
 
-        public Task<KeyValuePair<bool, List<Mark>>> GetFinalPrediction(string groupCourseId)
+        public async Task<KeyValuePair<bool, List<Mark>>> GetFinalPrediction(string groupCourseId)
         {
-            throw new NotImplementedException();
+            var result = await Task.Run<bool>(() => PythonRunner.Run(OperationNames.PredictForFinal, groupCourseId));
+            if (!result)
+                return new KeyValuePair<bool, List<Mark>>(false, null);
+
+            var final = (await lessonRepository.GetByGroupCourse(groupCourseId)).FirstOrDefault(l => l.LessonType == LessonType.Final);
+
+            var predictedFinalMarks = await markRepository.GetPredictedMarksByLesson(final.Id, (int)final.LessonType);
+
+            return new KeyValuePair<bool, List<Mark>>(true, predictedFinalMarks);
         }
 
         public async Task<KeyValuePair<bool, List<Mark>>> GetFirstMiddlePrediction(string groupCourseId)

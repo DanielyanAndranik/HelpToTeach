@@ -25,7 +25,7 @@ namespace WebApplication.Controllers
         private readonly IHostingEnvironment env;
         private readonly IBucket bucket;
 
-        public HomeController(INamedBucketProvider provider,IUserRepository userRepository,IHostingEnvironment env)
+        public HomeController(INamedBucketProvider provider, IUserRepository userRepository, IHostingEnvironment env)
         {
             this.provider = provider;
             this.userRepository = userRepository;
@@ -34,9 +34,6 @@ namespace WebApplication.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //var result = PythonRunner.Run(@"D:\Դիպլոմային\HelpToTeach\HelpToTeach.Core\AI\app.py", "");
-            //ViewData.Add("result", result);
-
             string superUserString = await ReadFile(env.WebRootPath + "//SuperUser.json");
             User superUser = JsonConvert.DeserializeObject<User>(superUserString);
             User user = await userRepository.Get(superUser.Id);
