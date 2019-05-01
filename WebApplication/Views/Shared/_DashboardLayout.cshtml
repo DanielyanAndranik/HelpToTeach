@@ -28,15 +28,18 @@
         <li class="nav-item text-center py-2 border-bottom">
             <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Info">Info</a>
         </li>
-        <li class="nav-item text-center py-2 border-bottom">
-            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Courses">Courses</a>
-        </li>
-        <li class="nav-item text-center py-2 border-bottom">
-            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Groups">Groups</a>
-        </li>
-        <li class="nav-item text-center py-2 border-bottom">
-            <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Students">Students</a>
-        </li>
+        @if (role != "0")
+        {
+            <li class="nav-item text-center py-2 border-bottom">
+                <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Courses">Courses</a>
+            </li>
+            <li class="nav-item text-center py-2 border-bottom">
+                <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Groups">Groups</a>
+            </li>
+            <li class="nav-item text-center py-2 border-bottom">
+                <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Students">Students</a>
+            </li>
+        }
         @if (role == "1")
         {
             <li class="nav-item text-center py-2 border-bottom">
@@ -46,7 +49,7 @@
                 <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Lessons">Lessons</a>
             </li>
         }
-        else
+        else if (role == "2")
         {
             <li class="nav-item text-center py-2 border-bottom">
                 <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Lecturers">Lecturers</a>
@@ -57,6 +60,9 @@
         }
         @if (role == "0")
         {
+            <li class="nav-item text-center py-2 border-bottom">
+                <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="Lecturers">Lecturers snd staff members</a>
+            </li>
             <li class="nav-item text-center py-2 border-bottom">
                 <a class="nav-link text-white" asp-area="" asp-controller="Dashboard" asp-action="RegistrationRequests">Registration Requests</a>
             </li>
