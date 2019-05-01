@@ -62,12 +62,46 @@ namespace WebApi.Controllers
             return new JsonResult(result);
         }
 
+        [HttpPost]
+        [Route("secondmiddle")]
+        public async Task<IActionResult> AddPredictedMarksForSecondMiddle(string groupCourseId, [FromBody] List<Mark> marks)
+        {
+            try
+            {
+                var lesson = (await lessonRepository.GetByGroupCourse(groupCourseId)).FirstOrDefault(l => l.LessonType == LessonType.SecondMiddle);
+                if (lesson == null) return new NotFoundResult();
+                var result = await markRepository.AddPredictedMarks(marks, lesson.Id);
+                return new OkObjectResult(result);
+            }
+            catch
+            {
+                return new NotFoundResult();
+            }
+        }
+
         [HttpGet]
         [Route("final")]
         public async Task<IActionResult> GetFinalData(string groupCourseId)
         {
             var result = await mlDataRepository.GetDataForFinal(groupCourseId);
             return new JsonResult(result);
+        }
+
+        [HttpPost]
+        [Route("final")]
+        public async Task<IActionResult> AddPredictedMarksForFinal(string groupCourseId, [FromBody]List<Mark> marks)
+        {
+            try
+            {
+                var lesson = (await lessonRepository.GetByGroupCourse(groupCourseId)).FirstOrDefault(l => l.LessonType == LessonType.Final);
+                if (lesson == null) return new NotFoundResult();
+                var result = await markRepository.AddPredictedMarks(marks, lesson.Id);
+                return new OkObjectResult(result);
+            }
+            catch
+            {
+                return new NotFoundResult();
+            }
         }
     }
 }

@@ -186,9 +186,71 @@ namespace HelpToTeach.Core.Repository
             return middleMarkDataList;
         }
 
-        public Task<List<MiddleMarkFeatures>> GetDataForSecondMiddle(string groupCourseId)
+        public async Task<List<MiddleMarkFeatures>> GetDataForSecondMiddle(string groupCourseId)
         {
-            throw new NotImplementedException();
+            var groupCourse = await groupCourseRepository.Get(groupCourseId);
+            var lessons = await lessonRepository.GetByGroupCourse(groupCourseId);
+            var students = await studentRepository.GetByGroupId(groupCourse.GroupId);
+            var middleMarkDataList = new List<MiddleMarkFeatures>();
+
+            foreach (var student in students)
+            {
+                var middleMarkData = new MiddleMarkFeatures
+                {
+                    StudentId = student.Id,
+                    HasScholarship = student.FullScholarship
+                };
+                var marks = await markRepository.GetMarksByStudentAndGroupCourse(student.Id, groupCourseId);
+
+                var firstMiddleMark = marks.FirstOrDefault(m => m.Lesson.LessonType == LessonType.FirstMiddle);
+                var secondMiddleMark = marks.FirstOrDefault(m => m.Lesson.LessonType == LessonType.SecondMiddle);
+
+                marks = marks.Where(m => m.Date > firstMiddleMark.Date).ToList();
+
+                if (secondMiddleMark != null)
+                {
+                    middleMarkData.Mark = !secondMiddleMark.Absent ? secondMiddleMark.Value : 0;
+                    marks = marks.Where(m => m.Date < secondMiddleMark.Date).ToList();
+                }
+
+                var labMarks = marks.Where(m => m.Lesson.LessonType == LessonType.Lab);
+                var labsCount = labMarks.Count();
+                middleMarkData.LabsCount = labsCount;
+                if (labsCount > 0)
+                {
+                    middleMarkData.LabAbsenceCount = labMarks.Where(m => m.Absent).Count();
+                    middleMarkData.LabMarkCount = labMarks.Where(m => !m.Absent).Count();
+                    if (middleMarkData.LabMarkCount > 0)
+                        middleMarkData.LabMark = (float)labMarks.Where(m => !m.Absent && m.Value != 0).Sum(m => m.Value) / middleMarkData.LabMarkCount;
+                }
+
+                var seminarMarks = marks.Where(m => m.Lesson.LessonType == LessonType.Seminar);
+                var seminarsCount = seminarMarks.Count();
+                middleMarkData.SeminarsCount = seminarsCount;
+                if (seminarsCount > 0)
+                {
+                    middleMarkData.SeminarAbsenceCount = seminarMarks.Where(m => m.Absent).Count();
+                    middleMarkData.SeminarMarkCount = seminarMarks.Where(m => !m.Absent).Count();
+                    if (middleMarkData.SeminarMarkCount > 0)
+                        middleMarkData.SeminarMark = (float)seminarMarks.Where(m => !m.Absent && m.Value != 0).Sum(m => m.Value) / middleMarkData.SeminarMarkCount;
+
+                }
+
+                var lectureMarks = marks.Where(m => m.Lesson.LessonType == LessonType.Lecture);
+                var lecturesCount = lectureMarks.Count();
+                middleMarkData.LecturesCount = lecturesCount;
+                if (lecturesCount > 0)
+                {
+                    middleMarkData.LectureAbsenceCount = lectureMarks.Where(m => m.Absent).Count();
+                    middleMarkData.LectureMarkCount = lectureMarks.Where(m => !m.Absent).Count();
+                    if (middleMarkData.LectureMarkCount > 0)
+                        middleMarkData.LectureMark = (float)lectureMarks.Where(m => !m.Absent && m.Value != 0).Sum(m => m.Value) / middleMarkData.LectureMarkCount;
+
+                }
+                middleMarkDataList.Add(middleMarkData);
+            }
+
+            return middleMarkDataList;
         }
 
         public async Task<KeyValuePair<bool, List<Mark>>> GetFinalPrediction(string groupCourseId)
