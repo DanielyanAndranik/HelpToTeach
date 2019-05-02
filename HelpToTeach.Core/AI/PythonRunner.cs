@@ -38,7 +38,7 @@ namespace HelpToTeach.Core.AI
 
         private static OperationScript GetOperationScript(string operationName)
         {
-            using (StreamReader r = new StreamReader("mapper.json"))
+            using (StreamReader r = new StreamReader(@"D:\Դիպլոմային\HelpToTeach\HelpToTeach.Core\AI\mapper.json"))
             {
                 string json = r.ReadToEnd();
                 List<OperationScript> items = JsonConvert.DeserializeObject<List<OperationScript>>(json);

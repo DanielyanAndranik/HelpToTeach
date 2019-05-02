@@ -1,24 +1,9 @@
-[
+﻿[
   {
     "Operation": "PredictFirstMiddleMarks",
-    "Script": "middle_marks.py",
+    "Script": "D:\\Դիպլոմային\\HelpToTeach\\MachineLearning\\middle_mark_prediction_script.py",
     "Mode": "predict",
     "GetUrl": "http://localhost:4000/api/MachineLearningData/firstmiddle?groupCourseId=",
     "PostUrl": "http://localhost:4000/api/MachineLearningData/firstmiddle?groupCourseId="
-  },
-  {
-    "Operation": "PredictSecondMiddleMarks",
-    "Script": "middle_marks.py",
-    "Args": "predict http://localhost:4000/api/MachineLearningData/secondmiddle?groupCourseId="
-  },
-  {
-    "Operation": "TrainFirstMiddleMark",
-    "Script": "middle_marks.py",
-    "Args": "train -which 1"
-  },
-  {
-    "Operation": "TrainSecondMiddleMark",
-    "Script": "middle_marks.py",
-    "Args": "train -which 2"
   }
 ]
