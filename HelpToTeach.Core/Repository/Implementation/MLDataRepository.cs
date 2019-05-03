@@ -138,6 +138,7 @@ namespace HelpToTeach.Core.Repository
                     HasScholarship = student.FullScholarship
                 };
                 var marks = await markRepository.GetMarksByStudentAndGroupCourse(student.Id, groupCourseId);
+                if (marks.Count == 0) break;
 
                 var firstMiddleMark = marks.FirstOrDefault(m => m.Lesson.LessonType == LessonType.FirstMiddle);
                 if (firstMiddleMark != null)
