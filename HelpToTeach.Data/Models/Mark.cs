@@ -16,7 +16,7 @@ namespace HelpToTeach.Data.Models
         public DateTime Date { get; set; }
         [Required]
         public string StudentId { get; set; }
-        [Required]
+        //[Required]
         public string LessonId { get; set; }
         public Lesson Lesson { get; set; }
         public bool IsPredicted { get; set; }

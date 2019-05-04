@@ -1,7 +1,4 @@
-import ModelsV2.Course;
-import ModelsV2.KeyStudent;
-import ModelsV2.Mark;
-import ModelsV2.Student;
+import ModelsV2.*;
 import com.cedarsoftware.util.io.JsonWriter;
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonArray;
@@ -17,6 +14,7 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
@@ -27,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ModelsV2.Group;
 
 public class MainV2 {
 
@@ -166,6 +163,34 @@ public class MainV2 {
         });
 
 
+        JavaRDD<MarkML> marksForML = resultFor2011and2012.flatMap(new FlatMapFunction<Student, MarkML>() {
+            @Override
+            public Iterator<MarkML> call(Student student) throws Exception {
+                List<MarkML> marksML = new ArrayList<MarkML>();
+
+                List<Mark> marks = student.getMarks_();
+
+                for (Mark m: marks) {
+                    MarkML firstMiddle = new MarkML(UUID.randomUUID().toString()
+                            ,MarkML.FIRST_MIDDLE,student.getId_(),m.getFirst());
+                    MarkML secondMiddle = new MarkML(UUID.randomUUID().toString()
+                            ,MarkML.SECOND_MIDDLE,student.getId_(),m.getSecond());
+                    MarkML finalMark = new MarkML(UUID.randomUUID().toString()
+                            ,MarkML.FINAL,student.getId_(),m.getFinal());
+                    MarkML activity = new MarkML(UUID.randomUUID().toString()
+                            ,MarkML.ACTIVITY,student.getId_(),m.getN());
+
+                    marksML.add(firstMiddle);
+                    marksML.add(secondMiddle);
+                    marksML.add(finalMark);
+                    marksML.add(activity);
+                }
+
+                return marksML.iterator();
+            }
+        });
+
+
         JavaRDD<JsonDocument> couchbaseStudents2011Result = resultFor2011and2012.map(new Function<Student, JsonDocument>() {
             @Override
             public JsonDocument call(Student student) throws Exception {
@@ -230,6 +255,25 @@ public class MainV2 {
 
         CouchbaseDocumentRDD<JsonDocument> result3 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseCoursesResult);
         result3.saveToCouchbase();
+
+        JavaRDD<JsonDocument> resltForML = marksForML.map(new Function<MarkML, JsonDocument>() {
+            @Override
+            public JsonDocument call(MarkML markML) throws Exception {
+                JsonObject data = JsonObject.create()
+                        .put("id",markML.getId_())
+                        .put("type","mark")
+                        .put("markType",markML.getMarkType_())
+                        .put("value",markML.getValue_())
+                        .put("studentId",markML.getStudentId_())
+                        .put("absent",markML.isAbsent_())
+                        .put("isPredicted",markML.isPredicted_());
+
+                return JsonDocument.create("mark::"+markML.getId_(),data);
+            }
+        });
+
+        CouchbaseDocumentRDD<JsonDocument> resultMLForCouchbase = CouchbaseDocumentRDD.couchbaseDocumentRDD(resltForML);
+        resultMLForCouchbase.saveToCouchbase();
 
     }
 
