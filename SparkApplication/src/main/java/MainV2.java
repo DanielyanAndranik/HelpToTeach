@@ -124,7 +124,7 @@ public class MainV2 {
             @Override
             public Student call(Tuple2<KeyStudent, Iterable<Mark>> keyStudentIterableTuple2) throws Exception {
                 Student student = new Student();
-                student.setId_(UUID.randomUUID().toString());
+                student.setId_(keyStudentIterableTuple2._1.getsId_());
                 student.setFirstName_(keyStudentIterableTuple2._1.getFn_());
                 student.setLastName_(keyStudentIterableTuple2._1.getLn_());
                 student.setMiddleName_(keyStudentIterableTuple2._1.getMn_());
@@ -163,6 +163,7 @@ public class MainV2 {
         });
 
 
+
         JavaRDD<MarkML> marksForML = resultFor2011and2012.flatMap(new FlatMapFunction<Student, MarkML>() {
             @Override
             public Iterator<MarkML> call(Student student) throws Exception {
@@ -171,14 +172,15 @@ public class MainV2 {
                 List<Mark> marks = student.getMarks_();
 
                 for (Mark m: marks) {
-                    MarkML firstMiddle = new MarkML(UUID.randomUUID().toString()
-                            ,MarkML.FIRST_MIDDLE,student.getId_(),m.getFirst());
-                    MarkML secondMiddle = new MarkML(UUID.randomUUID().toString()
-                            ,MarkML.SECOND_MIDDLE,student.getId_(),m.getSecond());
-                    MarkML finalMark = new MarkML(UUID.randomUUID().toString()
-                            ,MarkML.FINAL,student.getId_(),m.getFinal());
-                    MarkML activity = new MarkML(UUID.randomUUID().toString()
-                            ,MarkML.ACTIVITY,student.getId_(),m.getN());
+                    String id = student.getId_();
+                    MarkML firstMiddle = new MarkML(UUID.randomUUID().toString(),m.getCourseId()
+                            ,MarkML.FIRST_MIDDLE,id,m.getFirst());
+                    MarkML secondMiddle = new MarkML(UUID.randomUUID().toString(),m.getCourseId()
+                            ,MarkML.SECOND_MIDDLE,id,m.getSecond());
+                    MarkML finalMark = new MarkML(UUID.randomUUID().toString(),m.getCourseId()
+                            ,MarkML.FINAL,id,m.getFinal());
+                    MarkML activity = new MarkML(UUID.randomUUID().toString(),m.getCourseId()
+                            ,MarkML.ACTIVITY,id,m.getN());
 
                     marksML.add(firstMiddle);
                     marksML.add(secondMiddle);
@@ -191,40 +193,7 @@ public class MainV2 {
         });
 
 
-        JavaRDD<JsonDocument> couchbaseStudents2011Result = resultFor2011and2012.map(new Function<Student, JsonDocument>() {
-            @Override
-            public JsonDocument call(Student student) throws Exception {
 
-                /*
-                JsonArray jsonMarks = JsonArray.create();
-                for (Mark mark:
-                     student.getMarks_()) {
-                    JsonObject tempMark = JsonObject.create()
-                            .put("courseId",mark.getCourseId())
-                            .put("first",mark.getFirst())
-                            .put("second",mark.getSecond())
-                            .put("finalMark",mark.getFinal())
-                            .put("presence",mark.getN());
-                    jsonMarks.add(tempMark);
-                }
-                */
-
-                JsonObject data = JsonObject.create()
-                        .put("firstName",student.getFirstName_())
-                        .put("lastName",student.getLastName_())
-                        .put("id",student.getId_())
-                        .put("birthDate",student.getBirthDate_().toLocaleString())
-                        .put("middleName",student.getMiddleName_())
-                        .put("type","student")
-                        //.put("marks",jsonMarks)
-                        .put("groupId",student.getGroupId_());
-
-                return JsonDocument.create("student::"+student.getId_(),data);
-            }
-        });
-
-        CouchbaseDocumentRDD<JsonDocument> result1 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseStudents2011Result);
-        result1.saveToCouchbase();
 
         JavaRDD<JsonDocument> couchbaseGroupsResult = groupsRDD.map(new Function<Group, JsonDocument>() {
             @Override
@@ -256,6 +225,30 @@ public class MainV2 {
         CouchbaseDocumentRDD<JsonDocument> result3 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseCoursesResult);
         result3.saveToCouchbase();
 
+        //----------------------------------------------------------------------------------------------------------------------
+
+        JavaRDD<JsonDocument> couchbaseStudents2011Result = resultFor2011and2012.map(new Function<Student, JsonDocument>() {
+            @Override
+            public JsonDocument call(Student student) throws Exception {
+                JsonObject data = JsonObject.create()
+                        .put("firstName",student.getFirstName_())
+                        .put("lastName",student.getLastName_())
+                        .put("id",student.getId_())
+                        .put("birthDate",student.getBirthDate_().toLocaleString())
+                        .put("middleName",student.getMiddleName_())
+                        .put("type","student")
+                        //.put("marks",jsonMarks)
+                        .put("groupId",student.getGroupId_());
+
+                return JsonDocument.create("student::"+student.getId_(),data);
+            }
+        });
+
+
+
+        CouchbaseDocumentRDD<JsonDocument> result1 = CouchbaseDocumentRDD.couchbaseDocumentRDD(couchbaseStudents2011Result);
+        result1.saveToCouchbase();
+
         JavaRDD<JsonDocument> resltForML = marksForML.map(new Function<MarkML, JsonDocument>() {
             @Override
             public JsonDocument call(MarkML markML) throws Exception {
@@ -266,7 +259,8 @@ public class MainV2 {
                         .put("value",markML.getValue_())
                         .put("studentId",markML.getStudentId_())
                         .put("absent",markML.isAbsent_())
-                        .put("isPredicted",markML.isPredicted_());
+                        .put("isPredicted",markML.isPredicted_())
+                        .put("courseId",markML.getCourseId_());
 
                 return JsonDocument.create("mark::"+markML.getId_(),data);
             }
@@ -317,7 +311,7 @@ public class MainV2 {
                 }
             }
 
-            return new Tuple2<KeyStudent,Mark>(new KeyStudent(firstName,lastName,middleName,group,birthDate),
+            return new Tuple2<KeyStudent,Mark>(new KeyStudent(temp[0],firstName,lastName,middleName,group,birthDate),
                     new Mark(courseId,temp[6],temp[7],temp[8],temp[9]));
 
         }

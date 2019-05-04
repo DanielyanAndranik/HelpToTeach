@@ -9,15 +9,16 @@ public class KeyStudent implements Serializable {
     private String ln_;
     private String mn_;
     private String gn_;
-    //birthDate_
+    private String sId_;
     private Date bd_;
 
-    public KeyStudent(String fn,String ln,String mn,String gn,Date bd){
+    public KeyStudent(String id,String fn,String ln,String mn,String gn,Date bd){
         fn_ = fn;
         ln_ = ln;
         gn_ = gn;
         mn_ = mn;
         bd_ = bd;
+        sId_ = id;
     }
 
 
@@ -53,6 +54,14 @@ public class KeyStudent implements Serializable {
 
     public String getMn_() {
         return mn_;
+    }
+
+    public String getsId_() {
+        return sId_;
+    }
+
+    public void setsId_(String sId_) {
+        this.sId_ = sId_;
     }
 
     public Date getBirthDate_() {

@@ -23,6 +23,7 @@
             <th scope="col">MiddleName</th>
             <th scope="col">BirthDate</th>
             <th scope="col">Group</th>
+            <th scope="col">Info</th>
         </tr>
     </thead>
     <tbody>
@@ -34,6 +35,9 @@
                 <td>@student.MiddleName</td>
                 <td>@student.BirthDate.ToShortDateString()</td>
                 <td>@student.Group.Name</td>
+                <td>
+                    <a class="btn btn-outline-dark px-4" asp-action="StudentInfo" asp-route-id=@student.Id>Info</a>
+                </td>
             </tr>
         }
     </tbody>

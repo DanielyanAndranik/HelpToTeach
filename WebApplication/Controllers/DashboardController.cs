@@ -523,5 +523,28 @@ namespace WebApplication.Controllers
         }
 
         #endregion
+
+        #region Info
+
+        [Route("StudentInfo/{id}")]
+        public async Task<IActionResult> StudentInfo([FromRoute]string id)
+        {
+            Student student = await studentRepository.Get(id);
+            student.Group = await groupRepository.Get(student.GroupId);
+
+            List<Mark> studentMarks = await markRepository.GetMarksByStudent(student.Id);
+
+
+            return View();
+        }
+
+        [Route("UserInfo/{id}")]
+        public async Task<IActionResult> UserInfo([FromRoute]string id)
+        {
+            return View();
+        }
+
+        #endregion
+
     }
 }

@@ -10,6 +10,7 @@ public class MarkML implements Serializable {
     private int value_;
     private String studentId_;
     private boolean isPredicted_;
+    private String courseId_;
 
     public static final int FIRST_MIDDLE = 2;
     public static final int ACTIVITY = 0;
@@ -18,13 +19,14 @@ public class MarkML implements Serializable {
 
 
 
-    public MarkML(String id,int type,String studentId,int value){
+    public MarkML(String id,String courseId,int type,String studentId,int value){
         id_ = id;
         markType_ = type;
         studentId_ = studentId;
         absent_ = false;
         isPredicted_ = false;
         value_ = value;
+        courseId_ = courseId;
     }
 
 
@@ -62,6 +64,10 @@ public class MarkML implements Serializable {
 
     public void setStudentId_(String studentId_) {
         this.studentId_ = studentId_;
+    }
+
+    public String getCourseId_() {
+        return courseId_;
     }
 
     public void setValue_(int value_) {
