@@ -195,7 +195,7 @@ public class MainV2 {
             @Override
             public JsonDocument call(Student student) throws Exception {
 
-
+                /*
                 JsonArray jsonMarks = JsonArray.create();
                 for (Mark mark:
                      student.getMarks_()) {
@@ -207,7 +207,7 @@ public class MainV2 {
                             .put("presence",mark.getN());
                     jsonMarks.add(tempMark);
                 }
-
+                */
 
                 JsonObject data = JsonObject.create()
                         .put("firstName",student.getFirstName_())
@@ -216,7 +216,7 @@ public class MainV2 {
                         .put("birthDate",student.getBirthDate_().toLocaleString())
                         .put("middleName",student.getMiddleName_())
                         .put("type","student")
-                        .put("marks",jsonMarks)
+                        //.put("marks",jsonMarks)
                         .put("groupId",student.getGroupId_());
 
                 return JsonDocument.create("student::"+student.getId_(),data);

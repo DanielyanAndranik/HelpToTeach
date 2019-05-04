@@ -60,9 +60,10 @@ namespace WebApplication.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm]UserDto userDto)
         {
-            // map dto to entity
             var user = mapper.Map<User>(userDto);
-
+            //if (user.Role == "1") {
+            //    user.Approved = true;
+            //}
             try
             {
                 //// save 

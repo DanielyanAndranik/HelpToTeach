@@ -4,17 +4,19 @@ import java.io.Serializable;
 
 public class MarkML implements Serializable {
 
-    public static final int FIRST_MIDDLE = 2;
-    public static final int ACTIVITY = 0;
-    public static final int SECOND_MIDDLE = 3;
-    public static final int FINAL = 4;
-
     private String id_;
     private int markType_;
     private boolean absent_;
     private int value_;
     private String studentId_;
     private boolean isPredicted_;
+
+    public static final int FIRST_MIDDLE = 2;
+    public static final int ACTIVITY = 0;
+    public static final int SECOND_MIDDLE = 3;
+    public static final int FINAL = 4;
+
+
 
     public MarkML(String id,int type,String studentId,int value){
         id_ = id;
