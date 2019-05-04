@@ -3,6 +3,38 @@
     ViewData["Title"] = "StudentInfo";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
+@model StudentInfoViewModel
 
 <h1>StudentInfo</h1>
 
+<div class="container-fluid">
+    <p>@Model.Student.FirstName @Model.Student.LastName @Model.Student.MiddleName</p>
+    <p>@Model.Student.BirthDate @Model.Student.Group.Name</p>
+
+    @*<table class="table table-hover table-bordered" id="js-table">
+        <thead>
+            <tr>
+                <th scope="col">Course Name</th>
+                <th scope="col">First</th>
+                <th scope="col">Second</th>
+                <th scope="col">Pre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var lecturer in Model.Marks)
+            {
+                <tr>
+                    <td>@lecturer.FirstName</td>
+                    <td>@lecturer.LastName</td>
+                    <td>@lecturer.MiddleName</td>
+                    <td>@lecturer.BirthDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#js-table").DataTable();
+    });
+</script>

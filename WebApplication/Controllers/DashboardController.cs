@@ -534,8 +534,23 @@ namespace WebApplication.Controllers
 
             List<Mark> studentMarks = await markRepository.GetMarksByStudent(student.Id);
 
+            for (int i = 0; i < studentMarks.Count; i++)
+            {
+                if (studentMarks[i].CourseId != null)
+                {
+                    studentMarks[i].Course = await courseRepository.Get(studentMarks[i].CourseId);
+                }
+                else {
+                    Lesson temp = await lessonRepository.Get(studentMarks[i].LessonId);
+                    GroupCourse gc = await groupCourseRepository.Get(temp.GroupCourseId);
+                    studentMarks[i].Course = await courseRepository.Get(gc.CourseId);
+                }
+            }
 
-            return View();
+            return View(new StudentInfoViewModel() {
+                Student = student,
+                Marks = studentMarks
+            });
         }
 
         [Route("UserInfo/{id}")]
