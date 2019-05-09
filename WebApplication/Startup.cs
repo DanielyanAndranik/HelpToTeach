@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Couchbase.Extensions.DependencyInjection;
 using System;
 using HelpToTeach.Core.Repository;
+using HelpToTeach.Core.AI;
 
 namespace WebApplication
 {
@@ -56,6 +57,8 @@ namespace WebApplication
                     options.Cookie.MaxAge = TimeSpan.FromHours(12);
                     options.Cookie.HttpOnly = true;
                 });
+
+            PythonRunner.Configuration = Configuration;
 
             services.AddAuthorization(options =>
             {

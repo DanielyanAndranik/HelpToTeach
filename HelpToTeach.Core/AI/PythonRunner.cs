@@ -5,11 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace HelpToTeach.Core.AI
 {
     public static class PythonRunner
     {
+        public static IConfiguration Configuration;
+
         public static bool Run(string operationName, string optionalParameter)
         {
             var opScript = GetOperationScript(operationName);
@@ -38,7 +41,7 @@ namespace HelpToTeach.Core.AI
 
         private static OperationScript GetOperationScript(string operationName)
         {
-            using (StreamReader r = new StreamReader(@"D:\HelpToTeach\HelpToTeach.Core\AI\mapper.json"))
+            using (StreamReader r = new StreamReader(Configuration.GetValue<string>("MapperPath")))
             {
                 string json = r.ReadToEnd();
                 List<OperationScript> items = JsonConvert.DeserializeObject<List<OperationScript>>(json);

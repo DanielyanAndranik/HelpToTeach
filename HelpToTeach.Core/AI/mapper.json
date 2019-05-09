@@ -5,5 +5,40 @@
     "Mode": "predict",
     "GetUrl": "http://localhost:4000/api/MachineLearningData/firstmiddle?groupCourseId=",
     "PostUrl": "http://localhost:4000/api/MachineLearningData/firstmiddle?groupCourseId="
+  },
+  {
+    "Operation": "PredictSecondMiddleMarks",
+    "Script": "D:\\Դիպլոմային\\HelpToTeach\\MachineLearning\\middle_mark_prediction_script.py",
+    "Mode": "predict",
+    "GetUrl": "http://localhost:4000/api/MachineLearningData/secondmiddle?groupCourseId=",
+    "PostUrl": "http://localhost:4000/api/MachineLearningData/secondmiddle?groupCourseId="
+  },
+  {
+    "Operation": "PredictFirstMiddleMarks",
+    "Script": "D:\\Դիպլոմային\\HelpToTeach\\MachineLearning\\final_mark_prediction_script.py",
+    "Mode": "predict",
+    "GetUrl": "http://localhost:4000/api/MachineLearningData/final?groupCourseId=",
+    "PostUrl": "http://localhost:4000/api/MachineLearningData/final?groupCourseId="
+  },
+  {
+    "Operation": "PredictFirstMiddleMarks",
+    "Script": "D:\\Դիպլոմային\\HelpToTeach\\MachineLearning\\middle_mark_prediction_script.py",
+    "Mode": "train",
+    "GetUrl": "http://localhost:4000/api/MachineLearningData/firstmiddle?groupCourseId=",
+    "PostUrl": "http://localhost:4000/api/MachineLearningData/firstmiddle?groupCourseId="
+  },
+  {
+    "Operation": "PredictFirstMiddleMarks",
+    "Script": "D:\\Դիպլոմային\\HelpToTeach\\MachineLearning\\middle_mark_prediction_script.py",
+    "Mode": "train",
+    "GetUrl": "http://localhost:4000/api/MachineLearningData/secondmiddle?groupCourseId=",
+    "PostUrl": "http://localhost:4000/api/MachineLearningData/secondmiddle?groupCourseId="
+  },
+  {
+    "Operation": "PredictFirstMiddleMarks",
+    "Script": "D:\\Դիպլոմային\\HelpToTeach\\MachineLearning\\final_mark_prediction_script.py",
+    "Mode": "train",
+    "GetUrl": "http://localhost:4000/api/MachineLearningData/final?groupCourseId=",
+    "PostUrl": "http://localhost:4000/api/MachineLearningData/final?groupCourseId="
   }
 ]
